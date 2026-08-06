@@ -181,7 +181,7 @@ export const INITIAL_PLAYERS: Player[] = [
   { id: 50, dorsal: 5, name: 'EDWIN TEJADA', teamId: 'AMARILLO', isCaptain: true },
   { id: 51, dorsal: 18, name: 'YAMIR PINEDA', teamId: 'AMARILLO' },
   { id: 52, dorsal: 11, name: 'PEDRO DE LEON', teamId: 'AMARILLO' },
-  { id: 53, dorsal: 7, name: 'JOSE IVAN SIERRA', teamId: 'AMARILLO' },
+  { id: 53, dorsal: 7, name: 'JOSE SIERRA', teamId: 'AMARILLO' },
   { id: 54, dorsal: 17, name: 'HECTOR VERGARA', teamId: 'AMARILLO' },
   { id: 55, dorsal: 4, name: 'BERNARDO GALVIS', teamId: 'AMARILLO' },
   { id: 56, dorsal: 8, name: 'EDGARDO PACHECO', teamId: 'AMARILLO' },
@@ -250,7 +250,7 @@ export const INITIAL_CARDS: CardRecord[] = [
     { fecha: 31, type: 'ROJA' }, { fecha: 33, type: 'AZUL' },
   ]),
 
-  // JOSE IVAN SIERRA (VERDE - #54): 8 AM, 2 AZ
+  // JOSE SIERRA (VERDE - #54): 8 AM, 2 AZ
   ...createPlayerCardsByFechas(54, [
     { fecha: 2, type: 'AMARILLA' }, { fecha: 4, type: 'AMARILLA' }, { fecha: 7, type: 'AMARILLA' },
     { fecha: 10, type: 'AMARILLA' }, { fecha: 13, type: 'AMARILLA' }, { fecha: 16, type: 'AZUL' },
@@ -312,8 +312,8 @@ export const INITIAL_MATCHES: Match[] = [
   // FECHA 1
   { id: 'm1-1', fecha: 1, homeTeamId: 'RAYADO', awayTeamId: 'AZUL', homeGoals: 1, awayGoals: 0, isPlayed: true },
   { id: 'm1-2', fecha: 1, homeTeamId: 'VERDE', awayTeamId: 'ROJO', homeGoals: 4, awayGoals: 3, isPlayed: true },
-  { id: 'm1-3', fecha: 1, homeTeamId: 'BLANCO', awayTeamId: 'AMARILLO', homeGoals: 1, awayGoals: 1, isPlayed: true },
-  { id: 'm1-4', fecha: 1, homeTeamId: 'NEGRO', awayTeamId: 'NARANJA', homeGoals: 1, awayGoals: 1, isPlayed: true },
+  { id: 'm1-3', fecha: 1, homeTeamId: 'BLANCO', awayTeamId: 'AMARILLO', homeGoals: 1, awayGoals: 1, isPlayed: true, attendance: { homePlayerIds: [57, 58, 59, 60, 61, 62, 63, 64], awayPlayerIds: [49, 50, 51, 52, 54, 55, 56] } },
+  { id: 'm1-4', fecha: 1, homeTeamId: 'NEGRO', awayTeamId: 'NARANJA', homeGoals: 1, awayGoals: 1, isPlayed: true, attendance: { homePlayerIds: [17, 19, 20, 21, 23, 24], awayPlayerIds: [25, 26, 27, 28, 29, 30, 31, 32] } },
 
   // FECHA 2
   { id: 'm2-1', fecha: 2, homeTeamId: 'NARANJA', awayTeamId: 'ROJO', homeGoals: 2, awayGoals: 1, isPlayed: true },

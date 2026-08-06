@@ -300,6 +300,52 @@ export default function App() {
     );
   };
 
+  const handleToggleAttendance = (matchId: string, playerId: number, teamSide: 'home' | 'away') => {
+    setMatches((prev) =>
+      prev.map((m) => {
+        if (m.id !== matchId) return m;
+
+        const homePlayers = players.filter((p) => p.teamId === m.homeTeamId);
+        const awayPlayers = players.filter((p) => p.teamId === m.awayTeamId);
+
+        const currentHome = m.attendance?.homePlayerIds ?? homePlayers.map((p) => p.id);
+        const currentAway = m.attendance?.awayPlayerIds ?? awayPlayers.map((p) => p.id);
+
+        if (teamSide === 'home') {
+          const exists = currentHome.includes(playerId);
+          const nextHome = exists ? currentHome.filter((id) => id !== playerId) : [...currentHome, playerId];
+          return { ...m, attendance: { homePlayerIds: nextHome, awayPlayerIds: currentAway } };
+        } else {
+          const exists = currentAway.includes(playerId);
+          const nextAway = exists ? currentAway.filter((id) => id !== playerId) : [...currentAway, playerId];
+          return { ...m, attendance: { homePlayerIds: currentHome, awayPlayerIds: nextAway } };
+        }
+      })
+    );
+  };
+
+  const handleSetAllAttendance = (matchId: string, teamSide: 'home' | 'away', selectAll: boolean) => {
+    setMatches((prev) =>
+      prev.map((m) => {
+        if (m.id !== matchId) return m;
+
+        const homePlayers = players.filter((p) => p.teamId === m.homeTeamId);
+        const awayPlayers = players.filter((p) => p.teamId === m.awayTeamId);
+
+        const currentHome = m.attendance?.homePlayerIds ?? homePlayers.map((p) => p.id);
+        const currentAway = m.attendance?.awayPlayerIds ?? awayPlayers.map((p) => p.id);
+
+        if (teamSide === 'home') {
+          const nextHome = selectAll ? homePlayers.map((p) => p.id) : [];
+          return { ...m, attendance: { homePlayerIds: nextHome, awayPlayerIds: currentAway } };
+        } else {
+          const nextAway = selectAll ? awayPlayers.map((p) => p.id) : [];
+          return { ...m, attendance: { homePlayerIds: currentHome, awayPlayerIds: nextAway } };
+        }
+      })
+    );
+  };
+
   const handleUpdateMatchStatus = (matchId: string, status: 'PROGRAMADO' | 'EN_VIVO' | 'FINALIZADO') => {
     setMatches((prev) =>
       prev.map((m) =>
@@ -489,6 +535,8 @@ export default function App() {
                 isEditMode={isEditMode}
                 onUpdateMatchScore={handleUpdateMatchScore}
                 onUpdateMatchStatus={handleUpdateMatchStatus}
+                onToggleAttendance={handleToggleAttendance}
+                onSetAllAttendance={handleSetAllAttendance}
                 onAddCard={handleAddCard}
                 onAddGoal={handleAddGoal}
                 onRemoveCard={handleRemoveCard}

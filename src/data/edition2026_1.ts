@@ -64,7 +64,7 @@ export const PLAYERS_2026_1: Player[] = [
   { id: 349, dorsal: 10, name: 'ALBERTO OSORIO', teamId: 'AMARILLO' },
 
   // 7. BLANCO
-  { id: 350, dorsal: 7, name: 'JOSE IVAN SIERRA', teamId: 'BLANCO' },
+  { id: 350, dorsal: 7, name: 'JOSE SIERRA', teamId: 'BLANCO' },
   { id: 351, dorsal: 26, name: 'CAMILO PACHECO', teamId: 'BLANCO' },
   { id: 352, dorsal: 2, name: 'GUSTAVO FERNANDEZ', teamId: 'BLANCO' },
   { id: 353, dorsal: 7, name: 'JUAN MARTINEZ', teamId: 'BLANCO' },
@@ -196,7 +196,7 @@ export const CARDS_2026_1: CardRecord[] = [
     { fecha: 17, type: 'AMARILLA' }, { fecha: 20, type: 'AMARILLA' }, { fecha: 31, type: 'AMARILLA' },
     { fecha: 33, type: 'AMARILLA' }
   ]),
-  // JOSE IVAN SIERRA (350)
+  // JOSE SIERRA (350)
   ...createCards(350, [
     { fecha: 8, type: 'AMARILLA' }, { fecha: 10, type: 'AMARILLA' }, { fecha: 13, type: 'AMARILLA' },
     { fecha: 18, type: 'AMARILLA' }, { fecha: 19, type: 'ROJA' }, { fecha: 20, type: 'AZUL' }
@@ -451,7 +451,7 @@ export const GOALS_2026_1: GoalRecord[] = [
   ...createGoalsMap(305, 'AZUL', { 11: 1, 30: 1 }), // MANUEL PEÑA (2)
   ...createGoalsMap(318, 'VERDE', { 29: 1, 32: 1 }), // WALTER GOEZ (2)
   ...createGoalsMap(337, 'ROJO', { 26: 1, 33: 1 }), // HUGO MERCADO (2)
-  ...createGoalsMap(350, 'BLANCO', { 5: 1 }), // JOSE IVAN SIERRA (1)
+  ...createGoalsMap(350, 'BLANCO', { 5: 1 }), // JOSE SIERRA (1)
   ...createGoalsMap(314, 'VERDE', { 7: 1 }), // NILSON CASTELLANOS (1)
   ...createGoalsMap(343, 'AMARILLO', { 10: 1 }), // FERNANDO HUMANEZ (1)
   ...createGoalsMap(362, 'RAYADO', { 10: 1 }), // HECTOR VERGARA (1)

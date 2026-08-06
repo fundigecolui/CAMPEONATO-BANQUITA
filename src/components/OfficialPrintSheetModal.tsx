@@ -51,9 +51,12 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
   if (!isOpen) return null;
 
   // Print section toggles
-  const [printMatches, setPrintMatches] = useState(true);
-  const [printStandings, setPrintStandings] = useState(true);
-  const [printCards, setPrintCards] = useState(true);
+  const [printFechaSummary, setPrintFechaSummary] = useState(true);
+  const [printMatches, setPrintMatches] = useState(false);
+  const [printStandings, setPrintStandings] = useState(false);
+  const [printCards, setPrintCards] = useState(false);
+  const [printAttendance, setPrintAttendance] = useState(false);
+  const [printOnlyAttending, setPrintOnlyAttending] = useState(true);
 
   const currentMatches = matches.filter((m) => m.fecha === currentFecha);
   const fechaDate = FECHA_DATES[currentFecha] || 'Fecha Programada';
@@ -99,33 +102,49 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-2 sm:p-4 overflow-y-auto">
-      {/* CSS Print Styles for Multi-Page PDF & Clean Margins */}
+    <div className="modal-overlay fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-2 sm:p-4 overflow-y-auto print:static print:bg-white print:p-0 print:m-0 print:overflow-visible print:w-full">
+      {/* CSS Print Styles for Multi-Page PDF & Horizontal Landscape Margins */}
       <style>{`
         @media print {
           @page {
-            size: A4 portrait;
-            margin: 10mm 8mm 10mm 8mm;
+            size: letter landscape;
+            size: landscape;
+            margin: 5mm 6mm 5mm 6mm;
           }
-          body {
+          html, body {
+            width: 100% !important;
+            height: auto !important;
+            margin: 0 !important;
+            padding: 0 !important;
             background-color: white !important;
             color: black !important;
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
+            overflow: visible !important;
           }
           .modal-overlay {
             position: static !important;
-            background: none !important;
+            background: transparent !important;
             padding: 0 !important;
+            margin: 0 !important;
+            width: 100% !important;
+            max-width: 100% !important;
             overflow: visible !important;
+            display: block !important;
           }
           .modal-container {
+            position: static !important;
             max-width: 100% !important;
+            width: 100% !important;
             max-height: none !important;
             border: none !important;
             box-shadow: none !important;
             background: white !important;
             color: black !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow: visible !important;
+            display: block !important;
           }
           .print-page-break {
             page-break-after: always !important;
@@ -138,7 +157,7 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
         }
       `}</style>
 
-      <div className="modal-container bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-5xl text-slate-100 shadow-2xl overflow-hidden my-auto flex flex-col max-h-[94vh]">
+      <div className="modal-container bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-6xl text-slate-100 shadow-2xl overflow-hidden my-auto flex flex-col max-h-[94vh] print:max-h-none print:bg-white print:text-black">
         {/* Top Controls Header (Non-printable) */}
         <div className="p-4 bg-slate-950 border-b border-slate-800 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 shrink-0 print:hidden">
           <div>
@@ -149,7 +168,7 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
               </h3>
             </div>
             <p className="text-xs text-slate-400 font-mono mt-0.5">
-              Genera planillas por partido (1 por hoja), Tabla de Posiciones y Control de Tarjetas.
+              Genera el Resumen de Fecha en <strong className="text-amber-400">Hoja Tamaña Carta Horizontal</strong>, Planillas por Partido, Posiciones y Tarjetas.
             </p>
           </div>
 
@@ -172,9 +191,70 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
         </div>
 
         {/* Filter / Section Selectors Toolbar (Non-printable) */}
-        <div className="p-3 bg-slate-900 border-b border-slate-800 flex items-center justify-between text-xs font-mono gap-3 overflow-x-auto print:hidden shrink-0">
-          <span className="text-amber-400 font-bold shrink-0">SECCIONES A INCLUIR:</span>
-          <div className="flex items-center gap-4 text-slate-300">
+        <div className="p-3 bg-slate-900 border-b border-slate-800 flex flex-col md:flex-row items-start md:items-center justify-between text-xs font-mono gap-3 print:hidden shrink-0">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="text-amber-400 font-bold shrink-0">VISTAS RÁPIDAS:</span>
+            <button
+              onClick={() => {
+                setPrintFechaSummary(true);
+                setPrintMatches(false);
+                setPrintStandings(false);
+                setPrintCards(false);
+                setPrintAttendance(false);
+              }}
+              className={`px-2.5 py-1 rounded-lg border font-bold transition cursor-pointer ${
+                printFechaSummary && !printMatches && !printStandings && !printCards && !printAttendance
+                  ? 'bg-amber-500 text-slate-950 border-amber-400 font-black'
+                  : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700'
+              }`}
+            >
+              📺 Solo Resumen Fecha (Pantalla Principal)
+            </button>
+            <button
+              onClick={() => {
+                setPrintFechaSummary(false);
+                setPrintMatches(true);
+                setPrintStandings(false);
+                setPrintCards(false);
+                setPrintAttendance(false);
+              }}
+              className={`px-2.5 py-1 rounded-lg border font-bold transition cursor-pointer ${
+                !printFechaSummary && printMatches && !printStandings && !printCards && !printAttendance
+                  ? 'bg-amber-500 text-slate-950 border-amber-400 font-black'
+                  : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700'
+              }`}
+            >
+              📄 Solo Planillas de Partido
+            </button>
+            <button
+              onClick={() => {
+                setPrintFechaSummary(true);
+                setPrintMatches(true);
+                setPrintStandings(true);
+                setPrintCards(true);
+                setPrintAttendance(true);
+              }}
+              className={`px-2.5 py-1 rounded-lg border font-bold transition cursor-pointer ${
+                printFechaSummary && printMatches && printStandings && printCards && printAttendance
+                  ? 'bg-amber-500 text-slate-950 border-amber-400 font-black'
+                  : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700'
+              }`}
+            >
+              📊 Todo el Expediente Completo
+            </button>
+          </div>
+
+          <div className="flex items-center gap-3 text-slate-300 flex-wrap border-t md:border-t-0 border-slate-800 pt-2 md:pt-0 w-full md:w-auto">
+            <label className="flex items-center gap-1.5 cursor-pointer hover:text-white">
+              <input
+                type="checkbox"
+                checked={printFechaSummary}
+                onChange={(e) => setPrintFechaSummary(e.target.checked)}
+                className="rounded text-amber-500 focus:ring-amber-400 bg-slate-950 border-slate-700"
+              />
+              <span className="text-amber-300 font-bold">Resumen Fecha (Pantalla Principal)</span>
+            </label>
+
             <label className="flex items-center gap-1.5 cursor-pointer hover:text-white">
               <input
                 type="checkbox"
@@ -182,7 +262,7 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
                 onChange={(e) => setPrintMatches(e.target.checked)}
                 className="rounded text-amber-500 focus:ring-amber-400 bg-slate-950 border-slate-700"
               />
-              <span>Planillas de Partidos ({currentMatches.length} Hojas)</span>
+              <span>Planillas ({currentMatches.length})</span>
             </label>
 
             <label className="flex items-center gap-1.5 cursor-pointer hover:text-white">
@@ -192,7 +272,7 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
                 onChange={(e) => setPrintStandings(e.target.checked)}
                 className="rounded text-amber-500 focus:ring-amber-400 bg-slate-950 border-slate-700"
               />
-              <span>Tabla de Posiciones (1 Hoja)</span>
+              <span>Posiciones</span>
             </label>
 
             <label className="flex items-center gap-1.5 cursor-pointer hover:text-white">
@@ -202,13 +282,235 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
                 onChange={(e) => setPrintCards(e.target.checked)}
                 className="rounded text-amber-500 focus:ring-amber-400 bg-slate-950 border-slate-700"
               />
-              <span>Control de Tarjetas y Sanciones (1 Hoja)</span>
+              <span>Tarjetas</span>
+            </label>
+
+            <label className="flex items-center gap-1.5 cursor-pointer hover:text-white">
+              <input
+                type="checkbox"
+                checked={printAttendance}
+                onChange={(e) => setPrintAttendance(e.target.checked)}
+                className="rounded text-amber-500 focus:ring-amber-400 bg-slate-950 border-slate-700"
+              />
+              <span>Consolidado Asistencia</span>
             </label>
           </div>
         </div>
 
         {/* Printable Viewport Container */}
         <div className="p-4 sm:p-6 overflow-y-auto bg-slate-950 text-slate-900 print:bg-white print:text-black print:p-0 print:overflow-visible space-y-8">
+          {/* ======================================================== */}
+          {/* SECTION 0: RESUMEN DE LA FECHA (PANTALLA PRINCIPAL)     */}
+          {/* ======================================================== */}
+          {printFechaSummary && (
+            <div className="bg-white text-black p-5 sm:p-6 rounded-2xl border-2 border-slate-800 print:border-black shadow-md space-y-5 print-page-break print:p-2">
+              {/* Header */}
+              <div className="border-b-2 border-black pb-2.5 flex items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-11 h-11 rounded-lg border border-black p-0.5 flex items-center justify-center shrink-0">
+                    <img src={tournamentLogo} alt="San Simón" className="max-h-full max-w-full object-contain" />
+                  </div>
+                  <div>
+                    <h1 className="text-base sm:text-lg font-black tracking-tight text-black uppercase font-mono leading-tight">
+                      CAMPEONATO BANQUITAS SAN SIMÓN
+                    </h1>
+                    <p className="text-xs font-extrabold text-slate-800">
+                      Resumen Oficial de Partidos, Marcadores e Incidencias (Pantalla Principal)
+                    </p>
+                    <p className="text-[11px] text-slate-600 font-mono">
+                      {getFechaFullTitle(currentFecha)} — {fechaDate}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="text-right font-mono text-xs shrink-0 space-y-1">
+                  <div className="px-3 py-1 rounded bg-black text-white font-extrabold text-xs uppercase tracking-wide inline-block">
+                    RESUMEN JORNADA • CARTA HORIZONTAL
+                  </div>
+                  <div className="text-[11px] font-bold text-slate-800">
+                    4 Partidos Registrados
+                  </div>
+                </div>
+              </div>
+
+              {/* Grid of Matches for this Fecha */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 font-mono print:grid-cols-2 print:gap-2.5">
+                {currentMatches.map((m, idx) => {
+                  const homeTeam = teams.find((t) => t.id === m.homeTeamId);
+                  const awayTeam = teams.find((t) => t.id === m.awayTeamId);
+
+                  const homePlayers = players.filter((p) => p.teamId === m.homeTeamId);
+                  const awayPlayers = players.filter((p) => p.teamId === m.awayTeamId);
+
+                  const homeAttending = m.attendance?.homePlayerIds ?? homePlayers.map((p) => p.id);
+                  const awayAttending = m.attendance?.awayPlayerIds ?? awayPlayers.map((p) => p.id);
+
+                  const homeAbsent = homePlayers.filter((p) => !homeAttending.includes(p.id));
+                  const awayAbsent = awayPlayers.filter((p) => !awayAttending.includes(p.id));
+
+                  const allMatchPlayers = [...homePlayers, ...awayPlayers];
+                  const matchGoals = goals.filter(
+                    (g) => g.fecha === currentFecha && allMatchPlayers.some((p) => p.id === g.playerId)
+                  );
+                  const matchCards = cards.filter(
+                    (c) => c.fecha === currentFecha && allMatchPlayers.some((p) => p.id === c.playerId)
+                  );
+
+                  const homeGoals = matchGoals.filter((g) => homePlayers.some((p) => p.id === g.playerId));
+                  const homeCards = matchCards.filter((c) => homePlayers.some((p) => p.id === c.playerId));
+                  const homeSuspensions = activeSuspensions.filter((s) => s.teamId === m.homeTeamId);
+
+                  const awayGoals = matchGoals.filter((g) => awayPlayers.some((p) => p.id === g.playerId));
+                  const awayCards = matchCards.filter((c) => awayPlayers.some((p) => p.id === c.playerId));
+                  const awaySuspensions = activeSuspensions.filter((s) => s.teamId === m.awayTeamId);
+
+                  const scheduleTime = m.time || MATCH_SCHEDULE_TIMES[idx] || 'Horario Programado';
+
+                  return (
+                    <div
+                      key={m.id}
+                      className="border-2 border-black rounded-xl overflow-hidden bg-slate-900 text-white p-3 space-y-2.5 print:bg-slate-900 print:text-white"
+                    >
+                      {/* Match Bar */}
+                      <div className="flex items-center justify-between border-b border-slate-700 pb-1.5 text-xs">
+                        <span className="font-extrabold text-amber-400">
+                          Partido #{m.id}
+                        </span>
+                        <span className="text-[10px] text-slate-300">
+                          ⏰ {scheduleTime}
+                        </span>
+                        <span className="px-1.5 py-0.5 rounded text-[9px] font-black uppercase bg-emerald-950 text-emerald-400 border border-emerald-800">
+                          {m.status || (m.isPlayed ? 'FINALIZADO' : 'PROGRAMADO')}
+                        </span>
+                      </div>
+
+                      {/* Scoreboard */}
+                      <div className="flex items-center justify-between gap-2 bg-slate-950 p-2 rounded-lg border border-slate-800 text-center">
+                        <div className="flex-1 font-black text-xs text-slate-100 uppercase truncate">
+                          {homeTeam?.name || m.homeTeamId}
+                        </div>
+                        <div className="px-3 py-1 bg-amber-500 text-slate-950 font-black text-sm rounded shadow-inner">
+                          {m.homeGoals ?? 0} - {m.awayGoals ?? 0}
+                        </div>
+                        <div className="flex-1 font-black text-xs text-slate-100 uppercase truncate">
+                          {awayTeam?.name || m.awayTeamId}
+                        </div>
+                      </div>
+
+                      {/* Attendance Summary Bar */}
+                      <div className="text-[10px] text-slate-300 bg-slate-950/80 px-2 py-1 rounded border border-slate-800 flex items-center justify-between">
+                        <span>📋 Control Asistencia:</span>
+                        <span className="font-bold">
+                          <span className="text-emerald-400">{homeTeam?.name}: {homeAttending.length}/{homePlayers.length}</span>
+                          <span className="text-slate-500 mx-1">•</span>
+                          <span className="text-emerald-400">{awayTeam?.name}: {awayAttending.length}/{awayPlayers.length}</span>
+                        </span>
+                      </div>
+
+                      {/* Events & Absences Columns */}
+                      <div className="grid grid-cols-2 gap-2 text-[10px] pt-1 border-t border-slate-800">
+                        {/* Home Team Events */}
+                        <div className="space-y-1 bg-slate-950/60 p-1.5 rounded border border-slate-800/80">
+                          <span className="font-extrabold text-amber-300 block text-[9px] border-b border-slate-800 pb-0.5">
+                            {homeTeam?.name}
+                          </span>
+                          {homeGoals.map((g) => {
+                            const p = players.find((pl) => pl.id === g.playerId);
+                            return (
+                              <div key={g.id} className="text-emerald-300 flex items-center gap-1">
+                                <span>⚽</span>
+                                <span className="font-bold">{p ? `${p.dorsal} ${p.name}` : 'Gol'}</span>
+                              </div>
+                            );
+                          })}
+                          {homeCards.map((c) => {
+                            const p = players.find((pl) => pl.id === c.playerId);
+                            return (
+                              <div key={c.id} className="flex items-center gap-1">
+                                <span>{c.type === 'AMARILLA' ? '🟨' : c.type === 'AZUL' ? '🟦' : '🟥'}</span>
+                                <span className="text-slate-200">{p ? `${p.dorsal} ${p.name}` : 'Tarjeta'}</span>
+                              </div>
+                            );
+                          })}
+                          {homeSuspensions.map((s) => (
+                            <div key={s.playerId} className="text-red-400 flex items-center gap-1 font-bold">
+                              <span>⚠️</span>
+                              <span>{s.playerName} (Sancionado)</span>
+                            </div>
+                          ))}
+                          {homeAbsent.map((p) => (
+                            <div key={`abs-${p.id}`} className="text-red-300 flex items-center justify-between gap-1">
+                              <span className="truncate">❌ {p.dorsal} {p.name}</span>
+                              <span className="text-[8px] bg-red-950 text-red-300 px-1 rounded border border-red-900 shrink-0 font-bold">
+                                NO ASISTE
+                              </span>
+                            </div>
+                          ))}
+                          {homeGoals.length === 0 && homeCards.length === 0 && homeSuspensions.length === 0 && homeAbsent.length === 0 && (
+                            <span className="text-slate-500 italic text-[9px]">Sin novedades</span>
+                          )}
+                        </div>
+
+                        {/* Away Team Events */}
+                        <div className="space-y-1 bg-slate-950/60 p-1.5 rounded border border-slate-800/80">
+                          <span className="font-extrabold text-amber-300 block text-[9px] border-b border-slate-800 pb-0.5">
+                            {awayTeam?.name}
+                          </span>
+                          {awayGoals.map((g) => {
+                            const p = players.find((pl) => pl.id === g.playerId);
+                            return (
+                              <div key={g.id} className="text-emerald-300 flex items-center gap-1">
+                                <span>⚽</span>
+                                <span className="font-bold">{p ? `${p.dorsal} ${p.name}` : 'Gol'}</span>
+                              </div>
+                            );
+                          })}
+                          {awayCards.map((c) => {
+                            const p = players.find((pl) => pl.id === c.playerId);
+                            return (
+                              <div key={c.id} className="flex items-center gap-1">
+                                <span>{c.type === 'AMARILLA' ? '🟨' : c.type === 'AZUL' ? '🟦' : '🟥'}</span>
+                                <span className="text-slate-200">{p ? `${p.dorsal} ${p.name}` : 'Tarjeta'}</span>
+                              </div>
+                            );
+                          })}
+                          {awaySuspensions.map((s) => (
+                            <div key={s.playerId} className="text-red-400 flex items-center gap-1 font-bold">
+                              <span>⚠️</span>
+                              <span>{s.playerName} (Sancionado)</span>
+                            </div>
+                          ))}
+                          {awayAbsent.map((p) => (
+                            <div key={`abs-${p.id}`} className="text-red-300 flex items-center justify-between gap-1">
+                              <span className="truncate">❌ {p.dorsal} {p.name}</span>
+                              <span className="text-[8px] bg-red-950 text-red-300 px-1 rounded border border-red-900 shrink-0 font-bold">
+                                NO ASISTE
+                              </span>
+                            </div>
+                          ))}
+                          {awayGoals.length === 0 && awayCards.length === 0 && awaySuspensions.length === 0 && awayAbsent.length === 0 && (
+                            <span className="text-slate-500 italic text-[9px]">Sin novedades</span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Signatures */}
+              <div className="pt-3 border-t border-black grid grid-cols-2 gap-8 text-center font-mono text-[10px]">
+                <div className="space-y-2">
+                  <div className="border-b border-black h-6"></div>
+                  <p className="font-extrabold uppercase">COORDINADOR DE MESA Y CANCHA</p>
+                </div>
+                <div className="space-y-2">
+                  <div className="border-b border-black h-6"></div>
+                  <p className="font-extrabold uppercase">VOCAL DE DISCIPLINA Y ASISTENCIA</p>
+                </div>
+              </div>
+            </div>
+          )}
           {/* ======================================================== */}
           {/* SECTION 1: MATCH PLANILLAS (1 PAGE PER MATCH)           */}
           {/* ======================================================== */}
@@ -496,6 +798,105 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
                       );
                     })()}
                   </div>
+
+                  {/* Official Lineup / Attendance Table on Printed Sheet */}
+                  {(() => {
+                    const homeAttending = m.attendance?.homePlayerIds ?? homePlayers.map((p) => p.id);
+                    const awayAttending = m.attendance?.awayPlayerIds ?? awayPlayers.map((p) => p.id);
+
+                    const displayedHome = printOnlyAttending
+                      ? homePlayers.filter((p) => homeAttending.includes(p.id))
+                      : homePlayers;
+
+                    const displayedAway = printOnlyAttending
+                      ? awayPlayers.filter((p) => awayAttending.includes(p.id))
+                      : awayPlayers;
+
+                    return (
+                      <div className="border border-black rounded-lg p-2.5 bg-white text-black font-mono text-[10px]">
+                        <div className="flex items-center justify-between border-b border-black pb-1 mb-1 font-bold">
+                          <span className="uppercase text-[11px] font-black">
+                            📋 ALINEACIÓN OFICIAL Y NÓMINA DE CAMPO ({printOnlyAttending ? 'SOLO ASISTENTES CONVOCADOS' : 'NÓMINA COMPLETA'})
+                          </span>
+                          <span className="text-[10px] text-slate-700">
+                            Local: {displayedHome.length} jug. | Visitante: {displayedAway.length} jug.
+                          </span>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-3">
+                          {/* Home Team Lineup */}
+                          <div>
+                            <span className="font-extrabold text-black block mb-0.5 border-b border-black pb-0.5 uppercase text-[10px]">
+                              LOCAL: {homeTeam?.name}
+                            </span>
+                            <table className="w-full text-left border-collapse">
+                              <thead>
+                                <tr className="border-b border-black font-bold bg-slate-100">
+                                  <th className="p-0.5 w-6 text-center">#</th>
+                                  <th className="p-0.5">Jugador</th>
+                                  <th className="p-0.5 text-center w-14">Asistencia</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {displayedHome.map((p) => {
+                                  const attended = homeAttending.includes(p.id);
+                                  return (
+                                    <tr key={p.id} className="border-b border-slate-200">
+                                      <td className="p-0.5 text-center font-bold">{p.dorsal}</td>
+                                      <td className="p-0.5">{p.name} {p.isCaptain ? '(C)' : ''}</td>
+                                      <td className="p-0.5 text-center font-bold">
+                                        {attended ? '✅ Pres.' : '❌ Aus.'}
+                                      </td>
+                                    </tr>
+                                  );
+                                })}
+                                {displayedHome.length === 0 && (
+                                  <tr>
+                                    <td colSpan={3} className="p-1 italic text-slate-500 text-center">Sin jugadores convocados</td>
+                                  </tr>
+                                )}
+                              </tbody>
+                            </table>
+                          </div>
+
+                          {/* Away Team Lineup */}
+                          <div>
+                            <span className="font-extrabold text-black block mb-0.5 border-b border-black pb-0.5 uppercase text-[10px]">
+                              VISITANTE: {awayTeam?.name}
+                            </span>
+                            <table className="w-full text-left border-collapse">
+                              <thead>
+                                <tr className="border-b border-black font-bold bg-slate-100">
+                                  <th className="p-0.5 w-6 text-center">#</th>
+                                  <th className="p-0.5">Jugador</th>
+                                  <th className="p-0.5 text-center w-14">Asistencia</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {displayedAway.map((p) => {
+                                  const attended = awayAttending.includes(p.id);
+                                  return (
+                                    <tr key={p.id} className="border-b border-slate-200">
+                                      <td className="p-0.5 text-center font-bold">{p.dorsal}</td>
+                                      <td className="p-0.5">{p.name} {p.isCaptain ? '(C)' : ''}</td>
+                                      <td className="p-0.5 text-center font-bold">
+                                        {attended ? '✅ Pres.' : '❌ Aus.'}
+                                      </td>
+                                    </tr>
+                                  );
+                                })}
+                                {displayedAway.length === 0 && (
+                                  <tr>
+                                    <td colSpan={3} className="p-1 italic text-slate-500 text-center">Sin jugadores convocados</td>
+                                  </tr>
+                                )}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })()}
 
                   {/* Arbitral Control & Field Incidents Notes Box */}
                   <div className="p-2.5 bg-slate-50 border border-black rounded-lg space-y-1 font-mono text-xs">
@@ -909,6 +1310,145 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
                 <div className="space-y-4">
                   <div className="border-b border-black h-8"></div>
                   <p className="font-extrabold uppercase">COORDINADOR DE ARBITRAJE</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ======================================================== */}
+          {/* SECTION 4: CONSOLIDADO DE ASISTENCIA Y PARTICIPACIÓN       */}
+          {/* ======================================================== */}
+          {printAttendance && (
+            <div className="bg-white text-black p-6 rounded-2xl border-2 border-slate-800 print:border-black shadow-md space-y-4 print-page-break print:p-2">
+              {/* Header */}
+              <div className="border-b-2 border-black pb-3 flex items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-lg border border-black p-0.5 flex items-center justify-center shrink-0">
+                    <img src={tournamentLogo} alt="San Simón" className="max-h-full max-w-full object-contain" />
+                  </div>
+                  <div>
+                    <h1 className="text-base sm:text-lg font-black tracking-tight text-black uppercase font-mono leading-tight">
+                      CAMPEONATO BANQUITAS SAN SIMÓN IISEM
+                    </h1>
+                    <p className="text-xs font-extrabold text-slate-800">
+                      Consolidado Oficial de Asistencia y Convocatoria de Jugadores
+                    </p>
+                    <p className="text-[11px] text-slate-600 font-mono">
+                      Corte a la {getFechaFullTitle(currentFecha)} — {fechaDate}
+                    </p>
+                    <div className="flex items-center gap-3 mt-1 text-[10px] font-bold">
+                      <span className="flex items-center gap-1 text-emerald-800">
+                        <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block"></span>
+                        Asistencia
+                      </span>
+                      <span className="flex items-center gap-1 text-orange-800">
+                        <span className="w-2.5 h-2.5 rounded-full bg-orange-500 inline-block"></span>
+                        No Asistencia / Ausencia
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="text-right font-mono text-xs shrink-0">
+                  <div className="px-3 py-1 rounded bg-black text-white font-extrabold text-xs">
+                    REPORTE GENERAL
+                  </div>
+                  <div className="text-[11px] font-bold mt-1 text-slate-800">
+                    {teams.length} Equipos Registrados
+                  </div>
+                </div>
+              </div>
+
+              {/* Attendance Consolidated Tables by Team */}
+              <div className="space-y-4 font-mono">
+                {teams.map((t) => {
+                  const teamPlayers = players.filter((p) => p.teamId === t.id);
+                  const teamMatches = matches.filter(
+                    (m) => (m.isPlayed || m.status === 'FINALIZADO') && m.fecha! <= currentFecha && (m.homeTeamId === t.id || m.awayTeamId === t.id)
+                  );
+                  const totalTeamPlayed = teamMatches.length;
+
+                  const attendanceRows = teamPlayers.map((p) => {
+                    const attendedCount = teamMatches.filter((m) => {
+                      const isHome = m.homeTeamId === t.id;
+                      const list = isHome ? m.attendance?.homePlayerIds : m.attendance?.awayPlayerIds;
+                      if (list) return list.includes(p.id);
+                      return true; // Default attended if no explicit log
+                    }).length;
+
+                    const pct = totalTeamPlayed > 0 ? Math.round((attendedCount / totalTeamPlayed) * 100) : 100;
+                    return { player: p, attendedCount, pct };
+                  });
+
+                  return (
+                    <div key={t.id} className="border border-black rounded-lg overflow-hidden">
+                      <div className="bg-slate-900 text-white p-2 flex items-center justify-between font-bold text-xs">
+                        <span className="uppercase font-black text-amber-400">
+                          {t.name} ({teamPlayers.length} Jugadores)
+                        </span>
+                        <span>Total Partidos Jugados del Equipo: {totalTeamPlayed}</span>
+                      </div>
+                      <table className="w-full text-left border-collapse text-[11px]">
+                        <thead>
+                          <tr className="bg-slate-100 border-b border-black font-bold">
+                            <th className="p-1.5 w-10 text-center border-r border-black">#</th>
+                            <th className="p-1.5 border-r border-black">Jugador</th>
+                            <th className="p-1.5 text-center w-24 border-r border-black">Partidos Equipo</th>
+                            <th className="p-1.5 text-center w-28 border-r border-black">Partidos Asistidos</th>
+                            <th className="p-1.5 text-center w-24 border-r border-black">% Asistencia</th>
+                            <th className="p-1.5 text-center w-48">Asistencia</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-300">
+                          {attendanceRows.map(({ player: p, attendedCount, pct }, idx) => {
+                            const absentCount = Math.max(0, totalTeamPlayed - attendedCount);
+                            return (
+                              <tr key={p.id} className={idx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}>
+                                <td className="p-1.5 text-center font-bold border-r border-black">{p.dorsal}</td>
+                                <td className="p-1.5 font-bold border-r border-black">{p.name} {p.isCaptain ? '(C)' : ''}</td>
+                                <td className="p-1.5 text-center border-r border-black">{totalTeamPlayed}</td>
+                                <td className="p-1.5 text-center font-bold text-emerald-800 border-r border-black">{attendedCount}</td>
+                                <td className="p-1.5 text-center font-black border-r border-black">{pct}%</td>
+                                <td className="p-1.5 text-center">
+                                  <div className="flex items-center justify-center gap-2 px-1">
+                                    {/* Cylindrical capsule bar */}
+                                    <div
+                                      className="w-28 h-4 bg-orange-500 rounded-full border border-slate-700 overflow-hidden flex shadow-inner relative"
+                                      title={`${attendedCount} Asistidos (Verde) | ${absentCount} Ausencias (Naranja)`}
+                                    >
+                                      {pct > 0 && (
+                                        <div
+                                          className="bg-emerald-500 h-full transition-all duration-300 flex items-center justify-center"
+                                          style={{ width: `${pct}%` }}
+                                        />
+                                      )}
+                                    </div>
+                                    <span className="text-[10px] font-extrabold font-mono shrink-0">
+                                      <span className="text-emerald-700">{attendedCount}A</span>
+                                      <span className="text-slate-400">/</span>
+                                      <span className="text-orange-600">{absentCount}F</span>
+                                    </span>
+                                  </div>
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Signatures */}
+              <div className="pt-4 border-t border-black grid grid-cols-2 gap-8 text-center font-mono text-[10px]">
+                <div className="space-y-3">
+                  <div className="border-b border-black h-7"></div>
+                  <p className="font-extrabold uppercase">VOCAL DE ASISTENCIA Y CONTROL</p>
+                </div>
+                <div className="space-y-3">
+                  <div className="border-b border-black h-7"></div>
+                  <p className="font-extrabold uppercase">COORDINADOR GENERAL DE TORNEO</p>
                 </div>
               </div>
             </div>

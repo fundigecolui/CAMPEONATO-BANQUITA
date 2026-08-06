@@ -27,7 +27,7 @@ export const PLAYERS_2025_2: Player[] = [
   { id: 202, dorsal: 11, name: 'ALBERT MONTERROZA', teamId: 'VERDE', isCaptain: true },
   { id: 203, dorsal: 11, name: 'JOSE FIGUEROA', teamId: 'VERDE' },
   { id: 204, dorsal: 9, name: 'JOSE DAVID HOYOS', teamId: 'VERDE' },
-  { id: 207, dorsal: 7, name: 'JOSE IVAN SIERRA', teamId: 'VERDE' },
+  { id: 207, dorsal: 7, name: 'JOSE SIERRA', teamId: 'VERDE' },
   { id: 257, dorsal: 9, name: 'ROBERT VILLALBA', teamId: 'VERDE' },
   { id: 258, dorsal: 20, name: 'JORGE LUIS PINTO', teamId: 'VERDE' },
   { id: 259, dorsal: 4, name: 'EDUAR MONTIEL', teamId: 'VERDE' },
@@ -171,7 +171,7 @@ export const CARDS_2025_2: CardRecord[] = [
     { fecha: 25, type: 'AMARILLA' }, { fecha: 29, type: 'AMARILLA' },
   ]),
 
-  // JOSE IVAN SIERRA (VERDE - #207): 7 AM, 1 RO
+  // JOSE SIERRA (VERDE - #207): 7 AM, 1 RO
   ...createCards(207, [
     { fecha: 1, type: 'AMARILLA' }, { fecha: 5, type: 'AMARILLA' }, { fecha: 8, type: 'AMARILLA' },
     { fecha: 11, type: 'ROJA' }, { fecha: 16, type: 'AMARILLA' }, { fecha: 20, type: 'AMARILLA' },

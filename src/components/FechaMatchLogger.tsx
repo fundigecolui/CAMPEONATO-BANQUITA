@@ -26,6 +26,8 @@ interface FechaMatchLoggerProps {
   isEditMode: boolean;
   onUpdateMatchScore: (matchId: string, homeGoals: number, awayGoals: number) => void;
   onUpdateMatchStatus?: (matchId: string, status: 'PROGRAMADO' | 'EN_VIVO' | 'FINALIZADO') => void;
+  onToggleAttendance?: (matchId: string, playerId: number, teamSide: 'home' | 'away') => void;
+  onSetAllAttendance?: (matchId: string, teamSide: 'home' | 'away', selectAll: boolean) => void;
   onAddCard: (playerId: number, fecha: number, type: CardType) => void;
   onAddGoal: (playerId: number, fecha: number, teamId: TeamId) => void;
   onRemoveCard: (cardId: string) => void;
@@ -46,6 +48,8 @@ export const FechaMatchLogger: React.FC<FechaMatchLoggerProps> = ({
   isEditMode,
   onUpdateMatchScore,
   onUpdateMatchStatus,
+  onToggleAttendance,
+  onSetAllAttendance,
   onAddCard,
   onAddGoal,
   onRemoveCard,
@@ -60,6 +64,7 @@ export const FechaMatchLogger: React.FC<FechaMatchLoggerProps> = ({
   // Selected player for quick event registration per match
   const [selectedPlayerPerMatch, setSelectedPlayerPerMatch] = useState<Record<string, number>>({});
   const [isPrintSheetOpen, setIsPrintSheetOpen] = useState(false);
+  const [openAttendanceMatchId, setOpenAttendanceMatchId] = useState<string | null>(null);
 
   const handlePrintPlanilla = () => {
     setIsPrintSheetOpen(true);
@@ -96,11 +101,11 @@ export const FechaMatchLogger: React.FC<FechaMatchLoggerProps> = ({
         <div className="flex items-center gap-2 flex-wrap">
           <button
             onClick={handlePrintPlanilla}
-            title="Imprimir Planilla Oficial de Fecha"
-            className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition flex items-center gap-1.5 border border-slate-700 cursor-pointer"
+            title="Imprimir Resumen de la Fecha (Muestra los marcadores e incidencias de la pantalla principal)"
+            className="px-3.5 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black transition flex items-center gap-1.5 border border-amber-400 cursor-pointer shadow-md"
           >
-            <Printer className="w-3.5 h-3.5 text-amber-400" />
-            <span className="hidden md:inline">Planilla</span>
+            <Printer className="w-4 h-4 text-slate-950" />
+            <span>Resumen Fecha</span>
           </button>
 
           <button
@@ -509,8 +514,155 @@ export const FechaMatchLogger: React.FC<FechaMatchLoggerProps> = ({
                 </div>
               ) : null}
 
+              {/* Attendance & Lineup Checklist Bar */}
+              {(() => {
+                const homeAttending = match.attendance?.homePlayerIds ?? homePlayers.map((p) => p.id);
+                const awayAttending = match.attendance?.awayPlayerIds ?? awayPlayers.map((p) => p.id);
+                const isAttendanceOpen = openAttendanceMatchId === match.id;
+
+                return (
+                  <div className="bg-slate-950/80 border-t border-slate-800">
+                    <button
+                      onClick={() => setOpenAttendanceMatchId(isAttendanceOpen ? null : match.id)}
+                      className="w-full px-4 py-2 flex items-center justify-between text-xs font-mono font-bold text-slate-300 hover:text-white hover:bg-slate-900 transition cursor-pointer"
+                    >
+                      <span className="flex items-center gap-2 flex-wrap">
+                        <span>📋</span>
+                        <span>Control de Asistencia:</span>
+                        <span className="text-emerald-400">{homeTeam?.name}: {homeAttending.length}/{homePlayers.length}</span>
+                        <span className="text-slate-500">•</span>
+                        <span className="text-emerald-400">{awayTeam?.name}: {awayAttending.length}/{awayPlayers.length}</span>
+                      </span>
+                      <span className="text-amber-400 text-[11px] underline shrink-0">
+                        {isAttendanceOpen ? 'Ocultar Lista ▲' : 'Ver / Marcar Asistentes ▼'}
+                      </span>
+                    </button>
+
+                    {isAttendanceOpen && (
+                      <div className="p-3 bg-slate-900/90 border-t border-slate-800 grid grid-cols-1 md:grid-cols-2 gap-3 text-xs font-mono">
+                        {/* Home Team Attendance */}
+                        <div className="bg-slate-950 p-2.5 rounded-xl border border-slate-800 space-y-2">
+                          <div className="flex items-center justify-between border-b border-slate-800 pb-1.5">
+                            <span className="font-extrabold text-amber-400 uppercase text-[11px]">
+                              {homeTeam?.name} ({homeAttending.length} Presentes)
+                            </span>
+                            {isEditMode && onSetAllAttendance && (
+                              <div className="flex gap-1.5 text-[10px]">
+                                <button
+                                  onClick={() => onSetAllAttendance(match.id, 'home', true)}
+                                  className="text-emerald-400 hover:underline font-bold cursor-pointer"
+                                >
+                                  Todos
+                                </button>
+                                <span className="text-slate-600">|</span>
+                                <button
+                                  onClick={() => onSetAllAttendance(match.id, 'home', false)}
+                                  className="text-red-400 hover:underline font-bold cursor-pointer"
+                                >
+                                  Ninguno
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                          <div className="space-y-1 max-h-40 overflow-y-auto pr-1">
+                            {homePlayers.map((p) => {
+                              const isChecked = homeAttending.includes(p.id);
+                              return (
+                                <label
+                                  key={p.id}
+                                  className={`flex items-center justify-between p-1.5 rounded text-[11px] border cursor-pointer transition ${
+                                    isChecked
+                                      ? 'bg-emerald-950/40 border-emerald-800/60 text-slate-100 font-bold'
+                                      : 'bg-slate-900 border-slate-800 text-slate-500 line-through'
+                                  }`}
+                                >
+                                  <span className="flex items-center gap-2">
+                                    <input
+                                      type="checkbox"
+                                      disabled={!isEditMode}
+                                      checked={isChecked}
+                                      onChange={() => onToggleAttendance && onToggleAttendance(match.id, p.id, 'home')}
+                                      className="rounded text-emerald-500 focus:ring-emerald-400 bg-slate-950 border-slate-700"
+                                    />
+                                    <span>#{p.dorsal} {p.name}</span>
+                                  </span>
+                                  <span className="text-[10px] uppercase font-mono">
+                                    {isChecked ? '✅ Asiste' : '❌ Ausente'}
+                                  </span>
+                                </label>
+                              );
+                            })}
+                          </div>
+                        </div>
+
+                        {/* Away Team Attendance */}
+                        <div className="bg-slate-950 p-2.5 rounded-xl border border-slate-800 space-y-2">
+                          <div className="flex items-center justify-between border-b border-slate-800 pb-1.5">
+                            <span className="font-extrabold text-amber-400 uppercase text-[11px]">
+                              {awayTeam?.name} ({awayAttending.length} Presentes)
+                            </span>
+                            {isEditMode && onSetAllAttendance && (
+                              <div className="flex gap-1.5 text-[10px]">
+                                <button
+                                  onClick={() => onSetAllAttendance(match.id, 'away', true)}
+                                  className="text-emerald-400 hover:underline font-bold cursor-pointer"
+                                >
+                                  Todos
+                                </button>
+                                <span className="text-slate-600">|</span>
+                                <button
+                                  onClick={() => onSetAllAttendance(match.id, 'away', false)}
+                                  className="text-red-400 hover:underline font-bold cursor-pointer"
+                                >
+                                  Ninguno
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                          <div className="space-y-1 max-h-40 overflow-y-auto pr-1">
+                            {awayPlayers.map((p) => {
+                              const isChecked = awayAttending.includes(p.id);
+                              return (
+                                <label
+                                  key={p.id}
+                                  className={`flex items-center justify-between p-1.5 rounded text-[11px] border cursor-pointer transition ${
+                                    isChecked
+                                      ? 'bg-emerald-950/40 border-emerald-800/60 text-slate-100 font-bold'
+                                      : 'bg-slate-900 border-slate-800 text-slate-500 line-through'
+                                  }`}
+                                >
+                                  <span className="flex items-center gap-2">
+                                    <input
+                                      type="checkbox"
+                                      disabled={!isEditMode}
+                                      checked={isChecked}
+                                      onChange={() => onToggleAttendance && onToggleAttendance(match.id, p.id, 'away')}
+                                      className="rounded text-emerald-500 focus:ring-emerald-400 bg-slate-950 border-slate-700"
+                                    />
+                                    <span>#{p.dorsal} {p.name}</span>
+                                  </span>
+                                  <span className="text-[10px] uppercase font-mono">
+                                    {isChecked ? '✅ Asiste' : '❌ Ausente'}
+                                  </span>
+                                </label>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })()}
+
               {/* Match Event Timeline Log Divided by Teams (Local vs Visitor) */}
               {(() => {
+                const homeAttending = match.attendance?.homePlayerIds ?? homePlayers.map((p) => p.id);
+                const awayAttending = match.attendance?.awayPlayerIds ?? awayPlayers.map((p) => p.id);
+
+                const homeAbsent = homePlayers.filter((p) => !homeAttending.includes(p.id));
+                const awayAbsent = awayPlayers.filter((p) => !awayAttending.includes(p.id));
+
                 const homeGoals = matchGoals.filter((g) => homePlayers.some((p) => p.id === g.playerId));
                 const homeCards = matchCards.filter((c) => homePlayers.some((p) => p.id === c.playerId));
                 const homeSuspensions = activeSuspensions.filter((s) => s.teamId === match.homeTeamId);
@@ -523,10 +675,15 @@ export const FechaMatchLogger: React.FC<FechaMatchLoggerProps> = ({
                   <div className="p-3 bg-slate-950 border-t border-slate-800 grid grid-cols-1 md:grid-cols-2 gap-3 text-xs font-mono">
                     {/* Home Team Column */}
                     <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-2.5 space-y-2">
-                      <div className="border-b border-slate-800 pb-1.5">
+                      <div className="border-b border-slate-800 pb-1.5 flex items-center justify-between">
                         <span className="font-extrabold text-amber-400 uppercase tracking-wide text-[11px]">
                           {homeTeam?.name || match.homeTeamId}
                         </span>
+                        {homeAbsent.length > 0 && (
+                          <span className="text-[10px] text-red-400 font-bold bg-red-950 px-1.5 py-0.5 rounded border border-red-900">
+                            {homeAbsent.length} Ausente{homeAbsent.length > 1 ? 's' : ''}
+                          </span>
+                        )}
                       </div>
 
                       <div className="space-y-1.5 text-[11px]">
@@ -599,11 +756,28 @@ export const FechaMatchLogger: React.FC<FechaMatchLoggerProps> = ({
                           );
                         })}
 
+                        {/* Absent players (NO ASISTE) */}
+                        {homeAbsent.map((p) => (
+                          <div
+                            key={`absent-${p.id}`}
+                            className="flex items-center justify-between bg-slate-950 px-2 py-1 rounded border border-red-950/60 text-slate-300"
+                          >
+                            <span className="flex items-center gap-1.5 text-[11px]">
+                              <span className="text-red-500 font-bold text-xs">❌</span>
+                              <span className="font-semibold text-slate-200">{p.dorsal} {p.name}</span>
+                            </span>
+                            <span className="text-[9px] font-bold text-red-400 uppercase bg-red-950/90 px-1.5 py-0.5 rounded border border-red-900/40">
+                              NO ASISTE
+                            </span>
+                          </div>
+                        ))}
+
                         {homeGoals.length === 0 &&
                           homeCards.length === 0 &&
-                          homeSuspensions.length === 0 && (
+                          homeSuspensions.length === 0 &&
+                          homeAbsent.length === 0 && (
                             <p className="text-slate-500 italic text-[10px] p-0.5">
-                              Sin eventos registrados
+                              Sin novedades registradas
                             </p>
                           )}
                       </div>
@@ -611,10 +785,15 @@ export const FechaMatchLogger: React.FC<FechaMatchLoggerProps> = ({
 
                     {/* Away Team Column */}
                     <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-2.5 space-y-2">
-                      <div className="border-b border-slate-800 pb-1.5">
+                      <div className="border-b border-slate-800 pb-1.5 flex items-center justify-between">
                         <span className="font-extrabold text-amber-400 uppercase tracking-wide text-[11px]">
                           {awayTeam?.name || match.awayTeamId}
                         </span>
+                        {awayAbsent.length > 0 && (
+                          <span className="text-[10px] text-red-400 font-bold bg-red-950 px-1.5 py-0.5 rounded border border-red-900">
+                            {awayAbsent.length} Ausente{awayAbsent.length > 1 ? 's' : ''}
+                          </span>
+                        )}
                       </div>
 
                       <div className="space-y-1.5 text-[11px]">
@@ -687,11 +866,28 @@ export const FechaMatchLogger: React.FC<FechaMatchLoggerProps> = ({
                           );
                         })}
 
+                        {/* Absent players (NO ASISTE) */}
+                        {awayAbsent.map((p) => (
+                          <div
+                            key={`absent-${p.id}`}
+                            className="flex items-center justify-between bg-slate-950 px-2 py-1 rounded border border-red-950/60 text-slate-300"
+                          >
+                            <span className="flex items-center gap-1.5 text-[11px]">
+                              <span className="text-red-500 font-bold text-xs">❌</span>
+                              <span className="font-semibold text-slate-200">{p.dorsal} {p.name}</span>
+                            </span>
+                            <span className="text-[9px] font-bold text-red-400 uppercase bg-red-950/90 px-1.5 py-0.5 rounded border border-red-900/40">
+                              NO ASISTE
+                            </span>
+                          </div>
+                        ))}
+
                         {awayGoals.length === 0 &&
                           awayCards.length === 0 &&
-                          awaySuspensions.length === 0 && (
+                          awaySuspensions.length === 0 &&
+                          awayAbsent.length === 0 && (
                             <p className="text-slate-500 italic text-[10px] p-0.5">
-                              Sin eventos registrados
+                              Sin novedades registradas
                             </p>
                           )}
                       </div>

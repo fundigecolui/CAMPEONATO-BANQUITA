@@ -169,7 +169,7 @@ export const ReglamentoViewer: React.FC<ReglamentoViewerProps> = ({
           num: 'Art. 6',
           titulo: 'Duración del Partido y Programación Horaria',
           texto:
-            'El tiempo reglamentario es de 40 minutos (dos periodos de 20 minutos con descanso intermedio de 5 minutos).\nHorarios de los partidos en Cancha San Simón:\n• 1ra Hora: 7:00 p.m. a 7:50 p.m. (10 minutos de tiempo de espera único)\n• 2da Hora: 7:55 p.m. a 8:45 p.m. (5 minutos de tiempo de espera)\n• 3ra Hora: 8:50 p.m. a 9:40 p.m. (5 minutos de tiempo de espera)\n• 4ta Hora: 9:45 p.m. a 10:30 p.m. (5 minutos de tiempo de espera)',
+            'El tiempo reglamentario es de 40 minutos (dos tiempos de 20 minutos con descanso intermedio de 5 minutos).\nHorarios de los partidos en Cancha San Simón:\n• 1ra Hora: 7:00 p.m. a 7:50 p.m. (10 minutos de tiempo de espera único)\n• 2da Hora: 7:55 p.m. a 8:45 p.m. (5 minutos de tiempo de espera)\n• 3ra Hora: 8:50 p.m. a 9:40 p.m. (5 minutos de tiempo de espera)\n• 4ta Hora: 9:45 p.m. a 10:30 p.m. (5 minutos de tiempo de espera)',
         },
         {
           num: 'Art. 7',
@@ -542,7 +542,7 @@ export const ReglamentoViewer: React.FC<ReglamentoViewerProps> = ({
               </div>
               <div>
                 <span className="text-[10px] uppercase tracking-wider font-bold text-slate-400">Duración</span>
-                <p className="text-xs font-bold text-white mt-0.5">2 Tiempos de 25 min</p>
+                <p className="text-xs font-bold text-white mt-0.5">2 Tiempos de 20 min</p>
                 <span className="text-[10px] text-slate-400">5 min de descanso</span>
               </div>
             </div>

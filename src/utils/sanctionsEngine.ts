@@ -122,7 +122,8 @@ export function computeStandings(
   teams: Team[],
   matches: Match[],
   cards: CardRecord[] = [],
-  players: Player[] = []
+  players: Player[] = [],
+  maxFecha: number = 35
 ): TeamStandings[] {
   const standingsMap: Record<TeamId, TeamStandings> = {} as any;
 
@@ -145,9 +146,10 @@ export function computeStandings(
     };
   });
 
-  // Process Played Matches
+  // Process Played Matches up to maxFecha (Fase Regular Todos contra Todos)
   matches.forEach((m) => {
     if (!m.isPlayed) return;
+    if (m.fecha > maxFecha) return;
 
     const home = standingsMap[m.homeTeamId];
     const away = standingsMap[m.awayTeamId];
@@ -184,8 +186,9 @@ export function computeStandings(
     s.dg = s.gf - s.gc;
   });
 
-  // Deduct Fair Play Points based on team cards
+  // Deduct Fair Play Points based on team cards (only up to maxFecha)
   cards.forEach((c) => {
+    if (c.fecha > maxFecha) return;
     const p = players.find((player) => player.id === c.playerId);
     if (p && standingsMap[p.teamId]) {
       const t = standingsMap[p.teamId];

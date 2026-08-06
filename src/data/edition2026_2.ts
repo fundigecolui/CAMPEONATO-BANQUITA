@@ -67,7 +67,7 @@ export const PLAYERS_2026_2: Player[] = [
   { id: 450, dorsal: 5, name: 'EDWIN TEJADA', teamId: 'AMARILLO', isCaptain: true },
   { id: 451, dorsal: 18, name: 'YAMIR PINEDA', teamId: 'AMARILLO' },
   { id: 452, dorsal: 11, name: 'PEDRO DE LEON', teamId: 'AMARILLO' },
-  { id: 453, dorsal: 7, name: 'JOSE IVAN SIERRA', teamId: 'AMARILLO' },
+  { id: 453, dorsal: 7, name: 'JOSE SIERRA', teamId: 'AMARILLO' },
   { id: 454, dorsal: 17, name: 'HECTOR VERGARA', teamId: 'AMARILLO' },
   { id: 455, dorsal: 4, name: 'BERNARDO GALVIS', teamId: 'AMARILLO' },
   { id: 456, dorsal: 19, name: 'EDGARDO PACHECO', teamId: 'AMARILLO' },
@@ -108,9 +108,37 @@ export const GOALS_2026_2: GoalRecord[] = [
 const INITIAL_7_FECHAS_2026_2: Match[] = [
   // FECHA 1 (4 de Agosto)
   { id: 'm1-1', fecha: 1, homeTeamId: 'RAYADO', awayTeamId: 'ROJO', homeGoals: 2, awayGoals: 0, isPlayed: true, status: 'FINALIZADO', dateStr: '4 de Agosto' },
-  { id: 'm1-2', fecha: 1, homeTeamId: 'NEGRO', awayTeamId: 'BLANCO', homeGoals: 0, awayGoals: 0, isPlayed: true, status: 'FINALIZADO', dateStr: '4 de Agosto' },
+  {
+    id: 'm1-2',
+    fecha: 1,
+    homeTeamId: 'NEGRO',
+    awayTeamId: 'BLANCO',
+    homeGoals: 0,
+    awayGoals: 0,
+    isPlayed: true,
+    status: 'FINALIZADO',
+    dateStr: '4 de Agosto',
+    attendance: {
+      homePlayerIds: [417, 419, 420, 421, 423, 424], // Excludes 418 (Jorge Acevedo) & 422 (Manuel Peña)
+      awayPlayerIds: [457, 458, 459, 460, 461, 462, 463, 464],
+    },
+  },
   { id: 'm1-3', fecha: 1, homeTeamId: 'VERDE', awayTeamId: 'NARANJA', homeGoals: 1, awayGoals: 0, isPlayed: true, status: 'FINALIZADO', dateStr: '4 de Agosto' },
-  { id: 'm1-4', fecha: 1, homeTeamId: 'AZUL', awayTeamId: 'AMARILLO', homeGoals: 1, awayGoals: 1, isPlayed: true, status: 'FINALIZADO', dateStr: '4 de Agosto' },
+  {
+    id: 'm1-4',
+    fecha: 1,
+    homeTeamId: 'AZUL',
+    awayTeamId: 'AMARILLO',
+    homeGoals: 1,
+    awayGoals: 1,
+    isPlayed: true,
+    status: 'FINALIZADO',
+    dateStr: '4 de Agosto',
+    attendance: {
+      homePlayerIds: [401, 402, 403, 404, 405, 406, 407, 408],
+      awayPlayerIds: [449, 450, 451, 452, 454, 455, 456], // Excludes 453 (Jose Sierra)
+    },
+  },
 
   // FECHA 2 (6 de Agosto)
   { id: 'm2-1', fecha: 2, homeTeamId: 'AMARILLO', awayTeamId: 'BLANCO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '6 de Agosto' },

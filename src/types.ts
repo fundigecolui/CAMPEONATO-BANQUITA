@@ -65,6 +65,10 @@ export interface Match {
   status?: 'PROGRAMADO' | 'EN_VIVO' | 'FINALIZADO';
   dateStr?: string;
   time?: string;
+  attendance?: {
+    homePlayerIds: number[];
+    awayPlayerIds: number[];
+  };
 }
 
 export interface SuspensionAlert {
