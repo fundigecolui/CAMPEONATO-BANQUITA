@@ -168,7 +168,7 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
               </h3>
             </div>
             <p className="text-xs text-slate-400 font-mono mt-0.5">
-              Genera el Resumen de Fecha en <strong className="text-amber-400">Hoja Tamaña Carta Horizontal</strong>, Planillas por Partido, Posiciones y Tarjetas.
+              Genera el Resumen de Fecha, Planillas por Partido, Posiciones y Tarjetas.
             </p>
           </div>
 
@@ -325,7 +325,7 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
 
                 <div className="text-right font-mono text-xs shrink-0 space-y-1">
                   <div className="px-3 py-1 rounded bg-black text-white font-extrabold text-xs uppercase tracking-wide inline-block">
-                    RESUMEN JORNADA • CARTA HORIZONTAL
+                    RESUMEN JORNADA
                   </div>
                   <div className="text-[11px] font-bold text-slate-800">
                     4 Partidos Registrados

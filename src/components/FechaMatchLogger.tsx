@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Calendar, Plus, Trophy, AlertTriangle, Check, Trash2, Clock, Shield, Lock, Edit3, Printer, AlertOctagon, FileText } from 'lucide-react';
 import { Match, Player, Team, CardType, CardRecord, GoalRecord, SuspensionAlert, TeamId } from '../types';
-import { getFechaFullTitle, getFechaLabel, FECHA_DATES } from '../utils/fechas';
+import { getFechaFullTitle, FECHA_DATES } from '../utils/fechas';
 import { computeStandings, checkMathematicalElimination } from '../utils/sanctionsEngine';
 import { OfficialPrintSheetModal } from './OfficialPrintSheetModal';
 
@@ -115,10 +115,6 @@ export const FechaMatchLogger: React.FC<FechaMatchLoggerProps> = ({
           >
             ← Anterior
           </button>
-
-          <span className="px-3 py-1.5 rounded-lg bg-amber-500 text-slate-950 font-black text-xs font-mono shadow-md whitespace-nowrap">
-            {getFechaLabel(currentFecha)}
-          </span>
 
           <button
             onClick={() => {
