@@ -1,5 +1,5 @@
 import React from 'react';
-import { Shield, AlertTriangle, Trophy, Users, Calendar, RotateCcw, Download, Upload, UserPlus, Lock, Edit3, Key, Plus, Archive } from 'lucide-react';
+import { Shield, AlertTriangle, Trophy, Users, Calendar, RotateCcw, Download, Upload, UserPlus, Lock, Edit3, Key, Plus, Archive, FileText } from 'lucide-react';
 import { getFechaFullTitle } from '../utils/fechas';
 import tournamentLogo from '../assets/images/san_simon_logo_dark_1785590924842.jpg';
 import { TournamentEdition } from '../types';
@@ -9,8 +9,8 @@ interface HeaderProps {
   setCurrentFecha: (f: number) => void;
   maxUnlockedFecha: number;
   setMaxUnlockedFecha: (f: number) => void;
-  activeTab: 'matrix' | 'matches' | 'standings' | 'scorers' | 'teams';
-  setActiveTab: (tab: 'matrix' | 'matches' | 'standings' | 'scorers' | 'teams') => void;
+  activeTab: 'matrix' | 'matches' | 'standings' | 'scorers' | 'teams' | 'reglamento';
+  setActiveTab: (tab: 'matrix' | 'matches' | 'standings' | 'scorers' | 'teams' | 'reglamento') => void;
   activeSuspendedCount: number;
   totalCardsCount: { amarillas: number; azules: number; rojas: number; total: number };
   isEditMode: boolean;
@@ -47,38 +47,46 @@ export const Header: React.FC<HeaderProps> = ({
 }) => {
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
+  const [isShareModalOpen, setIsShareModalOpen] = React.useState(false);
+
   const handleToggleEditMode = () => {
     if (isEditMode) {
       setIsEditMode(false);
     } else {
       const savedPin = localStorage.getItem('banquitas_admin_pin') || '2026';
       const enteredPin = window.prompt(
-        `🔒 ACCESO ADMINISTRADOR\nIngrese el PIN de seguridad para ingresar al MODO EDICIÓN:\n(PIN por defecto: 2026)`
+        `🔒 ACCESO ADMINISTRADOR\nIngrese la contraseña / PIN de seguridad para ingresar al MODO EDICIÓN:\n(PIN inicial por defecto: 2026)`
       );
       if (enteredPin === null) return;
       if (enteredPin.trim() === savedPin) {
         setIsEditMode(true);
       } else {
-        alert('❌ PIN incorrecto. Acceso denegado.');
+        alert('❌ Contraseña / PIN incorrecto. Acceso denegado.');
       }
     }
   };
 
   const handleChangePin = () => {
     const currentSavedPin = localStorage.getItem('banquitas_admin_pin') || '2026';
-    const currentPin = window.prompt('Ingrese el PIN actual:');
+    const currentPin = window.prompt('🔒 SEGURIDAD ADMINISTRADOR\nIngrese la contraseña / PIN actual:');
     if (currentPin === null) return;
     if (currentPin.trim() !== currentSavedPin) {
-      alert('❌ PIN actual incorrecto.');
+      alert('❌ Contraseña actual incorrecta.');
       return;
     }
-    const newPin = window.prompt('Ingrese el nuevo PIN de seguridad (mínimo 4 caracteres/números):');
+    const newPin = window.prompt('🔑 NUEVA CONTRASEÑA\nIngrese la nueva contraseña / PIN de seguridad (mínimo 4 caracteres):');
     if (!newPin || newPin.trim().length < 4) {
-      alert('❌ El nuevo PIN debe tener al menos 4 caracteres.');
+      alert('❌ La nueva contraseña debe tener al menos 4 caracteres.');
+      return;
+    }
+    const confirmPin = window.prompt('🔑 CONFIRMAR CONTRASEÑA\nRepita la nueva contraseña para verificar:');
+    if (confirmPin === null) return;
+    if (confirmPin.trim() !== newPin.trim()) {
+      alert('❌ Las contraseñas no coinciden. Intente de nuevo.');
       return;
     }
     localStorage.setItem('banquitas_admin_pin', newPin.trim());
-    alert('✅ ¡PIN de seguridad actualizado con éxito!');
+    alert('✅ ¡Contraseña / PIN de Administrador actualizado con éxito!');
   };
 
   return (
@@ -130,41 +138,65 @@ export const Header: React.FC<HeaderProps> = ({
                   </button>
                 )}
               </div>
-              <p className="text-xs text-amber-300/90 font-medium">
-                Control Oficial de Resultados, Posiciones, Tarjetas, Goleadores y Suspensiones Automáticas
-              </p>
             </div>
           </div>
 
           {/* Edit Mode Toggle Switch & Quick Stat Badges */}
-          <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto justify-between lg:justify-end">
-            {/* Mode Switch Button */}
-            <button
-              onClick={handleToggleEditMode}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-black flex items-center gap-2 transition-all shadow-md border cursor-pointer ${
-                isEditMode
-                  ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 border-amber-400 ring-2 ring-amber-400/40'
-                  : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700 hover:text-white'
-              }`}
-              title={
-                isEditMode
-                  ? 'Modo Edición activo: Haz clic para cambiar a RESULTADOS IISEM 2026 (Público)'
-                  : 'Modo Público activo: Haz clic e ingresa PIN para activar MODO EDICIÓN'
-              }
-            >
-              {isEditMode ? (
-                <>
-                  <Edit3 className="w-4 h-4 text-slate-950 fill-slate-950" />
-                  <span>MODO EDICIÓN (ADMIN)</span>
-                  <span className="w-2 h-2 rounded-full bg-emerald-950 border border-emerald-400 animate-pulse"></span>
-                </>
-              ) : (
-                <>
-                  <Lock className="w-4 h-4 text-slate-400" />
-                  <span>RESULTADOS IISEM 2026</span>
-                </>
+          <div className="flex flex-wrap items-center gap-2.5 w-full lg:w-auto justify-between lg:justify-end">
+            <div className="flex flex-wrap items-center gap-2">
+              {/* Mode Switch Button */}
+              <button
+                onClick={handleToggleEditMode}
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-black flex items-center gap-2 transition-all shadow-md border cursor-pointer ${
+                  isEditMode
+                    ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 border-amber-400 ring-2 ring-amber-400/40'
+                    : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700 hover:text-white'
+                }`}
+                title={
+                  isEditMode
+                    ? 'Modo Administrador activo: Haz clic para salir y volver al Modo Consulta (Usuario)'
+                    : 'Modo Consulta activo: Haz clic e ingresa clave/PIN para activar MODO ADMINISTRADOR'
+                }
+              >
+                {isEditMode ? (
+                  <>
+                    <Edit3 className="w-4 h-4 text-slate-950 fill-slate-950" />
+                    <span>MODO ADMINISTRADOR</span>
+                    <span className="w-2 h-2 rounded-full bg-emerald-950 border border-emerald-400 animate-pulse"></span>
+                  </>
+                ) : (
+                  <>
+                    <Lock className="w-4 h-4 text-amber-400" />
+                    <span>MODO USUARIO (CONSULTA)</span>
+                    <span className="text-[10px] bg-amber-500/20 text-amber-300 font-semibold px-1.5 py-0.5 rounded border border-amber-500/30">
+                      Clave Admin 🔒
+                    </span>
+                  </>
+                )}
+              </button>
+
+              {/* Quick Cambiar PIN Button when in Edit Mode */}
+              {isEditMode && (
+                <button
+                  onClick={handleChangePin}
+                  className="px-2.5 py-1.5 rounded-xl text-xs font-bold bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 flex items-center gap-1.5 transition shadow-sm cursor-pointer"
+                  title="Cambiar Contraseña / PIN de Administrador"
+                >
+                  <Key className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Cambiar Clave</span>
+                </button>
               )}
-            </button>
+
+              {/* Security & Share Info Button */}
+              <button
+                onClick={() => setIsShareModalOpen(true)}
+                className="p-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs transition cursor-pointer flex items-center gap-1.5 px-2.5"
+                title="Información sobre Modo Usuario y Cambio de Contraseña"
+              >
+                <Shield className="w-3.5 h-3.5 text-blue-400" />
+                <span className="hidden sm:inline font-medium text-[11px]">Compartir / Clave</span>
+              </button>
+            </div>
 
             {/* Quick Stat Counter Badges */}
             <div className="flex flex-wrap items-center gap-1.5">
@@ -198,77 +230,14 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
 
         {/* Action Controls & Fecha Selector Bar */}
-        <div className="mt-3 pt-3 border-t border-slate-800 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
-          {/* Navigation Tabs ordered per user specification */}
-          <nav className="flex items-center gap-1 overflow-x-auto pb-1 md:pb-0 scrollbar-none">
-            {/* 1. Partidos x Fecha */}
-            <button
-              onClick={() => setActiveTab('matches')}
-              className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 cursor-pointer ${
-                activeTab === 'matches'
-                  ? 'bg-amber-500 text-slate-950 shadow-md font-extrabold'
-                  : 'bg-slate-800/60 text-slate-300 hover:bg-slate-800 hover:text-white'
-              }`}
-            >
-              <Calendar className="w-3.5 h-3.5" />
-              Partidos x Fecha
-            </button>
-
-            {/* 2. Tabla de Posiciones */}
-            <button
-              onClick={() => setActiveTab('standings')}
-              className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 cursor-pointer ${
-                activeTab === 'standings'
-                  ? 'bg-amber-500 text-slate-950 shadow-md font-extrabold'
-                  : 'bg-slate-800/60 text-slate-300 hover:bg-slate-800 hover:text-white'
-              }`}
-            >
-              <Trophy className="w-3.5 h-3.5" />
-              Tabla de Posiciones
-            </button>
-
-            {/* 3. Goleadores */}
-            <button
-              onClick={() => setActiveTab('scorers')}
-              className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 cursor-pointer ${
-                activeTab === 'scorers'
-                  ? 'bg-amber-500 text-slate-950 shadow-md font-extrabold'
-                  : 'bg-slate-800/60 text-slate-300 hover:bg-slate-800 hover:text-white'
-              }`}
-            >
-              <span className="text-xs">⚽</span>
-              Goleadores
-            </button>
-
-            {/* 4. Tarjetas */}
-            <button
-              onClick={() => setActiveTab('matrix')}
-              className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 cursor-pointer ${
-                activeTab === 'matrix'
-                  ? 'bg-amber-500 text-slate-950 shadow-md font-extrabold'
-                  : 'bg-slate-800/60 text-slate-300 hover:bg-slate-800 hover:text-white'
-              }`}
-            >
-              <Users className="w-3.5 h-3.5" />
-              Tarjetas
-            </button>
-
-            {/* 5. Equipos */}
-            <button
-              onClick={() => setActiveTab('teams')}
-              className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 cursor-pointer ${
-                activeTab === 'teams'
-                  ? 'bg-amber-500 text-slate-950 shadow-md font-bold'
-                  : 'bg-slate-800/60 text-slate-300 hover:bg-slate-800 hover:text-white'
-              }`}
-            >
-              <Shield className="w-3.5 h-3.5" />
-              Equipos
-            </button>
-          </nav>
+        <div className="mt-3 pt-3 border-t border-slate-800 flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-2 text-xs text-slate-400 font-medium">
+            <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+            <span>Sistema Oficial de Control Banquitas San Simón</span>
+          </div>
 
           {/* Fecha Selector & Data Management Tools */}
-          <div className="flex items-center gap-2 self-end md:self-auto flex-wrap">
+          <div className="flex items-center gap-2 flex-wrap">
             {/* Admin Fecha Unlocking Control */}
             {isEditMode && (
               <div className="flex items-center gap-1.5 bg-slate-800/90 border border-amber-500/40 rounded-lg px-2.5 py-1 text-xs text-amber-300 shadow-sm">
@@ -388,6 +357,69 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Modal de Ayuda: Cambiar Contraseña y Compartir en Modo Usuario */}
+      {isShareModalOpen && (
+        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-slate-900 border border-slate-700 rounded-2xl p-6 max-w-lg w-full text-slate-100 shadow-2xl space-y-5">
+            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+              <div className="flex items-center gap-2.5">
+                <Shield className="w-6 h-6 text-amber-400" />
+                <h3 className="font-bold text-lg text-white">Seguridad y Enlace para Usuarios</h3>
+              </div>
+              <button
+                onClick={() => setIsShareModalOpen(false)}
+                className="text-slate-400 hover:text-white p-1 rounded-lg bg-slate-800 text-xs font-bold px-2.5 cursor-pointer"
+              >
+                ✕ Cerrar
+              </button>
+            </div>
+
+            <div className="space-y-4 text-xs sm:text-sm text-slate-300">
+              <div className="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/80 space-y-1.5">
+                <h4 className="font-bold text-amber-300 flex items-center gap-1.5">
+                  <Key className="w-4 h-4 text-amber-400 shrink-0" />
+                  1. ¿Cómo cambiar la contraseña de Administrador?
+                </h4>
+                <p className="text-slate-300 leading-relaxed">
+                  1. Haz clic en el botón <strong className="text-white">"MODO USUARIO (CONSULTA)"</strong> e ingresa la contraseña actual (inicialmente <code className="bg-slate-950 px-1.5 py-0.5 rounded text-amber-300 font-mono font-bold">2026</code>).<br />
+                  2. Una vez activo el Modo Administrador, presiona el botón <strong className="text-amber-300">🔑 Cambiar Clave</strong>.<br />
+                  3. Ingresa tu clave actual, luego la nueva clave (mínimo 4 dígitos) y confírmala.
+                </p>
+              </div>
+
+              <div className="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/80 space-y-1.5">
+                <h4 className="font-bold text-emerald-400 flex items-center gap-1.5">
+                  <Lock className="w-4 h-4 text-emerald-400 shrink-0" />
+                  2. ¿Cómo hacer para que al compartir solo aparezca el modo usuario?
+                </h4>
+                <p className="text-slate-300 leading-relaxed">
+                  ¡Ya está configurado por defecto! La aplicación <strong className="text-white">inicia automáticamente en Modo Usuario (Consulta)</strong> para cualquier persona que abra el enlace.<br />
+                  Los usuarios y jugadores solo pueden consultar partidos, tablas, goleadores y sanciones. <strong className="text-emerald-300">No tienen permisos para modificar o borrar datos</strong>.
+                </p>
+              </div>
+            </div>
+
+            <div className="pt-2 flex flex-wrap justify-between items-center gap-3 border-t border-slate-800">
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(window.location.href);
+                  alert('📋 Enlace de la aplicación copiado al portapapeles. ¡Puedes enviarlo a los usuarios y jugadores!');
+                }}
+                className="px-4 py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-xl transition shadow-md flex items-center gap-2 cursor-pointer"
+              >
+                📋 Copiar Enlace para Usuarios
+              </button>
+              <button
+                onClick={() => setIsShareModalOpen(false)}
+                className="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs rounded-xl transition cursor-pointer"
+              >
+                Entendido
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   );
 };

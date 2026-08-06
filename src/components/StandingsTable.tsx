@@ -1,8 +1,9 @@
-import React from 'react';
-import { Trophy, Shield, Info, Medal, Award, AlertOctagon } from 'lucide-react';
+import React, { useState } from 'react';
+import { Trophy, Shield, Info, Medal, Award, AlertOctagon, Swords } from 'lucide-react';
 import { TeamStandings, Team, Match } from '../types';
 import tournamentLogo from '../assets/images/san_simon_logo_dark_1785590924842.jpg';
 import { checkMathematicalElimination } from '../utils/sanctionsEngine';
+import { HeadToHeadModal } from './HeadToHeadModal';
 
 interface StandingsTableProps {
   standings: TeamStandings[];
@@ -11,6 +12,8 @@ interface StandingsTableProps {
 }
 
 export const StandingsTable: React.FC<StandingsTableProps> = ({ standings, teams, matches = [] }) => {
+  const [isH2HOpen, setIsH2HOpen] = useState(false);
+
   // Identify Valla Menos Vencida (Lowest GC among teams with played matches)
   const playedStandings = standings.filter((s) => s.pj > 0);
   const minGC = playedStandings.length > 0 ? Math.min(...playedStandings.map((s) => s.gc)) : null;
@@ -20,6 +23,30 @@ export const StandingsTable: React.FC<StandingsTableProps> = ({ standings, teams
 
   // Check mathematical elimination for bottom team
   const eliminationInfo = checkMathematicalElimination(standings, matches);
+
+  // Compute last 3 matches form (W, D, L) for a team
+  const getTeamForm = (teamId: string) => {
+    const teamMatches = matches
+      .filter(
+        (m) =>
+          (m.homeTeamId === teamId || m.awayTeamId === teamId) &&
+          m.homeGoals !== undefined &&
+          m.awayGoals !== undefined &&
+          (m.status === 'FINALIZADO' || m.homeGoals > 0 || m.awayGoals > 0)
+      )
+      .sort((a, b) => b.fecha - a.fecha)
+      .slice(0, 3);
+
+    return teamMatches.map((m) => {
+      const isHome = m.homeTeamId === teamId;
+      const myGoals = isHome ? m.homeGoals! : m.awayGoals!;
+      const oppGoals = isHome ? m.awayGoals! : m.homeGoals!;
+
+      if (myGoals > oppGoals) return { res: 'W', label: 'G', color: 'bg-emerald-500 text-slate-950' };
+      if (myGoals === oppGoals) return { res: 'D', label: 'E', color: 'bg-amber-500 text-slate-950' };
+      return { res: 'L', label: 'P', color: 'bg-red-500 text-white' };
+    });
+  };
 
   return (
     <div className="space-y-3">
@@ -70,9 +97,20 @@ export const StandingsTable: React.FC<StandingsTableProps> = ({ standings, teams
             </div>
           </div>
 
-          {/* Table Subtitle */}
-          <div className="flex items-center gap-2 text-[11px] font-mono text-amber-300 font-bold">
-            <span>8 Equipos Habilitados</span>
+          {/* Table Header Subtitle & H2H Button */}
+          <div className="flex items-center gap-2 flex-wrap">
+            <button
+              onClick={() => setIsH2HOpen(true)}
+              className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 hover:text-amber-200 border border-amber-500/30 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-sm"
+              title="Comparar historial directo entre dos equipos"
+            >
+              <Swords className="w-3.5 h-3.5 text-amber-400" />
+              <span>⚔️ Frente a Frente (H2H)</span>
+            </button>
+
+            <span className="text-[11px] font-mono text-slate-400 font-bold bg-slate-900 px-2.5 py-1 rounded-lg border border-slate-800">
+              8 Equipos
+            </span>
           </div>
         </div>
 
@@ -90,6 +128,7 @@ export const StandingsTable: React.FC<StandingsTableProps> = ({ standings, teams
                 <th className="p-3 text-center font-bold" title="Goles a Favor">GF</th>
                 <th className="p-3 text-center font-bold" title="Goles en Contra (Valla)">GC</th>
                 <th className="p-3 text-center font-black text-amber-300" title="Diferencia de Goles">DG</th>
+                <th className="p-3 text-center font-bold text-slate-300" title="Últimos 3 partidos (G: Ganado, E: Empatado, P: Perdido)">RACHA (ÚLTIMOS 3)</th>
                 <th className="p-3 text-center font-bold text-emerald-300" title="Puntos Juego Limpio (Fair Play)">JUEGO LIMPIO</th>
                 <th className="p-3 text-center font-extrabold text-amber-400 bg-amber-500/10 text-sm" title="Puntos Totales">PTS</th>
               </tr>
@@ -101,6 +140,7 @@ export const StandingsTable: React.FC<StandingsTableProps> = ({ standings, teams
                 const isVallaMenosVencida = minGC !== null && row.gc === minGC && row.pj > 0;
                 const isFairPlayLeader = maxFP !== null && row.fairPlayPts === maxFP;
                 const isEliminatedRow = eliminationInfo.isEliminated && row.teamId === eliminationInfo.eliminatedTeamId;
+                const teamForm = getTeamForm(row.teamId);
 
                 return (
                   <tr
@@ -177,6 +217,26 @@ export const StandingsTable: React.FC<StandingsTableProps> = ({ standings, teams
                     <td className="p-3 text-center font-mono font-black text-amber-300">
                       {row.dg > 0 ? `+${row.dg}` : row.dg}
                     </td>
+
+                    {/* Team Form Badge Pills */}
+                    <td className="p-3 text-center font-mono text-xs">
+                      {teamForm.length === 0 ? (
+                        <span className="text-slate-600 font-sans text-[10px]">-</span>
+                      ) : (
+                        <div className="flex items-center justify-center gap-1">
+                          {teamForm.map((f, fIdx) => (
+                            <span
+                              key={fIdx}
+                              className={`w-5 h-5 rounded-md font-black text-[10px] inline-flex items-center justify-center shadow-xs ${f.color}`}
+                              title={`Partido: ${f.res === 'W' ? 'Ganado' : f.res === 'D' ? 'Empatado' : 'Perdido'}`}
+                            >
+                              {f.label}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </td>
+
                     <td className="p-3 text-center font-mono font-bold text-emerald-400 bg-emerald-950/20">
                       {row.fairPlayPts} pts
                     </td>
@@ -189,6 +249,14 @@ export const StandingsTable: React.FC<StandingsTableProps> = ({ standings, teams
             </tbody>
           </table>
         </div>
+
+        {/* Head to Head Modal */}
+        <HeadToHeadModal
+          isOpen={isH2HOpen}
+          onClose={() => setIsH2HOpen(false)}
+          teams={teams}
+          matches={matches}
+        />
 
         {/* Footer Legend for Badges & Rules */}
         <div className="p-3 bg-slate-950 border-t border-slate-800 text-[11px] text-slate-400 flex flex-col md:flex-row items-start md:items-center justify-between gap-2.5 font-mono">

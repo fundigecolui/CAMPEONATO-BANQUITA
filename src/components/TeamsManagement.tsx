@@ -27,10 +27,16 @@ export const TeamsManagement: React.FC<TeamsManagementProps> = ({
   selectedEditionName,
 }) => {
   const [selectedTeamId, setSelectedTeamId] = useState<TeamId>('AZUL');
+  const [playerSearchTerm, setPlayerSearchTerm] = useState('');
 
   const juntaDirectiva = getJuntaDirectiva(selectedEditionId);
   const selectedTeam = teams.find((t) => t.id === selectedTeamId) || teams[0];
   const teamPlayers = players.filter((p) => p.teamId === selectedTeamId);
+
+  const filteredTeamPlayers = teamPlayers.filter((p) =>
+    p.name.toLowerCase().includes(playerSearchTerm.toLowerCase()) ||
+    p.dorsal.toString().includes(playerSearchTerm)
+  );
 
   // Compute team totals
   let totalAmarillas = 0;
@@ -171,9 +177,25 @@ export const TeamsManagement: React.FC<TeamsManagementProps> = ({
           </div>
         </div>
 
+        {/* Player Search Bar */}
+        <div className="flex items-center justify-between gap-3 pt-2">
+          <div className="relative flex-1 max-w-xs">
+            <input
+              type="text"
+              value={playerSearchTerm}
+              onChange={(e) => setPlayerSearchTerm(e.target.value)}
+              placeholder="🔍 Buscar por nombre o dorsal..."
+              className="w-full bg-slate-950 text-slate-100 placeholder-slate-500 text-xs rounded-xl px-3.5 py-2 border border-slate-800 focus:outline-none focus:border-amber-400"
+            />
+          </div>
+          <span className="text-xs font-mono text-slate-400 font-semibold">
+            {filteredTeamPlayers.length} / {teamPlayers.length} Jugadores
+          </span>
+        </div>
+
         {/* Players Roster Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {teamPlayers.map((player) => {
+          {filteredTeamPlayers.map((player) => {
             const stat = playerStats.find((s) => s.playerId === player.id);
 
             return (
@@ -186,7 +208,7 @@ export const TeamsManagement: React.FC<TeamsManagementProps> = ({
                   className="flex items-center gap-3 cursor-pointer flex-1 min-w-0"
                 >
                   <span className="w-8 h-8 rounded-lg bg-slate-800 group-hover:bg-amber-500 group-hover:text-slate-950 font-black font-mono text-sm flex items-center justify-center text-slate-200 border border-slate-700 transition shrink-0">
-                    #{player.dorsal}
+                    {player.dorsal}
                   </span>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-1.5 flex-wrap">

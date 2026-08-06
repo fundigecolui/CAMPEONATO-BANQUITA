@@ -51,7 +51,7 @@ export const PlayerProfileModal: React.FC<PlayerProfileModalProps> = ({
         {/* Player Header Banner */}
         <div className="flex items-center gap-4 pb-4 border-b border-slate-800">
           <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 text-slate-950 font-black text-2xl flex items-center justify-center shadow-lg font-mono">
-            #{player.dorsal}
+            {player.dorsal}
           </div>
           <div>
             <div className="flex items-center gap-2">

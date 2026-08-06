@@ -75,7 +75,7 @@ export const SanctionAlertsBanner: React.FC<SanctionAlertsBannerProps> = ({
                 >
                   <div className="flex items-center gap-2.5 overflow-hidden">
                     <span className="w-6 h-6 rounded bg-red-600 text-white font-black text-xs flex items-center justify-center shrink-0 shadow-xs">
-                      #{s.dorsal}
+                      {s.dorsal}
                     </span>
                     <div className="truncate">
                       <p className="font-bold text-xs text-slate-100 group-hover:text-red-300 transition truncate">

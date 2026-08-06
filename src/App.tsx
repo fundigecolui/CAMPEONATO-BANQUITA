@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Header } from './components/Header';
+import { SidebarNav } from './components/SidebarNav';
 import { SanctionAlertsBanner } from './components/SanctionAlertsBanner';
 import { MatrixCardTable } from './components/MatrixCardTable';
 import { FechaMatchLogger } from './components/FechaMatchLogger';
 import { StandingsTable } from './components/StandingsTable';
 import { ScorersTable } from './components/ScorersTable';
 import { TeamsManagement } from './components/TeamsManagement';
+import { ReglamentoViewer } from './components/ReglamentoViewer';
 import { PlayerProfileModal } from './components/PlayerProfileModal';
 import { AddPlayerModal } from './components/AddPlayerModal';
 import { EditPlayerModal } from './components/EditPlayerModal';
@@ -52,7 +54,7 @@ const getInitialDataForEdition = (editionId: string) => {
       matches: MATCHES_2026_2,
       currentFecha: 1,
       maxUnlockedFecha: 7,
-      v: 5,
+      v: 8,
     };
   }
   if (editionId === '2026-1') {
@@ -92,7 +94,7 @@ export default function App() {
   // Navigation & Fecha state
   const [currentFecha, setCurrentFecha] = useState<number>(1);
   const [maxUnlockedFecha, setMaxUnlockedFecha] = useState<number>(7);
-  const [activeTab, setActiveTab] = useState<'matrix' | 'matches' | 'standings' | 'scorers' | 'teams'>('matches');
+  const [activeTab, setActiveTab] = useState<'matrix' | 'matches' | 'standings' | 'scorers' | 'teams' | 'reglamento'>('matches');
 
   // Editions Management
   const [editions, setEditions] = useState<TournamentEdition[]>(() => {
@@ -112,8 +114,8 @@ export default function App() {
   });
   const [selectedEditionId, setSelectedEditionId] = useState<string>('2026-2');
 
-  // Edit Mode vs Read-Only Mode (True by default for full editing capabilities)
-  const [isEditMode, setIsEditMode] = useState<boolean>(true);
+  // Edit Mode vs Read-Only Mode (False by default for user/public read-only view)
+  const [isEditMode, setIsEditMode] = useState<boolean>(false);
 
   // Database core state
   const default2026_2 = getInitialDataForEdition('2026-2');
@@ -140,7 +142,7 @@ export default function App() {
       if (saved) {
         const parsed = JSON.parse(saved);
         if (
-          (selectedEditionId === '2026-2' && (!parsed.v || parsed.v < 5)) ||
+          (selectedEditionId === '2026-2' && (!parsed.v || parsed.v < 8)) ||
           (selectedEditionId === '2025-2' && (!parsed.v || parsed.v < 3)) ||
           (selectedEditionId === '2026-1' && (!parsed.v || parsed.v < 4))
         ) {
@@ -183,7 +185,8 @@ export default function App() {
         if (typeof parsed.maxUnlockedFecha === 'number') setMaxUnlockedFecha(parsed.maxUnlockedFecha);
         else setMaxUnlockedFecha(defaults.maxUnlockedFecha);
 
-        if (typeof parsed.isEditMode === 'boolean') setIsEditMode(parsed.isEditMode);
+        // Always initialize in Read-Only (User Mode)
+        setIsEditMode(false);
       } else {
         setTeams(INITIAL_TEAMS);
         setPlayers(defaults.players);
@@ -412,96 +415,122 @@ export default function App() {
         onAddNewEdition={handleAddNewEdition}
       />
 
-      {/* Main Content Viewport */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
-        {/* Historical Edition Banner Indicator */}
-        {currentEdition?.status === 'FINALIZADO' && (
-          <div className="bg-gradient-to-r from-amber-950/90 via-slate-900 to-amber-950/90 border border-amber-500/50 p-3.5 rounded-2xl text-center shadow-lg flex flex-col sm:flex-row items-center justify-between gap-3 font-mono">
-            <div className="flex items-center gap-2 text-amber-300 font-extrabold text-xs sm:text-sm">
-              <span className="text-lg">🏆</span>
-              <span>EDICIÓN HISTÓRICA FINALIZADA: {currentEdition.name}</span>
-            </div>
-            {currentEdition.champion && (
-              <span className="px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-400/40 text-xs font-bold">
-                CAMPEÓN OFICIAL: EQUIPO {currentEdition.champion}
-              </span>
-            )}
-          </div>
-        )}
-
-        {/* Real-time Sanction Alerts Banner for current fecha */}
-        <SanctionAlertsBanner
-          currentFecha={currentFecha}
-          activeSuspensions={activeSuspensions}
-          teams={teams}
-          onPlayerClick={(pid) => setSelectedPlayerModalId(pid)}
-          eliminationInfo={checkMathematicalElimination(standings, matches)}
-        />
-
-        {/* Dynamic View Tabs */}
-        {activeTab === 'matrix' && (
-          <MatrixCardTable
-            players={players}
-            teams={teams}
-            cards={cards}
-            playerStats={playerStats}
-            currentFecha={currentFecha}
-            maxUnlockedFecha={maxUnlockedFecha}
-            isEditMode={isEditMode}
-            onAddCard={handleAddCard}
-            onRemoveCard={handleRemoveCard}
-            onSelectPlayer={(pid) => setSelectedPlayerModalId(pid)}
-            onOpenAddPlayerModal={() => setIsAddPlayerOpen(true)}
-          />
-        )}
-
-        {activeTab === 'matches' && (
-          <FechaMatchLogger
+      {/* Main Content Viewport with Left Vertical Sidebar Navigation */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="flex flex-col lg:flex-row gap-6 items-start">
+          {/* Left Vertical Module Navigation Sidebar */}
+          <SidebarNav
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
             currentFecha={currentFecha}
             setCurrentFecha={setCurrentFecha}
             maxUnlockedFecha={maxUnlockedFecha}
-            setMaxUnlockedFecha={setMaxUnlockedFecha}
-            matches={matches}
-            players={players}
-            teams={teams}
-            cards={cards}
-            goals={goals}
-            activeSuspensions={activeSuspensions}
             isEditMode={isEditMode}
-            onUpdateMatchScore={handleUpdateMatchScore}
-            onUpdateMatchStatus={handleUpdateMatchStatus}
-            onAddCard={handleAddCard}
-            onAddGoal={handleAddGoal}
-            onRemoveCard={handleRemoveCard}
-            onRemoveGoal={handleRemoveGoal}
+            activeSuspendedCount={activeSuspensions.length}
+            totalCardsCount={totalCardsCount}
+            currentEditionName={editions.find((e) => e.id === selectedEditionId)?.name}
           />
-        )}
 
-        {activeTab === 'standings' && (
-          <StandingsTable standings={standings} teams={teams} matches={matches} />
-        )}
+          {/* Right Main Active Viewport */}
+          <div className="flex-1 min-w-0 w-full space-y-6">
+            {/* Historical Edition Banner Indicator */}
+            {currentEdition?.status === 'FINALIZADO' && (
+              <div className="bg-gradient-to-r from-amber-950/90 via-slate-900 to-amber-950/90 border border-amber-500/50 p-3.5 rounded-2xl text-center shadow-lg flex flex-col sm:flex-row items-center justify-between gap-3 font-mono">
+                <div className="flex items-center gap-2 text-amber-300 font-extrabold text-xs sm:text-sm">
+                  <span className="text-lg">🏆</span>
+                  <span>EDICIÓN HISTÓRICA FINALIZADA: {currentEdition.name}</span>
+                </div>
+                {currentEdition.champion && (
+                  <span className="px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-400/40 text-xs font-bold">
+                    CAMPEÓN OFICIAL: EQUIPO {currentEdition.champion}
+                  </span>
+                )}
+              </div>
+            )}
 
-        {activeTab === 'scorers' && (
-          <ScorersTable
-            playerStats={playerStats}
-            teams={teams}
-            onSelectPlayer={(pid) => setSelectedPlayerModalId(pid)}
-          />
-        )}
+            {/* Real-time Sanction Alerts Banner for current fecha */}
+            <SanctionAlertsBanner
+              currentFecha={currentFecha}
+              activeSuspensions={activeSuspensions}
+              teams={teams}
+              onPlayerClick={(pid) => setSelectedPlayerModalId(pid)}
+              eliminationInfo={checkMathematicalElimination(standings, matches)}
+            />
 
-        {activeTab === 'teams' && (
-          <TeamsManagement
-            teams={teams}
-            players={players}
-            playerStats={playerStats}
-            isEditMode={isEditMode}
-            onSelectPlayer={(pid) => setSelectedPlayerModalId(pid)}
-            onEditPlayer={(player) => setEditingPlayer(player)}
-            onOpenAddPlayerModal={() => setIsAddPlayerOpen(true)}
-            selectedEditionId={selectedEditionId}
-            selectedEditionName={editions.find((e) => e.id === selectedEditionId)?.name}
-          />
-        )}
+            {/* Dynamic View Tabs */}
+            {activeTab === 'matrix' && (
+              <MatrixCardTable
+                players={players}
+                teams={teams}
+                cards={cards}
+                playerStats={playerStats}
+                currentFecha={currentFecha}
+                maxUnlockedFecha={maxUnlockedFecha}
+                isEditMode={isEditMode}
+                onAddCard={handleAddCard}
+                onRemoveCard={handleRemoveCard}
+                onSelectPlayer={(pid) => setSelectedPlayerModalId(pid)}
+                onOpenAddPlayerModal={() => setIsAddPlayerOpen(true)}
+              />
+            )}
+
+            {activeTab === 'matches' && (
+              <FechaMatchLogger
+                currentFecha={currentFecha}
+                setCurrentFecha={setCurrentFecha}
+                maxUnlockedFecha={maxUnlockedFecha}
+                setMaxUnlockedFecha={setMaxUnlockedFecha}
+                matches={matches}
+                players={players}
+                teams={teams}
+                cards={cards}
+                goals={goals}
+                activeSuspensions={activeSuspensions}
+                isEditMode={isEditMode}
+                onUpdateMatchScore={handleUpdateMatchScore}
+                onUpdateMatchStatus={handleUpdateMatchStatus}
+                onAddCard={handleAddCard}
+                onAddGoal={handleAddGoal}
+                onRemoveCard={handleRemoveCard}
+                onRemoveGoal={handleRemoveGoal}
+              />
+            )}
+
+            {activeTab === 'standings' && (
+              <StandingsTable standings={standings} teams={teams} matches={matches} />
+            )}
+
+            {activeTab === 'scorers' && (
+              <ScorersTable
+                playerStats={playerStats}
+                teams={teams}
+                onSelectPlayer={(pid) => setSelectedPlayerModalId(pid)}
+              />
+            )}
+
+            {activeTab === 'teams' && (
+              <TeamsManagement
+                teams={teams}
+                players={players}
+                playerStats={playerStats}
+                isEditMode={isEditMode}
+                onSelectPlayer={(pid) => setSelectedPlayerModalId(pid)}
+                onEditPlayer={(player) => setEditingPlayer(player)}
+                onOpenAddPlayerModal={() => setIsAddPlayerOpen(true)}
+                selectedEditionId={selectedEditionId}
+                selectedEditionName={editions.find((e) => e.id === selectedEditionId)?.name}
+              />
+            )}
+
+            {activeTab === 'reglamento' && (
+              <ReglamentoViewer
+                isEditMode={isEditMode}
+                selectedEditionId={selectedEditionId}
+                selectedEditionName={editions.find((e) => e.id === selectedEditionId)?.name}
+              />
+            )}
+          </div>
+        </div>
       </main>
 
       {/* Individual Player Dossier Modal */}

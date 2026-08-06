@@ -32,6 +32,7 @@ export const MatrixCardTable: React.FC<MatrixCardTableProps> = ({
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedTeam, setSelectedTeam] = useState<string>('ALL');
+  const [onlyCarded, setOnlyCarded] = useState(false);
   const [sortBy, setSortBy] = useState<'CARDS' | 'NAME' | 'DORSAL' | 'GOALS'>('CARDS');
   
   // Cell Popover State for editing cards on a specific date
@@ -39,6 +40,10 @@ export const MatrixCardTable: React.FC<MatrixCardTableProps> = ({
 
   // Filter & Sort Players
   const filteredPlayers = players.filter((p) => {
+    const stat = playerStats.find((s) => s.playerId === p.id);
+    const isCarded = (stat?.totalCards || 0) > 0 || stat?.isCurrentlySuspended;
+    if (onlyCarded && !isCarded) return false;
+
     const matchesSearch =
       p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       p.dorsal.toString().includes(searchTerm);
@@ -122,6 +127,18 @@ export const MatrixCardTable: React.FC<MatrixCardTableProps> = ({
               ))}
             </select>
           </div>
+
+          {/* Solo Amonestados Toggle */}
+          <button
+            onClick={() => setOnlyCarded(!onlyCarded)}
+            className={`px-3 py-1.5 rounded-xl border text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
+              onlyCarded
+                ? 'bg-amber-400 text-slate-950 border-amber-300 shadow'
+                : 'bg-slate-800 text-slate-300 border-slate-700 hover:text-white hover:border-slate-600'
+            }`}
+          >
+            <span>🟨 Solo amonestados</span>
+          </button>
 
           {/* Sorting */}
           <div className="flex items-center gap-1.5 bg-slate-800 px-3 py-1.5 rounded-xl border border-slate-700 text-xs">
@@ -226,7 +243,7 @@ export const MatrixCardTable: React.FC<MatrixCardTableProps> = ({
                   {/* Dorsal */}
                   <td className="p-2 font-black text-center sticky left-0 z-10 bg-slate-900 group-hover:bg-slate-800 border-r border-slate-800 text-slate-300 min-w-[50px]">
                     <span className="inline-block px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 font-mono">
-                      #{player.dorsal}
+                      {player.dorsal}
                     </span>
                   </td>
 

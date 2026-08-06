@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
-import { Calendar, Plus, Trophy, AlertTriangle, Check, Trash2, Clock, Shield, Lock, Edit3, Printer, AlertOctagon } from 'lucide-react';
+import { Calendar, Plus, Trophy, AlertTriangle, Check, Trash2, Clock, Shield, Lock, Edit3, Printer, AlertOctagon, FileText } from 'lucide-react';
 import { Match, Player, Team, CardType, CardRecord, GoalRecord, SuspensionAlert, TeamId } from '../types';
 import { getFechaFullTitle, getFechaLabel, FECHA_DATES } from '../utils/fechas';
 import { computeStandings, checkMathematicalElimination } from '../utils/sanctionsEngine';
+import { OfficialPrintSheetModal } from './OfficialPrintSheetModal';
 
 export const MATCH_SCHEDULES = [
-  { slot: 1, range: '7:00:00 p.m. - 7:50:00 p.m.' },
-  { slot: 2, range: '7:50:01 p.m. - 8:40:00 p.m.' },
-  { slot: 3, range: '8:40:01 p.m. - 9:30:00 p.m.' },
-  { slot: 4, range: '9:30:01 p.m. - 10:10:00 p.m.' },
+  { slot: 1, range: '7:00 p.m. - 7:50 p.m.' },
+  { slot: 2, range: '7:55 p.m. - 8:45 p.m.' },
+  { slot: 3, range: '8:50 p.m. - 9:40 p.m.' },
+  { slot: 4, range: '9:45 p.m. - 10:30 p.m.' },
 ];
 
 interface FechaMatchLoggerProps {
@@ -58,10 +59,10 @@ export const FechaMatchLogger: React.FC<FechaMatchLoggerProps> = ({
 
   // Selected player for quick event registration per match
   const [selectedPlayerPerMatch, setSelectedPlayerPerMatch] = useState<Record<string, number>>({});
-
+  const [isPrintSheetOpen, setIsPrintSheetOpen] = useState(false);
 
   const handlePrintPlanilla = () => {
-    window.print();
+    setIsPrintSheetOpen(true);
   };
 
   return (
@@ -428,7 +429,7 @@ export const FechaMatchLogger: React.FC<FechaMatchLoggerProps> = ({
                           const isSuspended = activeSuspensions.some((s) => s.playerId === p.id);
                           return (
                             <option key={p.id} value={p.id}>
-                              #{p.dorsal} {p.name} {isSuspended ? '⚠️ [SUSPENDIDO FECHA ' + currentFecha + ']' : ''}
+                              {p.dorsal} {p.name} {isSuspended ? '⚠️ [SUSPENDIDO FECHA ' + currentFecha + ']' : ''}
                             </option>
                           );
                         })}
@@ -438,7 +439,7 @@ export const FechaMatchLogger: React.FC<FechaMatchLoggerProps> = ({
                           const isSuspended = activeSuspensions.some((s) => s.playerId === p.id);
                           return (
                             <option key={p.id} value={p.id}>
-                              #{p.dorsal} {p.name} {isSuspended ? '⚠️ [SUSPENDIDO FECHA ' + currentFecha + ']' : ''}
+                              {p.dorsal} {p.name} {isSuspended ? '⚠️ [SUSPENDIDO FECHA ' + currentFecha + ']' : ''}
                             </option>
                           );
                         })}
@@ -454,7 +455,7 @@ export const FechaMatchLogger: React.FC<FechaMatchLoggerProps> = ({
                         <span className="font-extrabold uppercase text-red-300 block">
                           ¡ALERTA DE SUSPENSIÓN!
                         </span>
-                        {selectedPlayer.name} (<b>#{selectedPlayer.dorsal}</b>) está suspendido para la Fecha {currentFecha}. No debe disputar este partido.
+                        {selectedPlayer.name} (<b>{selectedPlayer.dorsal}</b>) está suspendido para la Fecha {currentFecha}. No debe disputar este partido.
                       </div>
                     </div>
                   )}
@@ -508,72 +509,214 @@ export const FechaMatchLogger: React.FC<FechaMatchLoggerProps> = ({
                 </div>
               ) : null}
 
-              {/* Match Event Timeline Log */}
-              <div className="p-3 bg-slate-950 border-t border-slate-800 text-xs space-y-1.5">
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider font-mono">
-                  Historial de Incidencias {getFechaLabel(currentFecha)}:
-                </p>
+              {/* Match Event Timeline Log Divided by Teams (Local vs Visitor) */}
+              {(() => {
+                const homeGoals = matchGoals.filter((g) => homePlayers.some((p) => p.id === g.playerId));
+                const homeCards = matchCards.filter((c) => homePlayers.some((p) => p.id === c.playerId));
+                const homeSuspensions = activeSuspensions.filter((s) => s.teamId === match.homeTeamId);
 
-                {matchGoals.length === 0 && matchCards.length === 0 ? (
-                  <p className="text-slate-500 italic text-[11px]">Sin tarjetas ni goles registrados aún en este partido.</p>
-                ) : (
-                  <div className="space-y-1 max-h-32 overflow-y-auto pr-1">
-                    {matchGoals.map((g) => {
-                      const p = players.find((pl) => pl.id === g.playerId);
-                      return (
-                        <div key={g.id} className="flex items-center justify-between bg-slate-900 px-2.5 py-1 rounded border border-slate-800">
-                          <span className="flex items-center gap-1.5 text-slate-200">
-                            <span>⚽</span>
-                            <span className="font-bold">Gol de #{p?.dorsal} {p?.name}</span>
-                            <span className="text-[10px] text-slate-400">({p?.teamId})</span>
-                          </span>
-                          {isEditMode && (
-                            <button
-                              onClick={() => onRemoveGoal(g.id)}
-                              className="text-slate-500 hover:text-red-400 transition"
-                              title="Eliminar gol"
-                            >
-                              <Trash2 className="w-3.5 h-3.5" />
-                            </button>
-                          )}
-                        </div>
-                      );
-                    })}
+                const awayGoals = matchGoals.filter((g) => awayPlayers.some((p) => p.id === g.playerId));
+                const awayCards = matchCards.filter((c) => awayPlayers.some((p) => p.id === c.playerId));
+                const awaySuspensions = activeSuspensions.filter((s) => s.teamId === match.awayTeamId);
 
-                    {matchCards.map((c) => {
-                      const p = players.find((pl) => pl.id === c.playerId);
-                      return (
-                        <div key={c.id} className="flex items-center justify-between bg-slate-900 px-2.5 py-1 rounded border border-slate-800">
-                          <span className="flex items-center gap-1.5 text-slate-200">
-                            <span
-                              className={`w-3 h-4 rounded-xs inline-block font-bold text-[9px] text-center ${
-                                c.type === 'AMARILLA' ? 'bg-yellow-400 text-slate-950' : c.type === 'AZUL' ? 'bg-blue-600 text-white' : 'bg-red-600 text-white'
-                              }`}
-                            ></span>
-                            <span className="font-bold">Tarjeta {c.type} - #{p?.dorsal} {p?.name}</span>
-                            <span className="text-[10px] text-slate-400">({p?.teamId})</span>
-                          </span>
-                          {isEditMode && (
-                            <button
-                              onClick={() => onRemoveCard(c.id)}
-                              className="text-slate-500 hover:text-red-400 transition"
-                              title="Eliminar tarjeta"
+                return (
+                  <div className="p-3 bg-slate-950 border-t border-slate-800 grid grid-cols-1 md:grid-cols-2 gap-3 text-xs font-mono">
+                    {/* Home Team Column */}
+                    <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-2.5 space-y-2">
+                      <div className="border-b border-slate-800 pb-1.5">
+                        <span className="font-extrabold text-amber-400 uppercase tracking-wide text-[11px]">
+                          {homeTeam?.name || match.homeTeamId}
+                        </span>
+                      </div>
+
+                      <div className="space-y-1.5 text-[11px]">
+                        {/* Suspensions if any */}
+                        {homeSuspensions.map((s) => (
+                          <div
+                            key={s.playerId}
+                            className="p-1 rounded bg-red-950/80 border border-red-800 text-red-300 font-bold text-[10px]"
+                          >
+                            ⛔ SUSPENDIDO: #{s.dorsal} {s.playerName} ({s.reason})
+                          </div>
+                        ))}
+
+                        {/* Goals */}
+                        {homeGoals.map((g) => {
+                          const p = players.find((pl) => pl.id === g.playerId);
+                          return (
+                            <div
+                              key={g.id}
+                              className="flex items-center justify-between bg-slate-950 px-2 py-1 rounded border border-slate-800 text-slate-200"
                             >
-                              <Trash2 className="w-3.5 h-3.5" />
-                            </button>
+                              <span className="flex items-center gap-1.5 font-bold">
+                                <span className="text-amber-400 text-xs">⚽</span>
+                                <span>{p?.dorsal} {p?.name}</span>
+                              </span>
+                              {isEditMode && (
+                                <button
+                                  onClick={() => onRemoveGoal(g.id)}
+                                  className="text-slate-500 hover:text-red-400 transition ml-1 shrink-0"
+                                  title="Eliminar gol"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                              )}
+                            </div>
+                          );
+                        })}
+
+                        {/* Cards */}
+                        {homeCards.map((c) => {
+                          const p = players.find((pl) => pl.id === c.playerId);
+                          return (
+                            <div
+                              key={c.id}
+                              className="flex items-center justify-between bg-slate-950 px-2 py-1 rounded border border-slate-800 text-slate-200"
+                            >
+                              <span className="flex items-center gap-1.5 font-bold">
+                                <span
+                                  className={`w-3 h-4 rounded-[1px] inline-block shrink-0 ${
+                                    c.type === 'AMARILLA'
+                                      ? 'bg-yellow-400'
+                                      : c.type === 'AZUL'
+                                      ? 'bg-blue-600'
+                                      : 'bg-red-600'
+                                  }`}
+                                  title={`Tarjeta ${c.type}`}
+                                ></span>
+                                <span>{p?.dorsal} {p?.name}</span>
+                              </span>
+                              {isEditMode && (
+                                <button
+                                  onClick={() => onRemoveCard(c.id)}
+                                  className="text-slate-500 hover:text-red-400 transition ml-1 shrink-0"
+                                  title="Eliminar tarjeta"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                              )}
+                            </div>
+                          );
+                        })}
+
+                        {homeGoals.length === 0 &&
+                          homeCards.length === 0 &&
+                          homeSuspensions.length === 0 && (
+                            <p className="text-slate-500 italic text-[10px] p-0.5">
+                              Sin eventos registrados
+                            </p>
                           )}
-                        </div>
-                      );
-                    })}
+                      </div>
+                    </div>
+
+                    {/* Away Team Column */}
+                    <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-2.5 space-y-2">
+                      <div className="border-b border-slate-800 pb-1.5">
+                        <span className="font-extrabold text-amber-400 uppercase tracking-wide text-[11px]">
+                          {awayTeam?.name || match.awayTeamId}
+                        </span>
+                      </div>
+
+                      <div className="space-y-1.5 text-[11px]">
+                        {/* Suspensions if any */}
+                        {awaySuspensions.map((s) => (
+                          <div
+                            key={s.playerId}
+                            className="p-1 rounded bg-red-950/80 border border-red-800 text-red-300 font-bold text-[10px]"
+                          >
+                            ⛔ SUSPENDIDO: #{s.dorsal} {s.playerName} ({s.reason})
+                          </div>
+                        ))}
+
+                        {/* Goals */}
+                        {awayGoals.map((g) => {
+                          const p = players.find((pl) => pl.id === g.playerId);
+                          return (
+                            <div
+                              key={g.id}
+                              className="flex items-center justify-between bg-slate-950 px-2 py-1 rounded border border-slate-800 text-slate-200"
+                            >
+                              <span className="flex items-center gap-1.5 font-bold">
+                                <span className="text-amber-400 text-xs">⚽</span>
+                                <span>{p?.dorsal} {p?.name}</span>
+                              </span>
+                              {isEditMode && (
+                                <button
+                                  onClick={() => onRemoveGoal(g.id)}
+                                  className="text-slate-500 hover:text-red-400 transition ml-1 shrink-0"
+                                  title="Eliminar gol"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                              )}
+                            </div>
+                          );
+                        })}
+
+                        {/* Cards */}
+                        {awayCards.map((c) => {
+                          const p = players.find((pl) => pl.id === c.playerId);
+                          return (
+                            <div
+                              key={c.id}
+                              className="flex items-center justify-between bg-slate-950 px-2 py-1 rounded border border-slate-800 text-slate-200"
+                            >
+                              <span className="flex items-center gap-1.5 font-bold">
+                                <span
+                                  className={`w-3 h-4 rounded-[1px] inline-block shrink-0 ${
+                                    c.type === 'AMARILLA'
+                                      ? 'bg-yellow-400'
+                                      : c.type === 'AZUL'
+                                      ? 'bg-blue-600'
+                                      : 'bg-red-600'
+                                  }`}
+                                  title={`Tarjeta ${c.type}`}
+                                ></span>
+                                <span>{p?.dorsal} {p?.name}</span>
+                              </span>
+                              {isEditMode && (
+                                <button
+                                  onClick={() => onRemoveCard(c.id)}
+                                  className="text-slate-500 hover:text-red-400 transition ml-1 shrink-0"
+                                  title="Eliminar tarjeta"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                              )}
+                            </div>
+                          );
+                        })}
+
+                        {awayGoals.length === 0 &&
+                          awayCards.length === 0 &&
+                          awaySuspensions.length === 0 && (
+                            <p className="text-slate-500 italic text-[10px] p-0.5">
+                              Sin eventos registrados
+                            </p>
+                          )}
+                      </div>
+                    </div>
                   </div>
-                )}
-              </div>
+                );
+              })()}
             </div>
           );
         })}
       </div>
         </>
       )}
+      {/* Official Print Sheet Modal */}
+      <OfficialPrintSheetModal
+        isOpen={isPrintSheetOpen}
+        onClose={() => setIsPrintSheetOpen(false)}
+        currentFecha={currentFecha}
+        matches={matches}
+        players={players}
+        teams={teams}
+        cards={cards}
+        goals={goals}
+        activeSuspensions={activeSuspensions}
+      />
     </div>
   );
 };

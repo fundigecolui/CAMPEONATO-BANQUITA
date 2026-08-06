@@ -23,20 +23,23 @@ export type CardType = 'AMARILLA' | 'AZUL' | 'ROJA';
 export interface CardRecord {
   id: string;
   playerId: number;
-  fecha: number; // 1 to 38
+  fecha?: number; // 1 to 38
+  fechaNumber?: number;
   type: CardType;
   minute?: number;
   notes?: string;
-  createdAt: string;
+  createdAt?: string;
 }
 
 export interface GoalRecord {
   id: string;
   playerId: number;
-  fecha: number; // 1 to 38
+  fecha?: number; // 1 to 38
+  fechaNumber?: number;
   minute?: number;
+  count?: number;
   teamId: TeamId;
-  createdAt: string;
+  createdAt?: string;
 }
 
 export interface Player {
@@ -49,14 +52,19 @@ export interface Player {
 
 export interface Match {
   id: string;
-  fecha: number; // 1 to 38
+  fecha?: number; // 1 to 38
+  fechaNumber?: number;
   homeTeamId: TeamId;
   awayTeamId: TeamId;
   homeGoals: number;
   awayGoals: number;
-  isPlayed: boolean;
+  isPlayed?: boolean;
+  played?: boolean;
+  homePenalties?: number;
+  awayPenalties?: number;
   status?: 'PROGRAMADO' | 'EN_VIVO' | 'FINALIZADO';
   dateStr?: string;
+  time?: string;
 }
 
 export interface SuspensionAlert {

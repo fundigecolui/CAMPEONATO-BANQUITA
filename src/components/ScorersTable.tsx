@@ -127,7 +127,7 @@ export const ScorersTable: React.FC<ScorersTableProps> = ({ playerStats, teams, 
                     <td className="p-3 font-bold">
                       <div className="flex items-center gap-2">
                         <span className="w-6 h-6 rounded bg-slate-800 text-slate-300 border border-slate-700 flex items-center justify-center font-mono text-xs font-black">
-                          #{scorer.dorsal}
+                          {scorer.dorsal}
                         </span>
                         <span className="text-slate-100 font-extrabold group-hover:text-amber-300 transition text-sm">
                           {scorer.name}
