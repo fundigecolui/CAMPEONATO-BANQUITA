@@ -209,6 +209,19 @@ export const TeamsManagement: React.FC<TeamsManagementProps> = ({
           {filteredTeamPlayers.map((player) => {
             const stat = playerStats.find((s) => s.playerId === player.id);
 
+            const playerPJ = matches.filter((m) => {
+              if (!m.isPlayed && m.status !== 'FINALIZADO') return false;
+              if (m.homeTeamId === player.teamId) {
+                const list = m.attendance?.homePlayerIds;
+                return list ? list.includes(player.id) : true;
+              }
+              if (m.awayTeamId === player.teamId) {
+                const list = m.attendance?.awayPlayerIds;
+                return list ? list.includes(player.id) : true;
+              }
+              return false;
+            }).length;
+
             return (
               <div
                 key={player.id}
@@ -233,7 +246,7 @@ export const TeamsManagement: React.FC<TeamsManagementProps> = ({
                       )}
                     </div>
                     <p className="text-[10px] text-slate-400 font-mono mt-0.5">
-                      G: <strong className="text-amber-300">{stat?.goles || 0}</strong>
+                      PJ: <strong className="text-emerald-400">{playerPJ}</strong> | G: <strong className="text-amber-300">{stat?.goles || 0}</strong>
                     </p>
                   </div>
                 </div>

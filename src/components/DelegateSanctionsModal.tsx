@@ -89,7 +89,7 @@ export const DelegateSanctionsModal: React.FC<DelegateSanctionsModalProps> = ({
     }
 
     if (teamCapilla.length > 0) {
-      msg += `⚠️ *JUGADORES APERCIBIDOS (A 1 AMARILLA DE SUSPENSIÓN):*\n`;
+      msg += `⚠️ *JUGADORES APERCIBIDOS (A 1 TARJETA DE SUSPENSIÓN):*\n`;
       teamCapilla.forEach((c) => {
         msg += `• *#${c.player.dorsal} ${c.player.name}* (Tiene ${c.yellowCount} amarillas acum). Si recibe 1 amarilla más en esta fecha, será suspendido la fecha siguiente.\n`;
       });
@@ -222,7 +222,7 @@ export const DelegateSanctionsModal: React.FC<DelegateSanctionsModalProps> = ({
             <div className="flex items-center justify-between border-b border-slate-800 pb-1.5">
               <div className="flex items-center gap-2 text-amber-400 font-black text-sm">
                 <Clock className="w-4 h-4" />
-                <span>2. ALERTA JUGADORES APERCIBIDOS (A 1 AMARILLA DE SUSPENSIÓN)</span>
+                <span>2. ALERTA JUGADORES APERCIBIDOS (A 1 TARJETA DE SUSPENSIÓN)</span>
               </div>
               <span className="px-2 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800 font-bold">
                 {filteredCapilla.length} Jugador{filteredCapilla.length !== 1 ? 'es' : ''}
