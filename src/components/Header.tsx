@@ -59,7 +59,7 @@ export const Header: React.FC<HeaderProps> = ({
     } else {
       const savedPin = localStorage.getItem('banquitas_admin_pin') || '2026';
       const enteredPin = window.prompt(
-        `🔒 ACCESO ADMINISTRADOR\nIngrese la contraseña / PIN de seguridad para ingresar al MODO EDICIÓN:\n(PIN inicial por defecto: 2026)`
+        `🔒 ACCESO ADMINISTRADOR\nIngrese PIN:`
       );
       if (enteredPin === null) return;
       if (enteredPin.trim() === savedPin) {
