@@ -364,7 +364,7 @@ export const SeasonPerformanceReport: React.FC<SeasonPerformanceReportProps> = (
                           </span>
                         ) : p.amarillas % 3 === 2 ? (
                           <span className="px-2 py-0.5 rounded bg-yellow-950 text-yellow-400 border border-yellow-800 font-bold text-[10px]">
-                            ⚠️ Apercibido (2🟨)
+                            ⚠️ Apercibido
                           </span>
                         ) : (
                           <span className="text-slate-500 font-bold text-[10px]">✅ Habilitado</span>
