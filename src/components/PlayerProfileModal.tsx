@@ -38,7 +38,7 @@ export const PlayerProfileModal: React.FC<PlayerProfileModalProps> = ({
   const [quickType, setQuickType] = useState<CardType>('AMARILLA');
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+    <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto print:hidden">
       <div className="bg-slate-900 border-2 border-slate-700 rounded-2xl max-w-2xl w-full p-5 shadow-2xl space-y-5 my-8 text-white relative">
         {/* Close button */}
         <button

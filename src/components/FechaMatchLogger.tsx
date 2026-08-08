@@ -72,7 +72,8 @@ export const FechaMatchLogger: React.FC<FechaMatchLoggerProps> = ({
 
   return (
     <div className="space-y-6">
-      {/* Header bar with Fecha selection */}
+      <div className="space-y-6 print:hidden">
+        {/* Header bar with Fecha selection */}
       <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-lg">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400 font-bold">
@@ -239,6 +240,12 @@ export const FechaMatchLogger: React.FC<FechaMatchLoggerProps> = ({
 
           const schedule = MATCH_SCHEDULES[matchIdx % 4];
           const isLive = match.status === 'EN_VIVO';
+          const isMatchPlayedOrLive =
+            match.status === 'FINALIZADO' ||
+            isLive ||
+            Boolean(match.isPlayed && match.status !== 'PROGRAMADO') ||
+            matchGoals.length > 0 ||
+            matchCards.length > 0;
 
           // Special Match Subtitles for Playoff Fechas
           let matchSubtitle = `Partido #${match.id}`;
@@ -518,7 +525,7 @@ export const FechaMatchLogger: React.FC<FechaMatchLoggerProps> = ({
               ) : null}
 
               {/* Attendance & Lineup Checklist Bar */}
-              {(() => {
+              {(isMatchPlayedOrLive || isEditMode) && (() => {
                 const homeAttending = match.attendance?.homePlayerIds ?? homePlayers.map((p) => p.id);
                 const awayAttending = match.attendance?.awayPlayerIds ?? awayPlayers.map((p) => p.id);
                 const isAttendanceOpen = openAttendanceMatchId === match.id;
@@ -659,7 +666,7 @@ export const FechaMatchLogger: React.FC<FechaMatchLoggerProps> = ({
               })()}
 
               {/* Match Event Timeline Log Divided by Teams (Local vs Visitor) */}
-              {(() => {
+              {(isMatchPlayedOrLive || isEditMode) && (() => {
                 const homeAttending = match.attendance?.homePlayerIds ?? homePlayers.map((p) => p.id);
                 const awayAttending = match.attendance?.awayPlayerIds ?? awayPlayers.map((p) => p.id);
 
@@ -898,6 +905,7 @@ export const FechaMatchLogger: React.FC<FechaMatchLoggerProps> = ({
       </div>
         </>
       )}
+      </div>
       {/* Official Print Sheet Modal */}
       <OfficialPrintSheetModal
         isOpen={isPrintSheetOpen}

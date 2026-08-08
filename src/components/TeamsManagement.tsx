@@ -55,7 +55,7 @@ export const TeamsManagement: React.FC<TeamsManagementProps> = ({
   });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 print:hidden">
       {/* Junta Directiva Banner */}
       <div className="bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 border border-slate-800 rounded-2xl p-4 shadow-xl">
         <div className="flex items-center gap-2 mb-3 pb-2 border-b border-slate-800">

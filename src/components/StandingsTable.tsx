@@ -50,7 +50,7 @@ export const StandingsTable: React.FC<StandingsTableProps> = ({ standings, teams
   };
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-3 print:hidden">
       {/* Mathematical Elimination Banner */}
       {eliminationInfo.isEliminated && (
         <div className="bg-gradient-to-r from-red-950/90 via-slate-900 to-red-950/90 border-2 border-red-500/80 p-3.5 rounded-2xl text-red-200 text-xs font-mono shadow-xl flex items-start gap-3">

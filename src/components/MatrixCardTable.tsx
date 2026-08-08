@@ -86,7 +86,7 @@ export const MatrixCardTable: React.FC<MatrixCardTableProps> = ({
   });
 
   return (
-    <div className="bg-slate-900 rounded-2xl border border-slate-800 shadow-2xl overflow-hidden flex flex-col">
+    <div className="bg-slate-900 rounded-2xl border border-slate-800 shadow-2xl overflow-hidden flex flex-col print:hidden">
       {/* Controls Bar */}
       <div className="p-4 bg-slate-900/90 border-b border-slate-800 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
         {/* Search */}

@@ -48,7 +48,7 @@ export const HeadToHeadModal: React.FC<HeadToHeadModalProps> = ({ isOpen, onClos
   });
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4 print:hidden">
       <div className="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-2xl text-slate-100 shadow-2xl p-6 space-y-5">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-slate-800 pb-3">

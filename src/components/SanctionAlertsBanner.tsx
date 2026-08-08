@@ -19,7 +19,7 @@ export const SanctionAlertsBanner: React.FC<SanctionAlertsBannerProps> = ({
   eliminationInfo,
 }) => {
   return (
-    <div className="space-y-2">
+    <div className="space-y-2 print:hidden">
       {/* Mathematical Elimination Banner Alert */}
       {eliminationInfo?.isEliminated && (
         <div className="bg-gradient-to-r from-red-950 via-slate-900 to-red-950 border-2 border-red-500/80 rounded-xl p-3 text-xs font-mono text-red-200 shadow-md flex items-center justify-between gap-3">

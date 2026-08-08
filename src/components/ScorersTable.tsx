@@ -25,7 +25,7 @@ export const ScorersTable: React.FC<ScorersTableProps> = ({ playerStats, teams, 
     .sort((a, b) => b.goles - a.goles || a.name.localeCompare(b.name));
 
   return (
-    <div className="bg-slate-900 rounded-2xl border border-slate-800 shadow-2xl overflow-hidden">
+    <div className="bg-slate-900 rounded-2xl border border-slate-800 shadow-2xl overflow-hidden print:hidden">
       {/* Header */}
       <div className="p-4 bg-slate-950 border-b border-slate-800 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
         <div className="flex items-center gap-3">

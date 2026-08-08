@@ -89,7 +89,7 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({
   ];
 
   return (
-    <aside className="w-full lg:w-64 xl:w-72 shrink-0 space-y-4 sticky lg:top-20 z-20">
+    <aside className="w-full lg:w-64 xl:w-72 shrink-0 space-y-4 sticky lg:top-20 z-20 print:hidden">
       {/* Main Vertical Nav Card */}
       <div className="bg-slate-900/90 backdrop-blur-md border border-slate-800 rounded-2xl p-3.5 sm:p-4 shadow-2xl relative overflow-hidden">
         {/* Subtle decorative glow accent */}
