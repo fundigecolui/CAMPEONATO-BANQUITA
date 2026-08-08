@@ -15,6 +15,7 @@ import {
   CheckSquare,
   Swords,
   Clock,
+  Calendar,
 } from 'lucide-react';
 import { computeStandings, computePlayerStats, checkMathematicalElimination, groupGoalsByPlayer } from '../utils/sanctionsEngine';
 
@@ -634,10 +635,18 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
                         <span className="font-extrabold text-amber-400 text-sm tracking-wide block">
                           Partido #{m.id}
                         </span>
-                        <span className="text-[11px] text-slate-300 font-medium flex items-center gap-1.5 mt-0.5">
-                          <Clock className="w-3.5 h-3.5 text-amber-400 inline" />
-                          Horario: {scheduleTime} • {fechaDate}
-                        </span>
+                        <div className="flex flex-col gap-0.5 text-[11px] text-slate-300 font-medium mt-0.5">
+                          <span className="flex items-center gap-1.5">
+                            <Clock className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                            Horario: {scheduleTime}
+                          </span>
+                          {fechaDate && (
+                            <span className="flex items-center gap-1.5">
+                              <Calendar className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                              Fecha: {fechaDate}
+                            </span>
+                          )}
+                        </div>
                       </div>
 
                       <div>

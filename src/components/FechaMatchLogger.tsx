@@ -288,12 +288,20 @@ export const FechaMatchLogger: React.FC<FechaMatchLoggerProps> = ({
                 )}
 
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-slate-400 mb-3 font-mono">
-                  <div className="flex flex-col">
+                  <div className="flex flex-col gap-1">
                     <span className="font-bold text-amber-400 text-sm tracking-wide">{matchSubtitle}</span>
-                    <span className="text-xs text-slate-400 flex items-center gap-1.5 font-medium mt-0.5">
-                      <Clock className="w-3.5 h-3.5 text-amber-400" />
-                      Horario: {schedule.range} {match.dateStr ? `• ${match.dateStr}` : FECHA_DATES[currentFecha] ? `• ${FECHA_DATES[currentFecha]}` : ''}
-                    </span>
+                    <div className="flex flex-col gap-0.5 text-xs text-slate-300 font-medium">
+                      <div className="flex items-center gap-1.5">
+                        <Clock className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                        <span>Horario: {schedule.range}</span>
+                      </div>
+                      {(match.dateStr || FECHA_DATES[currentFecha]) && (
+                        <div className="flex items-center gap-1.5">
+                          <Calendar className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                          <span>Fecha: {match.dateStr || FECHA_DATES[currentFecha]}</span>
+                        </div>
+                      )}
+                    </div>
                   </div>
 
                   <div className="flex items-center gap-2 self-start sm:self-center">
