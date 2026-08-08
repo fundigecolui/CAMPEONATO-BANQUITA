@@ -207,7 +207,7 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
         {/* Filter / Section Selectors Toolbar (Non-printable) */}
         <div className="p-3 bg-slate-900 border-b border-slate-800 flex flex-col md:flex-row items-start md:items-center justify-between text-xs font-mono gap-3 print:hidden shrink-0">
           <div className="flex items-center gap-1.5 flex-wrap">
-            <span className="text-amber-400 font-bold shrink-0 text-[11px]">IMPRIMIR HOJA ÚNICA:</span>
+            <span className="text-amber-400 font-bold shrink-0 text-[11px]">IMPRIMIR:</span>
             <button
               onClick={() => {
                 setPrintFechaSummary(true);
@@ -223,22 +223,6 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
               }`}
             >
               📺 Resumen Fecha
-            </button>
-            <button
-              onClick={() => {
-                setPrintFechaSummary(false);
-                setPrintMatches(true);
-                setPrintStandings(false);
-                setPrintCards(false);
-                setPrintAttendance(false);
-              }}
-              className={`px-2 py-1 rounded-lg border text-[11px] font-bold transition cursor-pointer ${
-                !printFechaSummary && printMatches && !printStandings && !printCards && !printAttendance
-                  ? 'bg-amber-500 text-slate-950 border-amber-400 font-black'
-                  : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700'
-              }`}
-            >
-              📄 Planillas Partido
             </button>
             <button
               onClick={() => {

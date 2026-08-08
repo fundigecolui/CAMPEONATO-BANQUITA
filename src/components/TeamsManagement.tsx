@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Shield, Users, Trophy, AlertTriangle, Eye, Edit3, UserPlus, Lock, UserCheck, Award } from 'lucide-react';
-import { Team, Player, PlayerStats, TeamId } from '../types';
+import { Team, Player, PlayerStats, TeamId, Match } from '../types';
 import { getJuntaDirectiva } from '../data/initialData';
 
 interface TeamsManagementProps {
   teams: Team[];
   players: Player[];
   playerStats: PlayerStats[];
+  matches?: Match[];
   isEditMode: boolean;
   onSelectPlayer: (playerId: number) => void;
   onEditPlayer: (player: Player) => void;
@@ -19,6 +20,7 @@ export const TeamsManagement: React.FC<TeamsManagementProps> = ({
   teams,
   players,
   playerStats,
+  matches = [],
   isEditMode,
   onSelectPlayer,
   onEditPlayer,
@@ -37,6 +39,11 @@ export const TeamsManagement: React.FC<TeamsManagementProps> = ({
     p.name.toLowerCase().includes(playerSearchTerm.toLowerCase()) ||
     p.dorsal.toString().includes(playerSearchTerm)
   );
+
+  // Compute team matches played
+  const partidosJugados = matches.filter(
+    (m) => (m.homeTeamId === selectedTeamId || m.awayTeamId === selectedTeamId) && (m.isPlayed || m.status === 'FINALIZADO')
+  ).length;
 
   // Compute team totals
   let totalAmarillas = 0;
@@ -157,19 +164,23 @@ export const TeamsManagement: React.FC<TeamsManagementProps> = ({
             )}
 
             <div className="flex items-center gap-2 font-mono text-xs">
-              <div className="bg-slate-800/80 px-3 py-1.5 rounded-xl border border-slate-700 text-center">
-                <span className="block text-slate-400 text-[10px]">⚽ GOLES</span>
+              <div className="bg-slate-800/80 px-2.5 py-1.5 rounded-xl border border-slate-700 text-center">
+                <span className="block text-slate-400 text-[10px]">🏟️ PJ:</span>
+                <span className="font-bold text-emerald-400 text-sm">{partidosJugados}</span>
+              </div>
+              <div className="bg-slate-800/80 px-2.5 py-1.5 rounded-xl border border-slate-700 text-center">
+                <span className="block text-slate-400 text-[10px]">⚽ G:</span>
                 <span className="font-bold text-amber-300 text-sm">{totalGoles}</span>
               </div>
-              <div className="bg-slate-800/80 px-3 py-1.5 rounded-xl border border-slate-700 text-center">
+              <div className="bg-slate-800/80 px-2.5 py-1.5 rounded-xl border border-slate-700 text-center">
                 <span className="block text-slate-400 text-[10px]">🟨 AMARILLAS</span>
                 <span className="font-bold text-yellow-300 text-sm">{totalAmarillas}</span>
               </div>
-              <div className="bg-slate-800/80 px-3 py-1.5 rounded-xl border border-slate-700 text-center">
+              <div className="bg-slate-800/80 px-2.5 py-1.5 rounded-xl border border-slate-700 text-center">
                 <span className="block text-slate-400 text-[10px]">🟦 AZULES</span>
                 <span className="font-bold text-blue-300 text-sm">{totalAzules}</span>
               </div>
-              <div className="bg-slate-800/80 px-3 py-1.5 rounded-xl border border-slate-700 text-center">
+              <div className="bg-slate-800/80 px-2.5 py-1.5 rounded-xl border border-slate-700 text-center">
                 <span className="block text-slate-400 text-[10px]">🟥 ROJAS</span>
                 <span className="font-bold text-red-400 text-sm">{totalRojas}</span>
               </div>
@@ -222,7 +233,7 @@ export const TeamsManagement: React.FC<TeamsManagementProps> = ({
                       )}
                     </div>
                     <p className="text-[10px] text-slate-400 font-mono mt-0.5">
-                      Goles: <strong className="text-amber-300">{stat?.goles || 0}</strong>
+                      G: <strong className="text-amber-300">{stat?.goles || 0}</strong>
                     </p>
                   </div>
                 </div>

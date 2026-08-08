@@ -11,6 +11,10 @@ import { ReglamentoViewer } from './components/ReglamentoViewer';
 import { PlayerProfileModal } from './components/PlayerProfileModal';
 import { AddPlayerModal } from './components/AddPlayerModal';
 import { EditPlayerModal } from './components/EditPlayerModal';
+import { SeasonPerformanceReport } from './components/SeasonPerformanceReport';
+import { ShareSummaryModal } from './components/ShareSummaryModal';
+import { DelegateSanctionsModal } from './components/DelegateSanctionsModal';
+import { validateMatchData, validateBackupJSONData } from './utils/zodSchemas';
 
 import {
   INITIAL_TEAMS,
@@ -95,7 +99,7 @@ export default function App() {
   // Navigation & Fecha state
   const [currentFecha, setCurrentFecha] = useState<number>(1);
   const [maxUnlockedFecha, setMaxUnlockedFecha] = useState<number>(7);
-  const [activeTab, setActiveTab] = useState<'matrix' | 'matches' | 'standings' | 'scorers' | 'teams' | 'reglamento'>('matches');
+  const [activeTab, setActiveTab] = useState<'matrix' | 'matches' | 'standings' | 'scorers' | 'teams' | 'reglamento' | 'reports'>('matches');
 
   // Editions Management
   const [editions, setEditions] = useState<TournamentEdition[]>(() => {
@@ -130,6 +134,8 @@ export default function App() {
   const [selectedPlayerModalId, setSelectedPlayerModalId] = useState<number | null>(null);
   const [isAddPlayerOpen, setIsAddPlayerOpen] = useState<boolean>(false);
   const [editingPlayer, setEditingPlayer] = useState<Player | null>(null);
+  const [isShareSummaryOpen, setIsShareSummaryOpen] = useState<boolean>(false);
+  const [isDelegateAlertsOpen, setIsDelegateAlertsOpen] = useState<boolean>(false);
 
   const currentEdition = editions.find((e) => e.id === selectedEditionId) || editions[0];
 
@@ -313,8 +319,18 @@ export default function App() {
   };
 
   const handleUpdateMatchScore = (matchId: string, homeGoals: number, awayGoals: number) => {
+    const targetMatch = matches.find((m) => m.id === matchId);
+    if (!targetMatch) return;
+
+    const candidateMatch = { ...targetMatch, homeGoals, awayGoals, isPlayed: true };
+    const validation = validateMatchData(candidateMatch);
+    if (!validation.success) {
+      alert(`⚠️ Validation error: ${validation.error}`);
+      return;
+    }
+
     setMatches((prev) =>
-      prev.map((m) => (m.id === matchId ? { ...m, homeGoals, awayGoals, isPlayed: true } : m))
+      prev.map((m) => (m.id === matchId ? validation.data : m))
     );
   };
 
@@ -365,16 +381,22 @@ export default function App() {
   };
 
   const handleUpdateMatchStatus = (matchId: string, status: 'PROGRAMADO' | 'EN_VIVO' | 'FINALIZADO') => {
+    const targetMatch = matches.find((m) => m.id === matchId);
+    if (!targetMatch) return;
+
+    const candidateMatch = {
+      ...targetMatch,
+      status,
+      isPlayed: status === 'FINALIZADO' ? true : targetMatch.isPlayed,
+    };
+    const validation = validateMatchData(candidateMatch);
+    if (!validation.success) {
+      alert(`⚠️ Validation error: ${validation.error}`);
+      return;
+    }
+
     setMatches((prev) =>
-      prev.map((m) =>
-        m.id === matchId
-          ? {
-              ...m,
-              status,
-              isPlayed: status === 'FINALIZADO' ? true : m.isPlayed,
-            }
-          : m
-      )
+      prev.map((m) => (m.id === matchId ? validation.data : m))
     );
   };
 
@@ -420,8 +442,15 @@ export default function App() {
   };
 
   const handleExportData = () => {
+    const rawBackup = { players, cards, goals, matches, currentFecha, isEditMode };
+    const validation = validateBackupJSONData(rawBackup);
+    if (!validation.success) {
+      alert(`⚠️ Error al validar copia de seguridad antes de exportar:\n${validation.error}`);
+      return;
+    }
+
     const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(
-      JSON.stringify({ players, cards, goals, matches, currentFecha, isEditMode }, null, 2)
+      JSON.stringify(validation.data, null, 2)
     );
     const downloadAnchor = document.createElement('a');
     downloadAnchor.setAttribute('href', dataStr);
@@ -437,16 +466,22 @@ export default function App() {
       fileReader.readAsText(e.target.files[0], 'UTF-8');
       fileReader.onload = (event) => {
         try {
-          const parsed = JSON.parse(event.target?.result as string);
-          if (parsed.players) setPlayers(parsed.players);
-          if (parsed.cards) setCards(parsed.cards);
-          if (parsed.goals) setGoals(parsed.goals);
-          if (parsed.matches) setMatches(parsed.matches);
-          if (parsed.currentFecha) setCurrentFecha(parsed.currentFecha);
-          if (typeof parsed.isEditMode === 'boolean') setIsEditMode(parsed.isEditMode);
-          alert('¡Datos del campeonato importados con éxito!');
+          const rawParsed = JSON.parse(event.target?.result as string);
+          const validation = validateBackupJSONData(rawParsed);
+          if (!validation.success) {
+            alert(`⚠️ Error de validación Zod en copia de respaldo:\n${validation.error}`);
+            return;
+          }
+          const { data } = validation;
+          setPlayers(data.players);
+          setCards(data.cards);
+          setGoals(data.goals);
+          setMatches(data.matches);
+          if (data.currentFecha) setCurrentFecha(data.currentFecha);
+          if (typeof data.isEditMode === 'boolean') setIsEditMode(data.isEditMode);
+          alert('✅ ¡Copia de respaldo en JSON validada con Zod e importada con éxito!');
         } catch (err) {
-          alert('Error al leer el archivo JSON importado.');
+          alert('⚠️ Error al leer el archivo. Verifique que sea un formato JSON sintácticamente válido.');
         }
       };
     }
@@ -477,6 +512,8 @@ export default function App() {
         setSelectedEditionId={setSelectedEditionId}
         editions={editions}
         onAddNewEdition={handleAddNewEdition}
+        onOpenShareSummary={() => setIsShareSummaryOpen(true)}
+        onOpenDelegateAlerts={() => setIsDelegateAlertsOpen(true)}
       />
 
       {/* Main Content Viewport with Left Vertical Sidebar Navigation */}
@@ -579,6 +616,7 @@ export default function App() {
                 teams={teams}
                 players={players}
                 playerStats={playerStats}
+                matches={matches}
                 isEditMode={isEditMode}
                 onSelectPlayer={(pid) => setSelectedPlayerModalId(pid)}
                 onEditPlayer={(player) => setEditingPlayer(player)}
@@ -595,9 +633,46 @@ export default function App() {
                 selectedEditionName={editions.find((e) => e.id === selectedEditionId)?.name}
               />
             )}
+
+            {activeTab === 'reports' && (
+              <SeasonPerformanceReport
+                teams={teams}
+                players={players}
+                matches={matches}
+                cards={cards}
+                goals={goals}
+                currentFecha={currentFecha}
+                selectedEditionName={editions.find((e) => e.id === selectedEditionId)?.name}
+              />
+            )}
           </div>
         </div>
       </main>
+
+      {/* Share Summary Modal for WhatsApp */}
+      <ShareSummaryModal
+        isOpen={isShareSummaryOpen}
+        onClose={() => setIsShareSummaryOpen(false)}
+        currentFecha={currentFecha}
+        matches={matches}
+        players={players}
+        teams={teams}
+        cards={cards}
+        goals={goals}
+        activeSuspensions={activeSuspensions}
+      />
+
+      {/* Delegate Sanctions Alerts Modal */}
+      <DelegateSanctionsModal
+        isOpen={isDelegateAlertsOpen}
+        onClose={() => setIsDelegateAlertsOpen(false)}
+        currentFecha={currentFecha}
+        teams={teams}
+        players={players}
+        cards={cards}
+        activeSuspensions={activeSuspensions}
+        allSuspensions={allSuspensions}
+      />
 
       {/* Individual Player Dossier Modal */}
       <PlayerProfileModal

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Shield, AlertTriangle, Trophy, Users, Calendar, RotateCcw, Download, Upload, UserPlus, Lock, Edit3, Key, Plus, Archive, FileText } from 'lucide-react';
+import { Shield, AlertTriangle, Trophy, Users, Calendar, RotateCcw, Download, Upload, UserPlus, Lock, Edit3, Key, Plus, Archive, FileText, Share2, Bell, BarChart2 } from 'lucide-react';
 import { getFechaFullTitle } from '../utils/fechas';
 import tournamentLogo from '../assets/images/san_simon_logo_dark_1785590924842.jpg';
 import { TournamentEdition } from '../types';
@@ -9,8 +9,8 @@ interface HeaderProps {
   setCurrentFecha: (f: number) => void;
   maxUnlockedFecha: number;
   setMaxUnlockedFecha: (f: number) => void;
-  activeTab: 'matrix' | 'matches' | 'standings' | 'scorers' | 'teams' | 'reglamento';
-  setActiveTab: (tab: 'matrix' | 'matches' | 'standings' | 'scorers' | 'teams' | 'reglamento') => void;
+  activeTab: 'matrix' | 'matches' | 'standings' | 'scorers' | 'teams' | 'reglamento' | 'reports';
+  setActiveTab: (tab: 'matrix' | 'matches' | 'standings' | 'scorers' | 'teams' | 'reglamento' | 'reports') => void;
   activeSuspendedCount: number;
   totalCardsCount: { amarillas: number; azules: number; rojas: number; total: number };
   isEditMode: boolean;
@@ -23,6 +23,8 @@ interface HeaderProps {
   setSelectedEditionId: (id: string) => void;
   editions: TournamentEdition[];
   onAddNewEdition: () => void;
+  onOpenShareSummary?: () => void;
+  onOpenDelegateAlerts?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -44,6 +46,8 @@ export const Header: React.FC<HeaderProps> = ({
   setSelectedEditionId,
   editions,
   onAddNewEdition,
+  onOpenShareSummary,
+  onOpenDelegateAlerts,
 }) => {
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
@@ -194,8 +198,30 @@ export const Header: React.FC<HeaderProps> = ({
                 title="Información sobre Modo Usuario y Cambio de Contraseña"
               >
                 <Shield className="w-3.5 h-3.5 text-blue-400" />
-                <span className="hidden sm:inline font-medium text-[11px]">Compartir / Clave</span>
+                <span className="hidden sm:inline font-medium text-[11px]">Seguridad / Clave</span>
               </button>
+
+              {onOpenShareSummary && (
+                <button
+                  onClick={onOpenShareSummary}
+                  className="p-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs transition cursor-pointer flex items-center gap-1.5 px-3 shadow-md"
+                  title="Compartir resumen de la fecha en imagen o texto para WhatsApp"
+                >
+                  <Share2 className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline font-bold text-[11px]">Compartir Resumen</span>
+                </button>
+              )}
+
+              {onOpenDelegateAlerts && (
+                <button
+                  onClick={onOpenDelegateAlerts}
+                  className="p-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs transition cursor-pointer flex items-center gap-1.5 px-2.5"
+                  title="Alertas automáticas de sanciones y tarjetas para delegados"
+                >
+                  <Bell className="w-3.5 h-3.5 text-amber-400" />
+                  <span className="hidden sm:inline font-bold text-[11px]">Alertas Delegados</span>
+                </button>
+              )}
             </div>
 
             {/* Quick Stat Counter Badges */}

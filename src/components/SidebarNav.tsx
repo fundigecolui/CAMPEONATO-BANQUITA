@@ -8,12 +8,13 @@ import {
   ChevronRight,
   Sparkles,
   Lock,
+  BarChart2,
 } from 'lucide-react';
 import { getFechaFullTitle } from '../utils/fechas';
 
 interface SidebarNavProps {
-  activeTab: 'matches' | 'standings' | 'scorers' | 'matrix' | 'teams' | 'reglamento';
-  setActiveTab: (tab: 'matches' | 'standings' | 'scorers' | 'matrix' | 'teams' | 'reglamento') => void;
+  activeTab: 'matches' | 'standings' | 'scorers' | 'matrix' | 'teams' | 'reglamento' | 'reports';
+  setActiveTab: (tab: 'matches' | 'standings' | 'scorers' | 'matrix' | 'teams' | 'reglamento' | 'reports') => void;
   currentFecha: number;
   setCurrentFecha: (f: number) => void;
   maxUnlockedFecha: number;
@@ -85,6 +86,15 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({
       icon: FileText,
       color: 'from-cyan-500 to-blue-600',
       activeColor: 'bg-amber-500 text-slate-950 font-black shadow-lg shadow-amber-500/20 ring-2 ring-amber-400/50',
+    },
+    {
+      id: 'reports' as const,
+      label: 'Rendimiento',
+      sublabel: 'Gráficas e informes históricos',
+      icon: BarChart2,
+      color: 'from-amber-500 to-emerald-600',
+      activeColor: 'bg-amber-500 text-slate-950 font-black shadow-lg shadow-amber-500/20 ring-2 ring-amber-400/50',
+      badge: '📊 RECHARTS',
     },
   ];
 
