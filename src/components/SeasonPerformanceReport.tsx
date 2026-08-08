@@ -322,6 +322,7 @@ export const SeasonPerformanceReport: React.FC<SeasonPerformanceReportProps> = (
                 <th className="py-2.5 px-3">Dorsal</th>
                 <th className="py-2.5 px-3">Jugador</th>
                 <th className="py-2.5 px-3">Equipo</th>
+                <th className="py-2.5 px-3 text-center">PJ</th>
                 <th className="py-2.5 px-3 text-center">Goles</th>
                 <th className="py-2.5 px-3 text-center">Amarillas</th>
                 <th className="py-2.5 px-3 text-center">Azules</th>
@@ -334,6 +335,19 @@ export const SeasonPerformanceReport: React.FC<SeasonPerformanceReportProps> = (
                 .sort((a, b) => b.goles - a.goles || a.dorsal - b.dorsal)
                 .map((p) => {
                   const teamObj = teams.find((t) => t.id === p.teamId);
+                  const playerPJ = matches.filter((m) => {
+                    if (!m.isPlayed && m.status !== 'FINALIZADO') return false;
+                    if (m.homeTeamId === p.teamId) {
+                      const list = m.attendance?.homePlayerIds;
+                      return list ? list.includes(p.playerId) : true;
+                    }
+                    if (m.awayTeamId === p.teamId) {
+                      const list = m.attendance?.awayPlayerIds;
+                      return list ? list.includes(p.playerId) : true;
+                    }
+                    return false;
+                  }).length;
+
                   return (
                     <tr key={p.playerId} className="hover:bg-slate-800/40 transition">
                       <td className="py-2 px-3 font-extrabold text-amber-400">#{p.dorsal}</td>
@@ -344,6 +358,9 @@ export const SeasonPerformanceReport: React.FC<SeasonPerformanceReportProps> = (
                         >
                           {teamObj?.name || p.teamId}
                         </span>
+                      </td>
+                      <td className="py-2 px-3 text-center font-bold text-cyan-400">
+                        {playerPJ}
                       </td>
                       <td className="py-2 px-3 text-center font-black text-emerald-400">
                         {p.goles > 0 ? `⚽ ${p.goles}` : '-'}
