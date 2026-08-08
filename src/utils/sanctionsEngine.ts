@@ -290,3 +290,23 @@ export function checkMathematicalElimination(
   };
 }
 
+/**
+ * Groups goal records by player so multiple goals show as repeated ball icons instead of duplicate player lines
+ */
+export function groupGoalsByPlayer<T extends { playerId: number; id: string }>(
+  goals: T[],
+  players: Player[]
+) {
+  const map = new Map<number, { playerId: number; player?: Player; count: number; goalIds: string[] }>();
+  goals.forEach((g) => {
+    const existing = map.get(g.playerId);
+    if (existing) {
+      existing.count += 1;
+      existing.goalIds.push(g.id);
+    } else {
+      const p = players.find((pl) => pl.id === g.playerId);
+      map.set(g.playerId, { playerId: g.playerId, player: p, count: 1, goalIds: [g.id] });
+    }
+  });
+  return Array.from(map.values());
+}

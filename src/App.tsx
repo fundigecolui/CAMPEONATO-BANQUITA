@@ -41,6 +41,7 @@ import {
 import { Player, Team, CardRecord, GoalRecord, Match, CardType, TeamId, TournamentEdition } from './types';
 import { computePlayerStats, computeStandings, checkMathematicalElimination } from './utils/sanctionsEngine';
 import { generateAllTournamentMatches } from './utils/fixtureGenerator';
+import { syncMatchStatuses } from './utils/matchSync';
 
 const STORAGE_KEY = 'banquitas_san_simon_db_v4';
 const EDITIONS_KEY = 'banquitas_editions_list_v1';
@@ -52,9 +53,9 @@ const getInitialDataForEdition = (editionId: string) => {
       cards: CARDS_2026_2,
       goals: GOALS_2026_2,
       matches: MATCHES_2026_2,
-      currentFecha: 1,
+      currentFecha: 2,
       maxUnlockedFecha: 7,
-      v: 8,
+      v: 10,
     };
   }
   if (editionId === '2026-1') {
@@ -142,7 +143,7 @@ export default function App() {
       if (saved) {
         const parsed = JSON.parse(saved);
         if (
-          (selectedEditionId === '2026-2' && (!parsed.v || parsed.v < 8)) ||
+          (selectedEditionId === '2026-2' && (!parsed.v || parsed.v < 10)) ||
           (selectedEditionId === '2025-2' && (!parsed.v || parsed.v < 3)) ||
           (selectedEditionId === '2026-1' && (!parsed.v || parsed.v < 4))
         ) {
@@ -201,6 +202,23 @@ export default function App() {
     }
   }, [selectedEditionId]);
 
+  // Auto-synchronize match status according to exact Date & Time schedule
+  useEffect(() => {
+    const runAutoSync = () => {
+      setMatches((prev) => {
+        const { syncedMatches, hasChanges } = syncMatchStatuses(prev);
+        return hasChanges ? syncedMatches : prev;
+      });
+    };
+
+    // Immediate sync on load or edition change
+    runAutoSync();
+
+    // Check schedule every 10 seconds
+    const interval = setInterval(runAutoSync, 10000);
+    return () => clearInterval(interval);
+  }, [selectedEditionId]);
+
   // Save to localStorage & broadcast real-time tab updates
   useEffect(() => {
     const dataToSave = {
@@ -211,7 +229,7 @@ export default function App() {
       currentFecha,
       maxUnlockedFecha,
       isEditMode,
-      v: 5,
+      v: 10,
     };
     const key = selectedEditionId === '2026-2' ? STORAGE_KEY : `banquitas_edition_${selectedEditionId}`;
     localStorage.setItem(key, JSON.stringify(dataToSave));
