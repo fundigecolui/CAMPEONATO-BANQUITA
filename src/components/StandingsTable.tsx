@@ -80,7 +80,7 @@ export const StandingsTable: React.FC<StandingsTableProps> = ({ standings, teams
         {/* Header */}
         <div className="p-4 bg-slate-950 border-b border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-slate-900 border border-amber-400/40 p-0.5 flex items-center justify-center shrink-0">
+            <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-slate-900 border border-amber-400/40 p-1 flex items-center justify-center shrink-0">
               <img
                 src={tournamentLogo}
                 alt="Campeonato Banquitas San Simón"

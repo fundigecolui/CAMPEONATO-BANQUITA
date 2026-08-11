@@ -99,7 +99,7 @@ export const Header: React.FC<HeaderProps> = ({
         {/* Top Title Bar */}
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="w-13 h-13 rounded-xl bg-slate-950 p-1 border-2 border-amber-400/50 shadow-lg shadow-amber-500/20 flex items-center justify-center overflow-hidden shrink-0">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-xl bg-slate-950 p-1 border-2 border-amber-400/50 shadow-lg shadow-amber-500/20 flex items-center justify-center overflow-hidden shrink-0">
               <img
                 src={tournamentLogo}
                 alt="Escudo Oficial Campeonato Banquitas San Simón"
