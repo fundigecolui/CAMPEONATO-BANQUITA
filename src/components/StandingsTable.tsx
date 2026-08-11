@@ -89,11 +89,8 @@ export const StandingsTable: React.FC<StandingsTableProps> = ({ standings, teams
               />
             </div>
             <div>
-              <h2 className="text-base font-extrabold text-white font-mono uppercase">
-                Tabla General de Posiciones
-              </h2>
-              <p className="text-xs text-slate-400">
-                Campeonato Banquitas San Simón - Fase Todos contra Todos (Actualización oficial calculada hasta la Fecha 35).
+              <p className="text-xs sm:text-sm font-bold text-amber-300 font-mono">
+                (Actualización oficial calculada hasta la Fecha 35)
               </p>
             </div>
           </div>

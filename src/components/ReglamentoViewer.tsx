@@ -564,7 +564,7 @@ export const ReglamentoViewer: React.FC<ReglamentoViewerProps> = ({
               </div>
               <div>
                 <span className="text-[10px] uppercase tracking-wider font-bold text-slate-400">Acumulación</span>
-                <p className="text-xs font-bold text-yellow-300 mt-0.5">3 Tarjetas Amarillas</p>
+                <p className="text-xs font-bold text-yellow-300 mt-0.5">3 Tarjetas</p>
                 <span className="text-[10px] text-slate-400">= 1 Fecha de Suspensión</span>
               </div>
             </div>
