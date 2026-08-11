@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { Match, Player, Team, CardRecord, GoalRecord, SuspensionAlert } from '../types';
 import { getFechaFullTitle, FECHA_DATES } from '../utils/fechas';
-import { computeStandings, groupGoalsByPlayer } from '../utils/sanctionsEngine';
+import { computeStandings, computePlayerStats, groupGoalsByPlayer } from '../utils/sanctionsEngine';
 import { toPng } from 'html-to-image';
 import {
   Share2,
@@ -12,8 +12,10 @@ import {
   MessageSquare,
   Image as ImageIcon,
   Trophy,
-  Calendar,
-  Sparkles,
+  AlertTriangle,
+  Flame,
+  CheckSquare,
+  Square,
 } from 'lucide-react';
 import tournamentLogo from '../assets/images/san_simon_logo_dark_1785590924842.jpg';
 
@@ -43,6 +45,13 @@ export const ShareSummaryModal: React.FC<ShareSummaryModalProps> = ({
   const [copiedText, setCopiedText] = useState(false);
   const [isGeneratingImage, setIsGeneratingImage] = useState(false);
   const [activeTab, setActiveTab] = useState<'text' | 'image'>('text');
+
+  // Section toggle options for sharing
+  const [includeResults, setIncludeResults] = useState(true);
+  const [includeStandings, setIncludeStandings] = useState(true);
+  const [includeScorers, setIncludeScorers] = useState(true);
+  const [includeCards, setIncludeCards] = useState(true);
+
   const cardRef = useRef<HTMLDivElement>(null);
 
   if (!isOpen) return null;
@@ -50,6 +59,16 @@ export const ShareSummaryModal: React.FC<ShareSummaryModalProps> = ({
   const currentMatches = matches.filter((m) => m.fecha === currentFecha);
   const fechaDate = FECHA_DATES[currentFecha] || 'Fecha Programada';
   const standings = computeStandings(teams, matches, cards, players);
+  
+  // Calculate top scorers and cards in fecha
+  const { stats } = computePlayerStats(players, cards, goals, currentFecha);
+  const topScorers = stats
+    .filter((s) => s.goles > 0)
+    .sort((a, b) => b.goles - a.goles || a.name.localeCompare(b.name))
+    .slice(0, 6);
+
+  // Cards shown in current fecha
+  const cardsInFecha = cards.filter((c) => c.fecha === currentFecha);
 
   // Generate formatted WhatsApp Text
   const generateWhatsAppText = () => {
@@ -57,45 +76,87 @@ export const ShareSummaryModal: React.FC<ShareSummaryModalProps> = ({
     txt += `📅 *${getFechaFullTitle(currentFecha).toUpperCase()}* (${fechaDate})\n`;
     txt += `━━━━━━━━━━━━━━━━━━━━━━\n\n`;
 
-    txt += `⚽ *RESULTADOS DE LA FECHA:*\n`;
-    currentMatches.forEach((m, idx) => {
-      const homeTeam = teams.find((t) => t.id === m.homeTeamId)?.name || m.homeTeamId;
-      const awayTeam = teams.find((t) => t.id === m.awayTeamId)?.name || m.awayTeamId;
-      const statusStr = m.status === 'FINALIZADO' || m.isPlayed ? ' (Fin)' : m.status === 'EN_VIVO' ? ' (🔴 En Vivo)' : ' (Prog)';
+    if (includeResults) {
+      txt += `⚽ *RESULTADOS DE LA FECHA:*\n`;
+      currentMatches.forEach((m, idx) => {
+        const homeTeam = teams.find((t) => t.id === m.homeTeamId)?.name || m.homeTeamId;
+        const awayTeam = teams.find((t) => t.id === m.awayTeamId)?.name || m.awayTeamId;
+        const statusStr =
+          m.status === 'FINALIZADO' || m.isPlayed
+            ? ' (Fin)'
+            : m.status === 'EN_VIVO'
+            ? ' (🔴 En Vivo)'
+            : ' (Prog)';
 
-      txt += `*P${idx + 1}:* ${homeTeam} *${m.homeGoals} - ${m.awayGoals}* ${awayTeam}${statusStr}\n`;
+        txt += `*P${idx + 1}:* ${homeTeam} *${m.homeGoals} - ${m.awayGoals}* ${awayTeam}${statusStr}\n`;
 
-      // Goals summary
-      const matchPlayers = players.filter((p) => p.teamId === m.homeTeamId || p.teamId === m.awayTeamId);
-      const matchGoals = goals.filter((g) => g.fecha === currentFecha && matchPlayers.some((p) => p.id === g.playerId));
-      if (matchGoals.length > 0) {
-        const goalList = groupGoalsByPlayer(matchGoals, players)
-          .map(({ player: p, count }) => `${p ? `${p.dorsal} ${p.name}` : 'Gol'} (${'⚽'.repeat(count)})`)
-          .join(', ');
-        txt += `   └ ⚽ _${goalList}_\n`;
-      }
-    });
-
-    txt += `\n📊 *TABLA DE POSICIONES:*\n`;
-    txt += `\`Pos  Equipo         PJ  PTS  DG\`\n`;
-    standings.forEach((s, i) => {
-      const pos = i + 1;
-      const medal = pos === 1 ? '🥇' : pos === 2 ? '🥈' : pos === 3 ? '🥉' : `${pos}.`;
-      const namePad = s.teamName.padEnd(12, ' ').substring(0, 12);
-      const pjPad = String(s.pj).padStart(2, ' ');
-      const ptsPad = String(s.pts).padStart(3, ' ');
-      const dgPad = (s.dg >= 0 ? `+${s.dg}` : String(s.dg)).padStart(3, ' ');
-      txt += `${medal} ${namePad} | ${pjPad} | ${ptsPad} | ${dgPad}\n`;
-    });
-
-    if (activeSuspensions.length > 0) {
-      txt += `\n⚠️ *JUGADORES SUSPENDIDOS PARA PRÓXIMA FECHA:*\n`;
-      activeSuspensions.forEach((s) => {
-        txt += `• *#${s.dorsal} ${s.playerName}* (${s.teamId}) - ${s.reason === '3_AMARILLAS' ? '3 Amarillas' : 'Tarjeta Roja'}\n`;
+        // Goals summary
+        const matchPlayers = players.filter((p) => p.teamId === m.homeTeamId || p.teamId === m.awayTeamId);
+        const matchGoals = goals.filter((g) => g.fecha === currentFecha && matchPlayers.some((p) => p.id === g.playerId));
+        if (matchGoals.length > 0) {
+          const goalList = groupGoalsByPlayer(matchGoals, players)
+            .map(({ player: p, count }) => `${p ? `#${p.dorsal} ${p.name}` : 'Gol'} (${'⚽'.repeat(count)})`)
+            .join(', ');
+          txt += `   └ ⚽ _${goalList}_\n`;
+        }
       });
+      txt += `\n`;
     }
 
-    txt += `\n📌 _Información oficial de la mesa directiva - San Simón_`;
+    if (includeStandings) {
+      txt += `📊 *TABLA DE POSICIONES:*\n`;
+      txt += `\`Pos  Equipo         PJ  PTS  DG\`\n`;
+      standings.slice(0, 8).forEach((s, i) => {
+        const pos = i + 1;
+        const medal = pos === 1 ? '🥇' : pos === 2 ? '🥈' : pos === 3 ? '🥉' : `${pos}.`;
+        const namePad = s.teamName.padEnd(12, ' ').substring(0, 12);
+        const pjPad = String(s.pj).padStart(2, ' ');
+        const ptsPad = String(s.pts).padStart(3, ' ');
+        const dgPad = (s.dg >= 0 ? `+${s.dg}` : String(s.dg)).padStart(3, ' ');
+        txt += `${medal} ${namePad} | ${pjPad} | ${ptsPad} | ${dgPad}\n`;
+      });
+      txt += `\n`;
+    }
+
+    if (includeScorers) {
+      txt += `🥇 *TOP GOLEADORES DE LA TEMPORADA:*\n`;
+      if (topScorers.length === 0) {
+        txt += `_Aún no hay goles registrados._\n`;
+      } else {
+        topScorers.forEach((p, idx) => {
+          const teamObj = teams.find((t) => t.id === p.teamId);
+          const posBadge = idx === 0 ? '👑' : `#${idx + 1}`;
+          txt += `${posBadge} *#${p.dorsal} ${p.name}* (${teamObj?.name || p.teamId}) → *${p.goles} Goles ⚽*\n`;
+        });
+      }
+      txt += `\n`;
+    }
+
+    if (includeCards) {
+      txt += `🟨 *REPORTE DE TARJETAS Y SANCIÓNES:*\n`;
+      if (cardsInFecha.length > 0) {
+        txt += `_Tarjetas en la Fecha ${currentFecha}:_\n`;
+        cardsInFecha.forEach((c) => {
+          const player = players.find((p) => p.id === c.playerId);
+          const icon = c.type === 'AMARILLA' ? '🟨' : c.type === 'AZUL' ? '🟦' : '🟥';
+          txt += `• ${icon} *#${player?.dorsal || ''} ${player?.name || 'Jugador'}* (${player?.teamId || ''})\n`;
+        });
+      }
+
+      if (activeSuspensions.length > 0) {
+        txt += `\n⚠️ *JUGADORES SUSPENDIDOS (PRÓXIMA FECHA):*\n`;
+        activeSuspensions.forEach((s) => {
+          txt += `• ⛔ *#${s.dorsal} ${s.playerName}* (${s.teamId}) → ${
+            s.reason === '3_AMARILLAS' ? '3 Amarillas acumuladas' : 'Tarjeta Roja Directa'
+          }\n`;
+        });
+      } else if (cardsInFecha.length === 0) {
+        txt += `_Sin tarjetas ni suspensiones en esta jornada._\n`;
+      }
+      txt += `\n`;
+    }
+
+    txt += `📌 _Información oficial de la Mesa Directiva - San Simón_`;
     return txt;
   };
 
@@ -138,10 +199,10 @@ export const ShareSummaryModal: React.FC<ShareSummaryModalProps> = ({
             </div>
             <div>
               <h3 className="font-extrabold text-white text-sm sm:text-base font-mono">
-                COMPARTIR RESUMEN RÁPIDO - FECHA #{currentFecha}
+                COMPARTIR RESUMEN - FECHA #{currentFecha}
               </h3>
               <p className="text-xs text-slate-400 font-mono">
-                Genera texto o imagen para enviar a grupos de WhatsApp
+                Personaliza y genera texto o imagen para WhatsApp
               </p>
             </div>
           </div>
@@ -151,6 +212,62 @@ export const ShareSummaryModal: React.FC<ShareSummaryModalProps> = ({
           >
             <X className="w-5 h-5" />
           </button>
+        </div>
+
+        {/* Section Toggle Filter Controls */}
+        <div className="p-3 bg-slate-950/60 border-b border-slate-800 space-y-2">
+          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block font-mono">
+            Selecciona el contenido a incluir en el resumen:
+          </span>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-mono">
+            <button
+              onClick={() => setIncludeResults(!includeResults)}
+              className={`p-2 rounded-xl border flex items-center gap-2 transition cursor-pointer ${
+                includeResults
+                  ? 'bg-amber-500/20 border-amber-500/50 text-amber-300 font-bold'
+                  : 'bg-slate-800/60 border-slate-700/60 text-slate-400 opacity-60'
+              }`}
+            >
+              {includeResults ? <CheckSquare className="w-4 h-4 text-amber-400" /> : <Square className="w-4 h-4" />}
+              <span>⚽ Resultados</span>
+            </button>
+
+            <button
+              onClick={() => setIncludeStandings(!includeStandings)}
+              className={`p-2 rounded-xl border flex items-center gap-2 transition cursor-pointer ${
+                includeStandings
+                  ? 'bg-amber-500/20 border-amber-500/50 text-amber-300 font-bold'
+                  : 'bg-slate-800/60 border-slate-700/60 text-slate-400 opacity-60'
+              }`}
+            >
+              {includeStandings ? <CheckSquare className="w-4 h-4 text-amber-400" /> : <Square className="w-4 h-4" />}
+              <span>📊 Posiciones</span>
+            </button>
+
+            <button
+              onClick={() => setIncludeScorers(!includeScorers)}
+              className={`p-2 rounded-xl border flex items-center gap-2 transition cursor-pointer ${
+                includeScorers
+                  ? 'bg-amber-500/20 border-amber-500/50 text-amber-300 font-bold'
+                  : 'bg-slate-800/60 border-slate-700/60 text-slate-400 opacity-60'
+              }`}
+            >
+              {includeScorers ? <CheckSquare className="w-4 h-4 text-amber-400" /> : <Square className="w-4 h-4" />}
+              <span>🥇 Goleadores</span>
+            </button>
+
+            <button
+              onClick={() => setIncludeCards(!includeCards)}
+              className={`p-2 rounded-xl border flex items-center gap-2 transition cursor-pointer ${
+                includeCards
+                  ? 'bg-amber-500/20 border-amber-500/50 text-amber-300 font-bold'
+                  : 'bg-slate-800/60 border-slate-700/60 text-slate-400 opacity-60'
+              }`}
+            >
+              {includeCards ? <CheckSquare className="w-4 h-4 text-amber-400" /> : <Square className="w-4 h-4" />}
+              <span>🟨 Tarjetas</span>
+            </button>
+          </div>
         </div>
 
         {/* Mode Selector Tabs */}
@@ -213,7 +330,7 @@ export const ShareSummaryModal: React.FC<ShareSummaryModalProps> = ({
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <p className="text-xs text-slate-400 font-mono">
-                  Vista previa de la tarjeta gráfica resumen (resolución optimizada):
+                  Vista previa de la tarjeta gráfica resumen:
                 </p>
                 <button
                   onClick={handleDownloadImage}
@@ -226,92 +343,203 @@ export const ShareSummaryModal: React.FC<ShareSummaryModalProps> = ({
               </div>
 
               {/* Graphical Card Renderable Container */}
-              <div className="overflow-hidden rounded-2xl border border-slate-800 shadow-2xl bg-slate-950">
+              <div className="overflow-x-auto rounded-2xl border border-slate-800 shadow-2xl bg-slate-950 p-2 sm:p-4 flex justify-center">
                 <div
                   ref={cardRef}
-                  className="p-5 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white font-mono space-y-4 max-w-lg mx-auto"
+                  className="w-[540px] p-5 sm:p-6 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white font-mono space-y-4 rounded-2xl border border-slate-800/80 shrink-0"
                 >
                   {/* Card Header */}
-                  <div className="flex items-center justify-between border-b border-amber-500/40 pb-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl border border-amber-500/50 p-1 bg-slate-900 flex items-center justify-center">
+                  <div className="flex items-center justify-between border-b border-amber-500/40 pb-3 gap-3">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="w-12 h-12 rounded-xl border border-amber-500/50 p-1 bg-slate-900 flex items-center justify-center shrink-0 shadow-md">
                         <img src={tournamentLogo} alt="Logo" className="max-h-full max-w-full object-contain" />
                       </div>
-                      <div>
-                        <h2 className="text-sm font-black text-amber-400 uppercase tracking-tight">
+                      <div className="min-w-0">
+                        <h2 className="text-sm sm:text-base font-black text-amber-400 uppercase tracking-tight leading-tight">
                           CAMPEONATO BANQUITAS SAN SIMÓN
                         </h2>
-                        <p className="text-[11px] font-extrabold text-slate-200">
+                        <p className="text-xs font-extrabold text-slate-200 mt-0.5">
                           {getFechaFullTitle(currentFecha)} • {fechaDate}
                         </p>
                       </div>
                     </div>
-                    <span className="px-2.5 py-1 rounded-lg bg-amber-500 text-slate-950 font-black text-[10px] uppercase">
+                    <span className="px-2.5 py-1 rounded-lg bg-amber-500 text-slate-950 font-black text-[10px] uppercase tracking-wider shrink-0 shadow">
                       OFICIAL
                     </span>
                   </div>
 
                   {/* Matches Grid */}
-                  <div className="space-y-1.5">
-                    <span className="text-[11px] font-bold text-amber-400 uppercase tracking-wider block border-b border-slate-800 pb-1">
-                      ⚽ RESULTADOS DE LA JORNADA
-                    </span>
-                    <div className="grid grid-cols-2 gap-2 text-[10px]">
-                      {currentMatches.map((m, idx) => {
-                        const home = teams.find((t) => t.id === m.homeTeamId);
-                        const away = teams.find((t) => t.id === m.awayTeamId);
-                        return (
-                          <div
-                            key={m.id}
-                            className="bg-slate-900/90 p-2 rounded-xl border border-slate-800 flex flex-col justify-between"
-                          >
-                            <span className="text-[9px] text-slate-400 font-bold block mb-1">
-                              Partido #{idx + 1}
-                            </span>
-                            <div className="flex items-center justify-between gap-1">
-                              <span className="font-extrabold text-slate-100 truncate max-w-[55px]">
-                                {home?.name}
+                  {includeResults && (
+                    <div className="space-y-2">
+                      <span className="text-xs font-bold text-amber-400 uppercase tracking-wider block border-b border-slate-800 pb-1">
+                        ⚽ RESULTADOS DE LA JORNADA
+                      </span>
+                      <div className="grid grid-cols-2 gap-2 text-xs">
+                        {currentMatches.map((m, idx) => {
+                          const home = teams.find((t) => t.id === m.homeTeamId);
+                          const away = teams.find((t) => t.id === m.awayTeamId);
+                          return (
+                            <div
+                              key={m.id}
+                              className="bg-slate-900/90 p-2.5 rounded-xl border border-slate-800 flex flex-col justify-between space-y-1"
+                            >
+                              <span className="text-[10px] text-slate-400 font-bold block">
+                                Partido #{idx + 1}
                               </span>
-                              <span className="px-1.5 py-0.5 rounded bg-amber-500 text-slate-950 font-black text-[11px]">
-                                {m.homeGoals} - {m.awayGoals}
-                              </span>
-                              <span className="font-extrabold text-slate-100 truncate max-w-[55px] text-right">
-                                {away?.name}
-                              </span>
+                              <div className="flex items-center justify-between gap-1.5">
+                                <span className="font-extrabold text-slate-100 truncate text-xs flex-1">
+                                  {home?.name}
+                                </span>
+                                <span className="px-2 py-0.5 rounded bg-amber-500 text-slate-950 font-black text-xs shrink-0 shadow-sm">
+                                  {m.homeGoals} - {m.awayGoals}
+                                </span>
+                                <span className="font-extrabold text-slate-100 truncate text-xs flex-1 text-right">
+                                  {away?.name}
+                                </span>
+                              </div>
                             </div>
-                          </div>
-                        );
-                      })}
+                          );
+                        })}
+                      </div>
                     </div>
-                  </div>
+                  )}
 
                   {/* Standings Summary */}
-                  <div className="space-y-1.5">
-                    <span className="text-[11px] font-bold text-amber-400 uppercase tracking-wider block border-b border-slate-800 pb-1">
-                      📊 TABLA DE POSICIONES
-                    </span>
-                    <div className="bg-slate-900/90 rounded-xl border border-slate-800 p-2 text-[10px]">
-                      <div className="grid grid-cols-6 font-bold text-slate-400 border-b border-slate-800 pb-1 text-[9px]">
-                        <span className="col-span-3">EQUIPO</span>
-                        <span className="text-center">PJ</span>
-                        <span className="text-center">DG</span>
-                        <span className="text-center text-amber-300">PTS</span>
-                      </div>
-                      {standings.slice(0, 8).map((s, i) => (
-                        <div key={s.teamId} className="grid grid-cols-6 py-0.5 border-b border-slate-800/40 text-slate-200">
-                          <span className="col-span-3 font-bold truncate">
-                            {i + 1}. {s.teamName}
-                          </span>
-                          <span className="text-center text-slate-400">{s.pj}</span>
-                          <span className="text-center text-slate-400">{s.dg >= 0 ? `+${s.dg}` : s.dg}</span>
-                          <span className="text-center font-black text-amber-400">{s.pts}</span>
+                  {includeStandings && (
+                    <div className="space-y-2">
+                      <span className="text-xs font-bold text-amber-400 uppercase tracking-wider block border-b border-slate-800 pb-1">
+                        📊 TABLA DE POSICIONES
+                      </span>
+                      <div className="bg-slate-900/90 rounded-xl border border-slate-800 p-2.5 text-xs">
+                        <div className="grid grid-cols-12 font-bold text-slate-400 border-b border-slate-800 pb-1.5 text-[10px] uppercase tracking-wider">
+                          <span className="col-span-6">EQUIPO</span>
+                          <span className="col-span-2 text-center">PJ</span>
+                          <span className="col-span-2 text-center">DG</span>
+                          <span className="col-span-2 text-center text-amber-300">PTS</span>
                         </div>
-                      ))}
+                        {standings.slice(0, 8).map((s, i) => (
+                          <div key={s.teamId} className="grid grid-cols-12 py-1 border-b border-slate-800/40 text-slate-200 items-center">
+                            <span className="col-span-6 font-bold truncate">
+                              {i + 1}. {s.teamName}
+                            </span>
+                            <span className="col-span-2 text-center text-slate-400 font-medium">{s.pj}</span>
+                            <span className="col-span-2 text-center text-slate-400 font-medium">{s.dg >= 0 ? `+${s.dg}` : s.dg}</span>
+                            <span className="col-span-2 text-center font-black text-amber-400 text-sm">{s.pts}</span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  </div>
+                  )}
+
+                  {/* Top Scorers Summary */}
+                  {includeScorers && (
+                    <div className="space-y-2">
+                      <span className="text-xs font-bold text-amber-400 uppercase tracking-wider block border-b border-slate-800 pb-1">
+                        🥇 TOP GOLEADORES DE LA TEMPORADA
+                      </span>
+                      <div className="bg-slate-900/90 rounded-xl border border-slate-800 p-2.5 text-xs">
+                        {topScorers.length === 0 ? (
+                          <p className="text-slate-400 text-[11px] text-center py-1">Sin goles registrados.</p>
+                        ) : (
+                          <div className="grid grid-cols-2 gap-1.5">
+                            {topScorers.map((p, idx) => {
+                              const teamObj = teams.find((t) => t.id === p.teamId);
+                              return (
+                                <div
+                                  key={p.playerId}
+                                  className="flex items-center justify-between p-1.5 rounded-lg bg-slate-950/80 border border-slate-800"
+                                >
+                                  <div className="flex items-center gap-1.5 min-w-0">
+                                    <span className="font-extrabold text-amber-400 text-[10px]">
+                                      #{p.dorsal}
+                                    </span>
+                                    <div className="min-w-0">
+                                      <p className="font-bold text-slate-100 truncate text-[11px] leading-tight">
+                                        {p.name}
+                                      </p>
+                                      <p className="text-[9px] text-slate-400 truncate">
+                                        {teamObj?.name || p.teamId}
+                                      </p>
+                                    </div>
+                                  </div>
+                                  <span className="px-1.5 py-0.5 bg-amber-500/20 border border-amber-500/40 text-amber-300 font-extrabold text-[10px] rounded-md shrink-0">
+                                    ⚽ {p.goles}
+                                  </span>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Cards & Suspensions Summary */}
+                  {includeCards && (
+                    <div className="space-y-2">
+                      <span className="text-xs font-bold text-amber-400 uppercase tracking-wider block border-b border-slate-800 pb-1">
+                        🟨 TARJETAS Y SANCIÓNES DE LA FECHA
+                      </span>
+                      <div className="bg-slate-900/90 rounded-xl border border-slate-800 p-2.5 text-xs space-y-2">
+                        {/* Cards in Fecha */}
+                        <div>
+                          <p className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mb-1">
+                            Amonestaciones Fecha #{currentFecha}:
+                          </p>
+                          {cardsInFecha.length === 0 ? (
+                            <p className="text-slate-400 text-[11px] italic">Sin amonestaciones registradas.</p>
+                          ) : (
+                            <div className="flex flex-wrap gap-1.5">
+                              {cardsInFecha.map((c, i) => {
+                                const player = players.find((p) => p.id === c.playerId);
+                                const cardBg =
+                                  c.type === 'AMARILLA'
+                                    ? 'bg-yellow-500/20 border-yellow-500/40 text-yellow-300'
+                                    : c.type === 'AZUL'
+                                    ? 'bg-cyan-500/20 border-cyan-500/40 text-cyan-300'
+                                    : 'bg-rose-500/20 border-rose-500/40 text-rose-300';
+                                return (
+                                  <span
+                                    key={i}
+                                    className={`px-2 py-0.5 rounded-md border text-[10px] font-bold ${cardBg}`}
+                                  >
+                                    #{player?.dorsal} {player?.name} ({player?.teamId})
+                                  </span>
+                                );
+                              })}
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Active Suspensions for Next Fecha */}
+                        {activeSuspensions.length > 0 && (
+                          <div className="pt-1 border-t border-slate-800">
+                            <p className="text-[10px] font-extrabold text-rose-400 uppercase tracking-wider mb-1 flex items-center gap-1">
+                              <span>⚠️ Suspendidos Próxima Fecha:</span>
+                            </p>
+                            <div className="space-y-1">
+                              {activeSuspensions.map((s, idx) => (
+                                <div
+                                  key={idx}
+                                  className="flex items-center justify-between text-[10px] bg-rose-950/40 border border-rose-900/50 p-1.5 rounded-md text-rose-200"
+                                >
+                                  <span className="font-bold">
+                                    #{s.dorsal} {s.playerName} ({s.teamId})
+                                  </span>
+                                  <span className="font-semibold text-rose-300">
+                                    {s.reason === '3_AMARILLAS' ? '3 Amarillas' : 'Roja Directa'}
+                                  </span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
 
                   {/* Footer */}
-                  <div className="pt-2 border-t border-slate-800 flex items-center justify-between text-[9px] text-slate-500 font-mono">
+                  <div className="pt-2 border-t border-slate-800 flex items-center justify-between text-[10px] text-slate-400 font-mono">
                     <span>Mesa Directiva San Simón</span>
                     <span>www.sansimon.com</span>
                   </div>
@@ -324,3 +552,4 @@ export const ShareSummaryModal: React.FC<ShareSummaryModalProps> = ({
     </div>
   );
 };
+
