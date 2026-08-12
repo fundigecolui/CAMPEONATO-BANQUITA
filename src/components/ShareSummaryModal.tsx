@@ -51,6 +51,8 @@ export const ShareSummaryModal: React.FC<ShareSummaryModalProps> = ({
   const [includeStandings, setIncludeStandings] = useState(true);
   const [includeScorers, setIncludeScorers] = useState(true);
   const [includeCards, setIncludeCards] = useState(true);
+  const [includeAttendanceFecha, setIncludeAttendanceFecha] = useState(true);
+  const [includeAttendanceConsolidated, setIncludeAttendanceConsolidated] = useState(false);
   const [includeNextFecha, setIncludeNextFecha] = useState(true);
 
   const cardRef = useRef<HTMLDivElement>(null);
@@ -160,6 +162,94 @@ export const ShareSummaryModal: React.FC<ShareSummaryModalProps> = ({
       txt += `\n`;
     }
 
+    if (includeAttendanceFecha) {
+      txt += `📋 *CONTROL DE ASISTENCIA - FECHA #${currentFecha}:*\n`;
+      let registeredAny = false;
+
+      currentMatches.forEach((m) => {
+        const homeTeam = teams.find((t) => t.id === m.homeTeamId);
+        const awayTeam = teams.find((t) => t.id === m.awayTeamId);
+        if (!homeTeam || !awayTeam) return;
+
+        const homePlayers = players.filter((p) => p.teamId === homeTeam.id);
+        const awayPlayers = players.filter((p) => p.teamId === awayTeam.id);
+
+        const homeAtt = m.attendance?.homePlayerIds;
+        const awayAtt = m.attendance?.awayPlayerIds;
+
+        if (homeAtt || awayAtt) {
+          registeredAny = true;
+          const hCount = homeAtt ? homeAtt.length : homePlayers.length;
+          const aCount = awayAtt ? awayAtt.length : awayPlayers.length;
+
+          txt += `*${homeTeam.name}* (${hCount}/${homePlayers.length}) vs *${awayTeam.name}* (${aCount}/${awayPlayers.length})\n`;
+
+          if (homeAtt) {
+            const homeAbsent = homePlayers.filter((p) => !homeAtt.includes(p.id));
+            if (homeAbsent.length > 0) {
+              txt += ` └ ❌ _Ausentes ${homeTeam.name}:_ ${homeAbsent.map((p) => `#${p.dorsal} ${p.name}`).join(', ')}\n`;
+            } else {
+              txt += ` └ ✅ _${homeTeam.name}: 100% Asistentes_\n`;
+            }
+          }
+
+          if (awayAtt) {
+            const awayAbsent = awayPlayers.filter((p) => !awayAtt.includes(p.id));
+            if (awayAbsent.length > 0) {
+              txt += ` └ ❌ _Ausentes ${awayTeam.name}:_ ${awayAbsent.map((p) => `#${p.dorsal} ${p.name}`).join(', ')}\n`;
+            } else {
+              txt += ` └ ✅ _${awayTeam.name}: 100% Asistentes_\n`;
+            }
+          }
+        }
+      });
+
+      if (!registeredAny) {
+        txt += `_Sin registro especial de inasistencias en esta jornada._\n`;
+      }
+      txt += `\n`;
+    }
+
+    if (includeAttendanceConsolidated) {
+      txt += `📈 *CONSOLIDADO GENERAL DE ASISTENCIA (CORTE FECHA #${currentFecha}):*\n`;
+      teams.forEach((t) => {
+        const teamPlayers = players.filter((p) => p.teamId === t.id);
+        const teamPlayedMatches = matches.filter(
+          (m) =>
+            (m.homeTeamId === t.id || m.awayTeamId === t.id) &&
+            (m.isPlayed || m.status === 'FINALIZADO')
+        );
+        const totalPJ = teamPlayedMatches.length;
+
+        if (totalPJ === 0) {
+          txt += `• *${t.name}:* _Sin partidos jugados_\n`;
+          return;
+        }
+
+        const playerAbsences = teamPlayers
+          .map((p) => {
+            const attended = teamPlayedMatches.filter((m) => {
+              const isHome = m.homeTeamId === t.id;
+              const attIds = isHome ? m.attendance?.homePlayerIds : m.attendance?.awayPlayerIds;
+              return attIds ? attIds.includes(p.id) : true;
+            }).length;
+            const absent = totalPJ - attended;
+            return { player: p, attended, absent };
+          })
+          .filter((item) => item.absent > 0);
+
+        if (playerAbsences.length === 0) {
+          txt += `• *${t.name}:* ✅ 100% Asistencia Perfecta (${totalPJ} PJ)\n`;
+        } else {
+          const absentDetails = playerAbsences
+            .map((item) => `#${item.player.dorsal} ${item.player.name} (${item.absent} F)`)
+            .join(', ');
+          txt += `• *${t.name}:* ⚠️ Faltas: ${absentDetails}\n`;
+        }
+      });
+      txt += `\n`;
+    }
+
     if (includeNextFecha) {
       txt += `📅 *PRÓXIMA JORNADA - FECHA #${nextFecha}* (${nextFechaDate}):\n`;
       if (nextMatches.length === 0) {
@@ -238,10 +328,10 @@ export const ShareSummaryModal: React.FC<ShareSummaryModalProps> = ({
           <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block font-mono">
             Selecciona el contenido a incluir en el resumen:
           </span>
-          <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 text-xs font-mono">
+          <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-1.5 text-[11px] font-mono">
             <button
               onClick={() => setIncludeResults(!includeResults)}
-              className={`p-2 rounded-xl border flex items-center gap-1.5 transition cursor-pointer ${
+              className={`p-1.5 rounded-xl border flex items-center gap-1 transition cursor-pointer ${
                 includeResults
                   ? 'bg-amber-500/20 border-amber-500/50 text-amber-300 font-bold'
                   : 'bg-slate-800/60 border-slate-700/60 text-slate-400 opacity-60'
@@ -253,7 +343,7 @@ export const ShareSummaryModal: React.FC<ShareSummaryModalProps> = ({
 
             <button
               onClick={() => setIncludeStandings(!includeStandings)}
-              className={`p-2 rounded-xl border flex items-center gap-1.5 transition cursor-pointer ${
+              className={`p-1.5 rounded-xl border flex items-center gap-1 transition cursor-pointer ${
                 includeStandings
                   ? 'bg-amber-500/20 border-amber-500/50 text-amber-300 font-bold'
                   : 'bg-slate-800/60 border-slate-700/60 text-slate-400 opacity-60'
@@ -265,7 +355,7 @@ export const ShareSummaryModal: React.FC<ShareSummaryModalProps> = ({
 
             <button
               onClick={() => setIncludeScorers(!includeScorers)}
-              className={`p-2 rounded-xl border flex items-center gap-1.5 transition cursor-pointer ${
+              className={`p-1.5 rounded-xl border flex items-center gap-1 transition cursor-pointer ${
                 includeScorers
                   ? 'bg-amber-500/20 border-amber-500/50 text-amber-300 font-bold'
                   : 'bg-slate-800/60 border-slate-700/60 text-slate-400 opacity-60'
@@ -277,7 +367,7 @@ export const ShareSummaryModal: React.FC<ShareSummaryModalProps> = ({
 
             <button
               onClick={() => setIncludeCards(!includeCards)}
-              className={`p-2 rounded-xl border flex items-center gap-1.5 transition cursor-pointer ${
+              className={`p-1.5 rounded-xl border flex items-center gap-1 transition cursor-pointer ${
                 includeCards
                   ? 'bg-amber-500/20 border-amber-500/50 text-amber-300 font-bold'
                   : 'bg-slate-800/60 border-slate-700/60 text-slate-400 opacity-60'
@@ -288,8 +378,32 @@ export const ShareSummaryModal: React.FC<ShareSummaryModalProps> = ({
             </button>
 
             <button
+              onClick={() => setIncludeAttendanceFecha(!includeAttendanceFecha)}
+              className={`p-1.5 rounded-xl border flex items-center gap-1 transition cursor-pointer ${
+                includeAttendanceFecha
+                  ? 'bg-amber-500/20 border-amber-500/50 text-amber-300 font-bold'
+                  : 'bg-slate-800/60 border-slate-700/60 text-slate-400 opacity-60'
+              }`}
+            >
+              {includeAttendanceFecha ? <CheckSquare className="w-3.5 h-3.5 text-amber-400 shrink-0" /> : <Square className="w-3.5 h-3.5 shrink-0" />}
+              <span className="truncate">📋 Asist. Fecha</span>
+            </button>
+
+            <button
+              onClick={() => setIncludeAttendanceConsolidated(!includeAttendanceConsolidated)}
+              className={`p-1.5 rounded-xl border flex items-center gap-1 transition cursor-pointer ${
+                includeAttendanceConsolidated
+                  ? 'bg-amber-500/20 border-amber-500/50 text-amber-300 font-bold'
+                  : 'bg-slate-800/60 border-slate-700/60 text-slate-400 opacity-60'
+              }`}
+            >
+              {includeAttendanceConsolidated ? <CheckSquare className="w-3.5 h-3.5 text-amber-400 shrink-0" /> : <Square className="w-3.5 h-3.5 shrink-0" />}
+              <span className="truncate">📈 Consolidado</span>
+            </button>
+
+            <button
               onClick={() => setIncludeNextFecha(!includeNextFecha)}
-              className={`p-2 rounded-xl border flex items-center gap-1.5 transition cursor-pointer col-span-2 sm:col-span-1 ${
+              className={`p-1.5 rounded-xl border flex items-center gap-1 transition cursor-pointer col-span-2 sm:col-span-1 ${
                 includeNextFecha
                   ? 'bg-amber-500/20 border-amber-500/50 text-amber-300 font-bold'
                   : 'bg-slate-800/60 border-slate-700/60 text-slate-400 opacity-60'
@@ -565,6 +679,110 @@ export const ShareSummaryModal: React.FC<ShareSummaryModalProps> = ({
                             </div>
                           </div>
                         )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Attendance for current Fecha */}
+                  {includeAttendanceFecha && (
+                    <div className="space-y-2">
+                      <span className="text-xs font-bold text-amber-400 uppercase tracking-wider block border-b border-slate-800 pb-1">
+                        📋 CONTROL DE ASISTENCIA FECHA #{currentFecha}
+                      </span>
+                      <div className="bg-slate-900/90 rounded-xl border border-slate-800 p-2.5 text-xs space-y-2 font-mono">
+                        {currentMatches.map((m) => {
+                          const home = teams.find((t) => t.id === m.homeTeamId);
+                          const away = teams.find((t) => t.id === m.awayTeamId);
+                          if (!home || !away) return null;
+
+                          const homePlayers = players.filter((p) => p.teamId === home.id);
+                          const awayPlayers = players.filter((p) => p.teamId === away.id);
+
+                          const homeAtt = m.attendance?.homePlayerIds;
+                          const awayAtt = m.attendance?.awayPlayerIds;
+
+                          const homeAbsent = homeAtt ? homePlayers.filter((p) => !homeAtt.includes(p.id)) : [];
+                          const awayAbsent = awayAtt ? awayPlayers.filter((p) => !awayAtt.includes(p.id)) : [];
+
+                          return (
+                            <div key={m.id} className="p-2 bg-slate-950/80 rounded-lg border border-slate-800/80 space-y-1">
+                              <div className="flex items-center justify-between text-[11px] font-bold text-slate-200">
+                                <span>{home.name} ({homeAtt ? homeAtt.length : homePlayers.length}/{homePlayers.length})</span>
+                                <span className="text-slate-500 font-mono text-[9px]">VS</span>
+                                <span>{away.name} ({awayAtt ? awayAtt.length : awayPlayers.length}/{awayPlayers.length})</span>
+                              </div>
+                              {(homeAbsent.length > 0 || awayAbsent.length > 0) && (
+                                <div className="text-[10px] space-y-0.5 pt-1 border-t border-slate-800/60 font-mono">
+                                  {homeAbsent.length > 0 && (
+                                    <p className="text-rose-300">
+                                      <span className="font-bold text-rose-400">Ausentes {home.name}:</span>{' '}
+                                      {homeAbsent.map((p) => `#${p.dorsal} ${p.name}`).join(', ')}
+                                    </p>
+                                  )}
+                                  {awayAbsent.length > 0 && (
+                                    <p className="text-rose-300">
+                                      <span className="font-bold text-rose-400">Ausentes {away.name}:</span>{' '}
+                                      {awayAbsent.map((p) => `#${p.dorsal} ${p.name}`).join(', ')}
+                                    </p>
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Attendance Consolidated */}
+                  {includeAttendanceConsolidated && (
+                    <div className="space-y-2">
+                      <span className="text-xs font-bold text-amber-400 uppercase tracking-wider block border-b border-slate-800 pb-1">
+                        📈 CONSOLIDADO GENERAL DE ASISTENCIA
+                      </span>
+                      <div className="bg-slate-900/90 rounded-xl border border-slate-800 p-2.5 text-xs space-y-1.5 font-mono">
+                        {teams.map((t) => {
+                          const teamPlayers = players.filter((p) => p.teamId === t.id);
+                          const teamMatches = matches.filter(
+                            (m) =>
+                              (m.homeTeamId === t.id || m.awayTeamId === t.id) &&
+                              (m.isPlayed || m.status === 'FINALIZADO')
+                          );
+                          const totalPJ = teamMatches.length;
+
+                          if (totalPJ === 0) return null;
+
+                          const absentPlayers = teamPlayers
+                            .map((p) => {
+                              const attended = teamMatches.filter((m) => {
+                                const isHome = m.homeTeamId === t.id;
+                                const attIds = isHome ? m.attendance?.homePlayerIds : m.attendance?.awayPlayerIds;
+                                return attIds ? attIds.includes(p.id) : true;
+                              }).length;
+                              const absent = totalPJ - attended;
+                              return { player: p, attended, absent };
+                            })
+                            .filter((item) => item.absent > 0);
+
+                          return (
+                            <div key={t.id} className="p-1.5 bg-slate-950/80 rounded-md border border-slate-800/80 text-[10px]">
+                              <div className="flex items-center justify-between font-bold">
+                                <span className="text-amber-300">{t.name} ({totalPJ} PJ)</span>
+                                {absentPlayers.length === 0 ? (
+                                  <span className="text-emerald-400 font-extrabold">✅ 100% Asistencia</span>
+                                ) : (
+                                  <span className="text-orange-400 font-extrabold">{absentPlayers.length} Con Faltas</span>
+                                )}
+                              </div>
+                              {absentPlayers.length > 0 && (
+                                <p className="text-slate-300 text-[9px] mt-0.5 truncate">
+                                  <span className="text-slate-400 font-bold">Ausentes:</span>{' '}
+                                  {absentPlayers.map((a) => `#${a.player.dorsal} ${a.player.name} (${a.absent}F)`).join(', ')}
+                                </p>
+                              )}
+                            </div>
+                          );
+                        })}
                       </div>
                     </div>
                   )}
