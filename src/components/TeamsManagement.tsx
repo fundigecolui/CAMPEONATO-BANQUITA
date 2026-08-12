@@ -253,12 +253,41 @@ export const TeamsManagement: React.FC<TeamsManagementProps> = ({
 
                 {/* Card summary badges & Edit Action */}
                 <div className="flex items-center gap-1.5 font-mono text-[11px] shrink-0">
-                  <span className="text-yellow-300 font-bold">{stat?.amarillas || 0}🟨</span>
-                  <span className="text-blue-300 font-bold">{stat?.azules || 0}🟦</span>
-                  <span className="text-red-400 font-bold">{stat?.rojas || 0}🟥</span>
+                  <span
+                    title={`${stat?.amarillas || 0} Tarjeta(s) Amarilla(s)`}
+                    className={`w-6 h-8 rounded-[4px] text-xs font-mono flex items-center justify-center border transition-all ${
+                      (stat?.amarillas || 0) > 0
+                        ? 'bg-gradient-to-br from-amber-300 via-amber-400 to-amber-500 text-slate-950 border-amber-200 shadow-sm font-black scale-105'
+                        : 'bg-amber-500/15 text-amber-300/40 border-amber-500/25 font-bold'
+                    }`}
+                  >
+                    {stat?.amarillas || 0}
+                  </span>
+
+                  <span
+                    title={`${stat?.azules || 0} Tarjeta(s) Azul(es)`}
+                    className={`w-6 h-8 rounded-[4px] text-xs font-mono flex items-center justify-center border transition-all ${
+                      (stat?.azules || 0) > 0
+                        ? 'bg-gradient-to-br from-blue-400 via-blue-500 to-blue-600 text-white border-blue-300 shadow-sm font-black scale-105'
+                        : 'bg-blue-500/15 text-blue-300/40 border-blue-500/25 font-bold'
+                    }`}
+                  >
+                    {stat?.azules || 0}
+                  </span>
+
+                  <span
+                    title={`${stat?.rojas || 0} Tarjeta(s) Roja(s)`}
+                    className={`w-6 h-8 rounded-[4px] text-xs font-mono flex items-center justify-center border transition-all ${
+                      (stat?.rojas || 0) > 0
+                        ? 'bg-gradient-to-br from-red-500 via-red-600 to-red-700 text-white border-red-300 shadow-sm font-black scale-105'
+                        : 'bg-red-500/15 text-red-300/40 border-red-500/25 font-bold'
+                    }`}
+                  >
+                    {stat?.rojas || 0}
+                  </span>
 
                   {stat?.isCurrentlySuspended && (
-                    <span className="px-1.5 py-0.5 rounded bg-red-600 text-white font-black text-[9px] animate-pulse">
+                    <span className="px-1.5 py-1 rounded bg-red-600 text-white font-black text-[9px] animate-pulse ml-0.5">
                       SUS
                     </span>
                   )}
