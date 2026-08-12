@@ -59,7 +59,7 @@ const getInitialDataForEdition = (editionId: string) => {
       matches: MATCHES_2026_2,
       currentFecha: 3,
       maxUnlockedFecha: 7,
-      v: 13,
+      v: 15,
     };
   }
   if (editionId === '2026-1') {
@@ -149,7 +149,7 @@ export default function App() {
       if (saved) {
         const parsed = JSON.parse(saved);
         if (
-          (selectedEditionId === '2026-2' && (!parsed.v || parsed.v < 13)) ||
+          (selectedEditionId === '2026-2' && (!parsed.v || parsed.v < 15)) ||
           (selectedEditionId === '2025-2' && (!parsed.v || parsed.v < 3)) ||
           (selectedEditionId === '2026-1' && (!parsed.v || parsed.v < 4))
         ) {

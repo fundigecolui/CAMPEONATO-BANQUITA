@@ -105,6 +105,10 @@ export const CARDS_2026_2: CardRecord[] = [
   { id: 'c2-6', playerId: 406, fecha: 2, type: 'AMARILLA', createdAt: new Date('2026-08-06').toISOString() }, // LEONARDO CASTILLO (AZUL)
   { id: 'c2-7', playerId: 421, fecha: 2, type: 'AMARILLA', createdAt: new Date('2026-08-06').toISOString() }, // JHON CUARTAS (NEGRO)
   { id: 'c2-8', playerId: 423, fecha: 2, type: 'AMARILLA', createdAt: new Date('2026-08-06').toISOString() }, // HUGO MERCADO (NEGRO)
+
+  // Fecha 3 (11 de Agosto)
+  { id: 'c3-1', playerId: 451, fecha: 3, type: 'AZUL', createdAt: new Date('2026-08-11').toISOString() }, // YAMIR PINEDA (AMARILLO)
+  { id: 'c3-2', playerId: 421, fecha: 3, type: 'AMARILLA', createdAt: new Date('2026-08-11').toISOString() }, // JHON CUARTAS (NEGRO)
 ];
 
 export const GOALS_2026_2: GoalRecord[] = [
@@ -258,15 +262,26 @@ const INITIAL_7_FECHAS_2026_2: Match[] = [
       awayPlayerIds: [433, 435, 436, 437, 438, 439, 440], // Excludes 434 (Alvaro Betin)
     },
   },
-  { id: 'm3-2', fecha: 3, homeTeamId: 'AZUL', awayTeamId: 'BLANCO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '11 de Agosto' },
+  {
+    id: 'm3-2',
+    fecha: 3,
+    homeTeamId: 'AZUL',
+    awayTeamId: 'BLANCO',
+    homeGoals: 2,
+    awayGoals: 2,
+    isPlayed: true,
+    status: 'FINALIZADO',
+    dateStr: '11 de Agosto',
+  },
   {
     id: 'm3-3',
     fecha: 3,
     homeTeamId: 'ROJO',
     awayTeamId: 'VERDE',
     homeGoals: 0,
-    awayGoals: 0,
-    isPlayed: false,
+    awayGoals: 3,
+    isPlayed: true,
+    status: 'FINALIZADO',
     dateStr: '11 de Agosto',
     attendance: {
       homePlayerIds: [441, 442, 443, 444, 445, 446, 447, 448],
@@ -280,7 +295,8 @@ const INITIAL_7_FECHAS_2026_2: Match[] = [
     awayTeamId: 'AMARILLO',
     homeGoals: 0,
     awayGoals: 0,
-    isPlayed: false,
+    isPlayed: true,
+    status: 'FINALIZADO',
     dateStr: '11 de Agosto',
     attendance: {
       homePlayerIds: [417, 418, 419, 420, 421, 422, 423, 424],

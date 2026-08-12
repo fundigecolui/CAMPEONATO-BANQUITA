@@ -126,7 +126,7 @@ export const StandingsTable: React.FC<StandingsTableProps> = ({ standings, teams
                 <th className="p-3.5 text-center font-bold" title="Goles a Favor">GF</th>
                 <th className="p-3.5 text-center font-bold" title="Goles en Contra (Valla)">GC</th>
                 <th className="p-3.5 text-center font-black text-amber-300" title="Diferencia de Goles">DG</th>
-                <th className="p-3.5 text-center font-bold text-slate-300" title="Últimos 3 partidos (G: Ganado, E: Empatado, P: Perdido)">RACHA (ÚLTIMOS 3)</th>
+                <th className="p-3.5 text-center font-bold text-slate-300" title="Últimos partidos (G: Ganado, E: Empatado, P: Perdido)">RACHA</th>
                 <th className="p-3.5 text-center font-bold text-emerald-300" title="Puntos Juego Limpio (Fair Play)">JUEGO LIMPIO</th>
                 <th className="p-3.5 text-center font-extrabold text-amber-400 bg-amber-500/10 text-base sm:text-lg" title="Puntos Totales">PTS</th>
               </tr>

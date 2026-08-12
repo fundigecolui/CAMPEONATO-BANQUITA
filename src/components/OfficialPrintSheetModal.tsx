@@ -1079,7 +1079,7 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
                       <th className="p-1 text-center border border-slate-700">GF</th>
                       <th className="p-1 text-center border border-slate-700">GC</th>
                       <th className="p-1 text-center border border-slate-700">DG</th>
-                      <th className="p-1 text-center border border-slate-700">RACHA (ÚLT 3)</th>
+                      <th className="p-1 text-center border border-slate-700">RACHA</th>
                       <th className="p-1 text-center border border-slate-700">JUEGO LIMPIO</th>
                       <th className="p-1 text-center bg-amber-400 text-black border border-slate-700">PTS</th>
                     </tr>
