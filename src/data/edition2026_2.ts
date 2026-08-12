@@ -146,6 +146,9 @@ export const GOALS_2026_2: GoalRecord[] = [
   { id: 'g2-17', playerId: 409, fecha: 2, teamId: 'VERDE', createdAt: new Date('2026-08-06').toISOString() }, // ANDY ACEVEDO
   { id: 'g2-18', playerId: 434, fecha: 2, teamId: 'RAYADO', createdAt: new Date('2026-08-06').toISOString() }, // ALVARO BETIN
   { id: 'g2-19', playerId: 435, fecha: 2, teamId: 'RAYADO', createdAt: new Date('2026-08-06').toISOString() }, // MARIO GUERRA
+
+  // Fecha 3 (11 de Agosto)
+  { id: 'g3-1', playerId: 412, fecha: 3, teamId: 'VERDE', createdAt: new Date('2026-08-11').toISOString() }, // JAVIER MELGAREJO (VERDE)
 ];
 
 // Official First 7 Fechas for II Semestre 2026 (Vuelta 1)
