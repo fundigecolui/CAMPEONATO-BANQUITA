@@ -14,6 +14,7 @@ import { EditPlayerModal } from './components/EditPlayerModal';
 import { SeasonPerformanceReport } from './components/SeasonPerformanceReport';
 import { ShareSummaryModal } from './components/ShareSummaryModal';
 import { DelegateSanctionsModal } from './components/DelegateSanctionsModal';
+import { CreateEditionModal } from './components/CreateEditionModal';
 import { validateMatchData, validateBackupJSONData } from './utils/zodSchemas';
 
 import {
@@ -136,6 +137,7 @@ export default function App() {
   const [editingPlayer, setEditingPlayer] = useState<Player | null>(null);
   const [isShareSummaryOpen, setIsShareSummaryOpen] = useState<boolean>(false);
   const [isDelegateAlertsOpen, setIsDelegateAlertsOpen] = useState<boolean>(false);
+  const [isCreateEditionOpen, setIsCreateEditionOpen] = useState<boolean>(false);
 
   const currentEdition = editions.find((e) => e.id === selectedEditionId) || editions[0];
 
@@ -238,7 +240,11 @@ export default function App() {
       v: 10,
     };
     const key = selectedEditionId === '2026-2' ? STORAGE_KEY : `banquitas_edition_${selectedEditionId}`;
-    localStorage.setItem(key, JSON.stringify(dataToSave));
+    try {
+      localStorage.setItem(key, JSON.stringify(dataToSave));
+    } catch (e) {
+      console.warn('Could not save to localStorage:', e);
+    }
 
     if ('BroadcastChannel' in window) {
       const channel = new BroadcastChannel('banquitas_san_simon_sync');
@@ -248,9 +254,10 @@ export default function App() {
   }, [players, cards, goals, matches, currentFecha, isEditMode, selectedEditionId]);
 
   const handleAddNewEdition = () => {
-    const name = window.prompt(
-      '🔒 CREAR NUEVA EDICIÓN DE TORNEO\nIngrese el nombre de la nueva edición:\n(Ejemplo: I SEMESTRE 2027)'
-    );
+    setIsCreateEditionOpen(true);
+  };
+
+  const handleConfirmCreateEdition = (name: string) => {
     if (!name || !name.trim()) return;
     const newId = `ed_${Date.now()}`;
     const newEd: TournamentEdition = {
@@ -260,14 +267,17 @@ export default function App() {
     };
     const updatedEditions = [newEd, ...editions];
     setEditions(updatedEditions);
-    localStorage.setItem(EDITIONS_KEY, JSON.stringify(updatedEditions));
+    try {
+      localStorage.setItem(EDITIONS_KEY, JSON.stringify(updatedEditions));
+    } catch (e) {
+      console.error(e);
+    }
     setSelectedEditionId(newId);
     setPlayers(INITIAL_PLAYERS);
     setCards([]);
     setGoals([]);
     setMatches(generateAllTournamentMatches(INITIAL_MATCHES));
     setCurrentFecha(1);
-    alert(`✅ ¡Nueva edición "${newEd.name}" creada con éxito! Ahora puedes registrar sus partidos y resultados.`);
   };
 
   // Real-Time Computations Engine
@@ -704,6 +714,13 @@ export default function App() {
         onClose={() => setEditingPlayer(null)}
         onSave={handleSaveEditedPlayer}
         onDelete={handleDeletePlayer}
+      />
+
+      {/* Create New Edition Modal */}
+      <CreateEditionModal
+        isOpen={isCreateEditionOpen}
+        onClose={() => setIsCreateEditionOpen(false)}
+        onCreate={handleConfirmCreateEdition}
       />
     </div>
   );

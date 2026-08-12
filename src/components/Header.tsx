@@ -3,6 +3,7 @@ import { Shield, AlertTriangle, Trophy, Users, Calendar, RotateCcw, Download, Up
 import { getFechaFullTitle } from '../utils/fechas';
 import tournamentLogo from '../assets/images/san_simon_logo_dark_1785590924842.jpg';
 import { TournamentEdition } from '../types';
+import { AdminAuthModal } from './AdminAuthModal';
 
 interface HeaderProps {
   currentFecha: number;
@@ -52,45 +53,21 @@ export const Header: React.FC<HeaderProps> = ({
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   const [isShareModalOpen, setIsShareModalOpen] = React.useState(false);
+  const [isAdminAuthModalOpen, setIsAdminAuthModalOpen] = React.useState(false);
+  const [adminAuthMode, setAdminAuthMode] = React.useState<'enter_pin' | 'change_pin'>('enter_pin');
 
   const handleToggleEditMode = () => {
     if (isEditMode) {
       setIsEditMode(false);
     } else {
-      const savedPin = localStorage.getItem('banquitas_admin_pin') || '2026';
-      const enteredPin = window.prompt(
-        `🔒 ACCESO ADMINISTRADOR\nIngrese PIN:`
-      );
-      if (enteredPin === null) return;
-      if (enteredPin.trim() === savedPin) {
-        setIsEditMode(true);
-      } else {
-        alert('❌ Contraseña / PIN incorrecto. Acceso denegado.');
-      }
+      setAdminAuthMode('enter_pin');
+      setIsAdminAuthModalOpen(true);
     }
   };
 
   const handleChangePin = () => {
-    const currentSavedPin = localStorage.getItem('banquitas_admin_pin') || '2026';
-    const currentPin = window.prompt('🔒 SEGURIDAD ADMINISTRADOR\nIngrese la contraseña / PIN actual:');
-    if (currentPin === null) return;
-    if (currentPin.trim() !== currentSavedPin) {
-      alert('❌ Contraseña actual incorrecta.');
-      return;
-    }
-    const newPin = window.prompt('🔑 NUEVA CONTRASEÑA\nIngrese la nueva contraseña / PIN de seguridad (mínimo 4 caracteres):');
-    if (!newPin || newPin.trim().length < 4) {
-      alert('❌ La nueva contraseña debe tener al menos 4 caracteres.');
-      return;
-    }
-    const confirmPin = window.prompt('🔑 CONFIRMAR CONTRASEÑA\nRepita la nueva contraseña para verificar:');
-    if (confirmPin === null) return;
-    if (confirmPin.trim() !== newPin.trim()) {
-      alert('❌ Las contraseñas no coinciden. Intente de nuevo.');
-      return;
-    }
-    localStorage.setItem('banquitas_admin_pin', newPin.trim());
-    alert('✅ ¡Contraseña / PIN de Administrador actualizado con éxito!');
+    setAdminAuthMode('change_pin');
+    setIsAdminAuthModalOpen(true);
   };
 
   return (
@@ -446,6 +423,13 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         </div>
       )}
+      {/* Admin Auth Modal */}
+      <AdminAuthModal
+        isOpen={isAdminAuthModalOpen}
+        mode={adminAuthMode}
+        onClose={() => setIsAdminAuthModalOpen(false)}
+        onSuccessEnter={() => setIsEditMode(true)}
+      />
     </header>
   );
 };
