@@ -4,6 +4,7 @@ import { TeamStandings, Team, Match } from '../types';
 import tournamentLogo from '../assets/images/san_simon_logo_dark_1785590924842.jpg';
 import { checkMathematicalElimination } from '../utils/sanctionsEngine';
 import { HeadToHeadModal } from './HeadToHeadModal';
+import { TeamBadgeDot } from './TeamColorDot';
 
 interface StandingsTableProps {
   standings: TeamStandings[];
@@ -135,16 +136,26 @@ export const StandingsTable: React.FC<StandingsTableProps> = ({ standings, teams
               {standings.map((row, idx) => {
                 const team = teams.find((t) => t.id === row.teamId);
                 const isLeader = idx === 0;
+                const isTopFour = idx >= 1 && idx <= 3;
+                const isBottomTwo = idx >= 6;
                 const isVallaMenosVencida = minGC !== null && row.gc === minGC && row.pj > 0;
                 const isFairPlayLeader = maxFP !== null && row.fairPlayPts === maxFP;
                 const isEliminatedRow = eliminationInfo.isEliminated && row.teamId === eliminationInfo.eliminatedTeamId;
                 const teamForm = getTeamForm(row.teamId);
 
+                const zoneClass = isLeader
+                  ? 'border-l-4 border-l-amber-400 bg-amber-500/10'
+                  : isTopFour
+                  ? 'border-l-4 border-l-emerald-500 bg-emerald-950/20'
+                  : isBottomTwo
+                  ? 'border-l-4 border-l-rose-500 bg-rose-950/20'
+                  : 'border-l-4 border-l-slate-700 bg-slate-900/40';
+
                 return (
                   <tr
                     key={row.teamId}
-                    className={`hover:bg-slate-800/60 transition ${
-                      isLeader ? 'bg-amber-500/5' : isEliminatedRow ? 'bg-red-950/30' : ''
+                    className={`hover:bg-slate-800/80 transition-all cursor-pointer ${zoneClass} ${
+                      isEliminatedRow ? 'opacity-80' : ''
                     }`}
                   >
                     {/* Position number */}
@@ -169,17 +180,11 @@ export const StandingsTable: React.FC<StandingsTableProps> = ({ standings, teams
                     {/* Team Name */}
                     <td className="p-3.5 font-black">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span
-                          className={`px-3 py-1.5 rounded-lg font-black text-xs sm:text-sm uppercase shadow-xs border ${
-                            team?.badgeBg || 'bg-slate-800'
-                          } ${team?.badgeText || 'text-white'} ${team?.badgeBorder || 'border-slate-700'}`}
-                        >
-                          {team?.name || row.teamId}
-                        </span>
+                        <TeamBadgeDot teamId={team?.id} teamName={team?.name || row.teamId} size="md" />
 
                         {isLeader && (
-                          <span className="text-sm bg-amber-500/20 border border-amber-500/40 p-1 rounded-md font-bold inline-flex items-center justify-center leading-none" title="Líder del Torneo">
-                            🏆
+                          <span className="text-xs bg-amber-500/20 border border-amber-500/40 px-1.5 py-0.5 rounded font-bold inline-flex items-center gap-1 text-amber-300" title="Líder del Torneo">
+                            🏆 Líder
                           </span>
                         )}
 
@@ -238,7 +243,7 @@ export const StandingsTable: React.FC<StandingsTableProps> = ({ standings, teams
                     <td className="p-3.5 text-center font-mono font-bold text-sm sm:text-base text-emerald-400 bg-emerald-950/20">
                       {row.fairPlayPts} pts
                     </td>
-                    <td className="p-3.5 text-center font-mono font-black text-base sm:text-lg text-amber-400 bg-amber-500/10">
+                    <td className="p-3.5 text-center font-mono font-black text-lg sm:text-xl text-amber-300 bg-amber-500/20 border-l border-amber-500/30">
                       {row.pts}
                     </td>
                   </tr>
@@ -258,15 +263,21 @@ export const StandingsTable: React.FC<StandingsTableProps> = ({ standings, teams
 
         {/* Footer Legend for Badges & Rules */}
         <div className="p-3 bg-slate-950 border-t border-slate-800 text-[11px] text-slate-400 flex flex-col md:flex-row items-start md:items-center justify-between gap-2.5 font-mono">
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
             <span className="text-amber-300 font-bold flex items-center gap-1 bg-amber-500/10 border border-amber-500/30 px-2 py-0.5 rounded">
-              🏆 Líder del Torneo
+              🏆 Líder
+            </span>
+            <span className="text-emerald-300 font-bold flex items-center gap-1 bg-emerald-950/80 border border-emerald-500/40 px-2 py-0.5 rounded">
+              🟢 Pos 1-4: Clasificación
+            </span>
+            <span className="text-slate-300 font-bold flex items-center gap-1 bg-slate-900 border border-slate-700 px-2 py-0.5 rounded">
+              ⚪ Pos 5-6: Zona Media
+            </span>
+            <span className="text-rose-300 font-bold flex items-center gap-1 bg-rose-950/80 border border-rose-500/40 px-2 py-0.5 rounded">
+              🔴 Pos 7-8: Zona Riesgo
             </span>
             <span className="text-blue-300 font-bold flex items-center gap-1 bg-blue-950 border border-blue-500/40 px-2 py-0.5 rounded">
               <Shield className="w-3.5 h-3.5 text-blue-400" /> Valla Menos Vencida
-            </span>
-            <span className="text-emerald-300 font-bold flex items-center gap-1 bg-emerald-950 border border-emerald-500/40 px-2 py-0.5 rounded">
-              <Award className="w-3.5 h-3.5 text-emerald-400" /> Líder Juego Limpio
             </span>
           </div>
 

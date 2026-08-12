@@ -320,7 +320,7 @@ const INITIAL_7_FECHAS_2026_2: Match[] = [
     status: 'FINALIZADO',
     dateStr: '11 de Agosto',
     attendance: {
-      homePlayerIds: [417, 418, 419, 420, 421, 422, 423, 424],
+      homePlayerIds: [417, 418, 419, 420, 421, 423, 424], // Excludes 422 (Manuel Peña)
       awayPlayerIds: [449, 450, 451, 452, 454, 455, 456], // Excludes 453 (Jose Sierra)
     },
   },

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Trophy, Search, Eye, Flame, Info, Filter, ArrowUpDown } from 'lucide-react';
 import { PlayerStats, Team } from '../types';
+import { TeamBadgeDot, CardIconVector } from './TeamColorDot';
 
 interface ScorersTableProps {
   playerStats: PlayerStats[];
@@ -193,22 +194,28 @@ export const ScorersTable: React.FC<ScorersTableProps> = ({ playerStats, teams, 
                     </td>
 
                     <td className="p-3 text-center">
-                      <span
-                        className={`inline-block px-2.5 py-0.5 rounded font-black text-[10px] uppercase shadow-xs border ${
-                          team?.badgeBg || 'bg-slate-800'
-                        } ${team?.badgeText || 'text-white'} ${team?.badgeBorder || 'border-slate-700'}`}
-                      >
-                        {team?.name || scorer.teamId}
-                      </span>
+                      <TeamBadgeDot teamId={scorer.teamId} teamName={team?.name} size="sm" />
                     </td>
 
                     <td className="p-3 text-center">
-                      <div className="flex items-center justify-center gap-1.5 text-[11px] font-mono">
-                        {scorer.amarillas > 0 && <span className="text-yellow-300">{scorer.amarillas}🟨</span>}
-                        {scorer.azules > 0 && <span className="text-blue-300">{scorer.azules}🟦</span>}
-                        {scorer.rojas > 0 && <span className="text-red-400">{scorer.rojas}🟥</span>}
+                      <div className="flex items-center justify-center gap-2 text-[11px] font-mono">
+                        {scorer.amarillas > 0 && (
+                          <span className="flex items-center gap-1 text-amber-300 font-bold">
+                            <CardIconVector type="AMARILLA" /> {scorer.amarillas}
+                          </span>
+                        )}
+                        {scorer.azules > 0 && (
+                          <span className="flex items-center gap-1 text-cyan-300 font-bold">
+                            <CardIconVector type="AZUL" /> {scorer.azules}
+                          </span>
+                        )}
+                        {scorer.rojas > 0 && (
+                          <span className="flex items-center gap-1 text-rose-400 font-bold">
+                            <CardIconVector type="ROJA" /> {scorer.rojas}
+                          </span>
+                        )}
                         {scorer.amarillas === 0 && scorer.azules === 0 && scorer.rojas === 0 && (
-                          <span className="text-slate-600 text-xs"></span>
+                          <span className="text-slate-600 text-xs">-</span>
                         )}
                       </div>
                     </td>

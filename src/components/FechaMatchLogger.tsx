@@ -4,6 +4,7 @@ import { Match, Player, Team, CardType, CardRecord, GoalRecord, SuspensionAlert,
 import { getFechaFullTitle, FECHA_DATES } from '../utils/fechas';
 import { computeStandings, checkMathematicalElimination, groupGoalsByPlayer } from '../utils/sanctionsEngine';
 import { OfficialPrintSheetModal } from './OfficialPrintSheetModal';
+import { TeamBadgeDot } from './TeamColorDot';
 
 export const MATCH_SCHEDULES = [
   { slot: 1, range: '7:00 p.m. - 7:50 p.m.' },
@@ -372,11 +373,12 @@ export const FechaMatchLogger: React.FC<FechaMatchLoggerProps> = ({
                   {/* Home Team */}
                   <div className="col-span-3 flex flex-col items-center justify-center">
                     <span
-                      className={`px-5 py-1.5 rounded-2xl font-black text-xs sm:text-sm uppercase border shadow-md ${
+                      className={`px-4 py-1.5 rounded-2xl font-black text-xs sm:text-sm uppercase border shadow-md flex items-center justify-center gap-2 ${
                         homeTeam?.badgeBg || 'bg-slate-800'
                       } ${homeTeam?.badgeText || 'text-white'} ${homeTeam?.badgeBorder || 'border-slate-700'}`}
                     >
-                      {homeTeam?.name || match.homeTeamId}
+                      <TeamBadgeDot teamId={homeTeam?.id} showName={false} size="sm" />
+                      <span>{homeTeam?.name || match.homeTeamId}</span>
                     </span>
                   </div>
 
@@ -416,11 +418,12 @@ export const FechaMatchLogger: React.FC<FechaMatchLoggerProps> = ({
                   {/* Away Team */}
                   <div className="col-span-3 flex flex-col items-center justify-center">
                     <span
-                      className={`px-5 py-1.5 rounded-2xl font-black text-xs sm:text-sm uppercase border shadow-md ${
+                      className={`px-4 py-1.5 rounded-2xl font-black text-xs sm:text-sm uppercase border shadow-md flex items-center justify-center gap-2 ${
                         awayTeam?.badgeBg || 'bg-slate-800'
                       } ${awayTeam?.badgeText || 'text-white'} ${awayTeam?.badgeBorder || 'border-slate-700'}`}
                     >
-                      {awayTeam?.name || match.awayTeamId}
+                      <TeamBadgeDot teamId={awayTeam?.id} showName={false} size="sm" />
+                      <span>{awayTeam?.name || match.awayTeamId}</span>
                     </span>
                   </div>
                 </div>
