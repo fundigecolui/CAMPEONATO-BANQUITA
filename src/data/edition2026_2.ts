@@ -149,6 +149,7 @@ export const GOALS_2026_2: GoalRecord[] = [
 
   // Fecha 3 (11 de Agosto)
   { id: 'g3-1', playerId: 412, fecha: 3, teamId: 'VERDE', createdAt: new Date('2026-08-11').toISOString() }, // JAVIER MELGAREJO (VERDE)
+  { id: 'g3-2', playerId: 411, fecha: 3, teamId: 'VERDE', createdAt: new Date('2026-08-11').toISOString() }, // LUIS PACHECO (VERDE)
 ];
 
 // Official First 7 Fechas for II Semestre 2026 (Vuelta 1)
