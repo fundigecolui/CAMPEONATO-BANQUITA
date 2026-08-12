@@ -1417,38 +1417,40 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
           {/* SECTION 4: CONSOLIDADO DE ASISTENCIA Y PARTICIPACIÓN       */}
           {/* ======================================================== */}
           {printAttendance && (
-            <div className="bg-white text-black p-4 sm:p-5 rounded-2xl border-2 border-slate-800 print:border-black shadow-md space-y-2 print-single-sheet print:p-2.5 print:m-0 flex flex-col justify-between">
+            <div className="bg-white text-black p-3 sm:p-4 rounded-2xl border-2 border-slate-800 print:border-black shadow-md space-y-1.5 print-single-sheet print:p-2 print:m-0 flex flex-col justify-between">
               {/* Header */}
-              <div className="border-b-2 border-black pb-2 flex items-center justify-between gap-2">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-10 h-10 rounded-lg border border-black p-0.5 flex items-center justify-center shrink-0">
+              <div className="border-b-2 border-black pb-1 flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded border border-black p-0.5 flex items-center justify-center shrink-0">
                     <img src={tournamentLogo} alt="San Simón" className="max-h-full max-w-full object-contain" />
                   </div>
                   <div>
-                    <h1 className="text-sm sm:text-base font-black tracking-tight text-black uppercase font-mono leading-tight">
+                    <h1 className="text-xs sm:text-sm font-black tracking-tight text-black uppercase font-mono leading-tight">
                       CAMPEONATO BANQUITAS SAN SIMÓN IISEM
                     </h1>
-                    <p className="text-[11px] font-black text-slate-800 leading-tight uppercase">
-                      ASISTENCIA
-                    </p>
-                    <p className="text-[10px] text-slate-600 font-mono">
-                      Corte a la {getFechaFullTitle(currentFecha)}
-                    </p>
+                    <div className="flex items-center gap-2">
+                      <p className="text-[10px] font-black text-slate-800 leading-tight uppercase">
+                        CONSOLIDADO GENERAL DE ASISTENCIA Y PARTICIPACIÓN
+                      </p>
+                      <span className="text-[9px] text-slate-600 font-mono">
+                        • Corte a la {getFechaFullTitle(currentFecha)}
+                      </span>
+                    </div>
                   </div>
                 </div>
 
                 <div className="text-right font-mono text-xs shrink-0 space-y-0.5">
-                  <div className="px-2.5 py-0.5 rounded bg-black text-white font-extrabold text-[11px]">
+                  <div className="px-2 py-0.5 rounded bg-black text-white font-extrabold text-[10px]">
                     ASISTENCIA
                   </div>
-                  <div className="text-[10px] font-bold text-slate-800">
+                  <div className="text-[9px] font-bold text-slate-800">
                     {teams.length} Equipos Registrados
                   </div>
                 </div>
               </div>
 
-              {/* Attendance Consolidated Tables by Team in 2 Columns */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 font-mono print:grid-cols-2 print:gap-2">
+              {/* Attendance Consolidated Tables by Team in 4 Columns in Print for 1-Page Layout */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 print:grid-cols-4 gap-1.5 print:gap-1.5 print:gap-y-1.5 font-mono">
                 {teams.map((t) => {
                   const teamPlayers = players.filter((p) => p.teamId === t.id);
                   const teamMatches = matches.filter(
@@ -1469,48 +1471,43 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
                   });
 
                   return (
-                    <div key={t.id} className="border border-black rounded-lg overflow-hidden">
-                      <div className="bg-slate-900 text-white p-1 px-2 flex items-center justify-between font-bold text-[10px]">
-                        <span className="uppercase font-black text-amber-400 truncate max-w-[150px]">
+                    <div key={t.id} className="border border-black rounded overflow-hidden bg-white">
+                      <div className="bg-slate-900 text-white p-0.5 px-1.5 flex items-center justify-between font-bold text-[9px]">
+                        <span className="uppercase font-black text-amber-300 truncate max-w-[120px]">
                           {t.name}
                         </span>
-                        <span className="text-[9px]">Partidos: {totalTeamPlayed}</span>
+                        <span className="text-[8px] text-slate-300">PJ: {totalTeamPlayed}</span>
                       </div>
-                      <table className="w-full text-left border-collapse text-[9.5px]">
+                      <table className="w-full text-left border-collapse text-[8px] print:text-[8px]">
                         <thead>
-                          <tr className="bg-slate-100 border-b border-black font-bold text-[8.5px]">
-                            <th className="p-0.5 w-6 text-center border-r border-black">#</th>
+                          <tr className="bg-slate-200 border-b border-black font-bold text-[7.5px]">
+                            <th className="p-0.5 w-4 text-center border-r border-black">#</th>
                             <th className="p-0.5 border-r border-black">Jugador</th>
-                            <th className="p-0.5 text-center w-10 border-r border-black">Asist</th>
-                            <th className="p-0.5 text-center w-10 border-r border-black">%</th>
-                            <th className="p-0.5 text-center w-24">Barra</th>
+                            <th className="p-0.5 text-center w-6 border-r border-black">Ast</th>
+                            <th className="p-0.5 text-center w-6 border-r border-black">%</th>
+                            <th className="p-0.5 text-center w-12">Detalle</th>
                           </tr>
                         </thead>
-                        <tbody className="divide-y divide-slate-200">
+                        <tbody className="divide-y divide-slate-300">
                           {attendanceRows.map(({ player: p, attendedCount, pct }, idx) => {
                             const absentCount = Math.max(0, totalTeamPlayed - attendedCount);
                             return (
-                              <tr key={p.id} className={idx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}>
+                              <tr key={p.id} className={idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/80'}>
                                 <td className="p-0.5 text-center font-bold border-r border-black">{p.dorsal}</td>
-                                <td className="p-0.5 font-bold border-r border-black truncate max-w-[110px]">{p.name} {p.isCaptain ? '(C)' : ''}</td>
-                                <td className="p-0.5 text-center font-bold text-emerald-800 border-r border-black">{attendedCount}/{totalTeamPlayed}</td>
-                                <td className="p-0.5 text-center font-black border-r border-black">{pct}%</td>
+                                <td className="p-0.5 font-bold border-r border-black truncate max-w-[75px]" title={p.name}>
+                                  {p.name} {p.isCaptain ? '(C)' : ''}
+                                </td>
+                                <td className="p-0.5 text-center font-bold text-emerald-800 border-r border-black">
+                                  {attendedCount}/{totalTeamPlayed}
+                                </td>
+                                <td className="p-0.5 text-center font-black border-r border-black">
+                                  {pct}%
+                                </td>
                                 <td className="p-0.5 text-center">
-                                  <div className="flex items-center justify-center gap-1 px-0.5">
-                                    <div
-                                      className="w-16 h-3 bg-orange-500 rounded-full border border-slate-700 overflow-hidden flex relative"
-                                      title={`${attendedCount} Asistidos | ${absentCount} Ausencias`}
-                                    >
-                                      {pct > 0 && (
-                                        <div
-                                          className="bg-emerald-500 h-full"
-                                          style={{ width: `${pct}%` }}
-                                        />
-                                      )}
-                                    </div>
-                                    <span className="text-[8.5px] font-extrabold font-mono shrink-0">
+                                  <div className="flex items-center justify-center gap-0.5">
+                                    <span className="text-[7.5px] font-extrabold font-mono shrink-0">
                                       <span className="text-emerald-700">{attendedCount}A</span>
-                                      <span className="text-orange-600">{absentCount}F</span>
+                                      {absentCount > 0 && <span className="text-orange-600 ml-0.5">{absentCount}F</span>}
                                     </span>
                                   </div>
                                 </td>
@@ -1525,13 +1522,13 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
               </div>
 
               {/* Signatures */}
-              <div className="pt-2 border-t border-black grid grid-cols-2 gap-8 text-center font-mono text-[9.5px]">
-                <div className="space-y-1">
-                  <div className="border-b border-black h-5"></div>
+              <div className="pt-1 border-t border-black grid grid-cols-2 gap-8 text-center font-mono text-[8.5px]">
+                <div className="space-y-0.5">
+                  <div className="border-b border-black h-4"></div>
                   <p className="font-extrabold uppercase">VOCAL DE ASISTENCIA Y CONTROL</p>
                 </div>
-                <div className="space-y-1">
-                  <div className="border-b border-black h-5"></div>
+                <div className="space-y-0.5">
+                  <div className="border-b border-black h-4"></div>
                   <p className="font-extrabold uppercase">COORDINADOR GENERAL DE TORNEO</p>
                 </div>
               </div>
