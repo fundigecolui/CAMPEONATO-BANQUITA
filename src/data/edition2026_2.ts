@@ -248,9 +248,10 @@ const INITIAL_7_FECHAS_2026_2: Match[] = [
     fecha: 3,
     homeTeamId: 'NARANJA',
     awayTeamId: 'RAYADO',
-    homeGoals: 0,
-    awayGoals: 0,
-    isPlayed: false,
+    homeGoals: 3,
+    awayGoals: 1,
+    isPlayed: true,
+    status: 'FINALIZADO',
     dateStr: '11 de Agosto',
     attendance: {
       homePlayerIds: [425, 426, 427, 428, 429, 430, 431, 432],
