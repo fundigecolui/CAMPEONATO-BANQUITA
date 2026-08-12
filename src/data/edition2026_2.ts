@@ -243,10 +243,49 @@ const INITIAL_7_FECHAS_2026_2: Match[] = [
   },
 
   // FECHA 3 (11 de Agosto)
-  { id: 'm3-1', fecha: 3, homeTeamId: 'NARANJA', awayTeamId: 'RAYADO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '11 de Agosto' },
+  {
+    id: 'm3-1',
+    fecha: 3,
+    homeTeamId: 'NARANJA',
+    awayTeamId: 'RAYADO',
+    homeGoals: 0,
+    awayGoals: 0,
+    isPlayed: false,
+    dateStr: '11 de Agosto',
+    attendance: {
+      homePlayerIds: [425, 426, 427, 428, 429, 430, 431, 432],
+      awayPlayerIds: [433, 435, 436, 437, 438, 439, 440], // Excludes 434 (Alvaro Betin)
+    },
+  },
   { id: 'm3-2', fecha: 3, homeTeamId: 'AZUL', awayTeamId: 'BLANCO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '11 de Agosto' },
-  { id: 'm3-3', fecha: 3, homeTeamId: 'ROJO', awayTeamId: 'VERDE', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '11 de Agosto' },
-  { id: 'm3-4', fecha: 3, homeTeamId: 'NEGRO', awayTeamId: 'AMARILLO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '11 de Agosto' },
+  {
+    id: 'm3-3',
+    fecha: 3,
+    homeTeamId: 'ROJO',
+    awayTeamId: 'VERDE',
+    homeGoals: 0,
+    awayGoals: 0,
+    isPlayed: false,
+    dateStr: '11 de Agosto',
+    attendance: {
+      homePlayerIds: [441, 442, 443, 444, 445, 446, 447, 448],
+      awayPlayerIds: [409, 410, 411, 412, 413, 414, 415], // Excludes 416 (Jacit Arabia)
+    },
+  },
+  {
+    id: 'm3-4',
+    fecha: 3,
+    homeTeamId: 'NEGRO',
+    awayTeamId: 'AMARILLO',
+    homeGoals: 0,
+    awayGoals: 0,
+    isPlayed: false,
+    dateStr: '11 de Agosto',
+    attendance: {
+      homePlayerIds: [417, 418, 419, 420, 421, 422, 423, 424],
+      awayPlayerIds: [449, 450, 451, 452, 454, 455, 456], // Excludes 453 (Jose Sierra)
+    },
+  },
 
   // FECHA 4 (13 de Agosto)
   { id: 'm4-1', fecha: 4, homeTeamId: 'ROJO', awayTeamId: 'BLANCO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '13 de Agosto' },

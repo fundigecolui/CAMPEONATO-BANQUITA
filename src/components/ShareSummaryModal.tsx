@@ -51,13 +51,17 @@ export const ShareSummaryModal: React.FC<ShareSummaryModalProps> = ({
   const [includeStandings, setIncludeStandings] = useState(true);
   const [includeScorers, setIncludeScorers] = useState(true);
   const [includeCards, setIncludeCards] = useState(true);
+  const [includeNextFecha, setIncludeNextFecha] = useState(true);
 
   const cardRef = useRef<HTMLDivElement>(null);
 
   if (!isOpen) return null;
 
   const currentMatches = matches.filter((m) => m.fecha === currentFecha);
+  const nextFecha = currentFecha + 1;
+  const nextMatches = matches.filter((m) => m.fecha === nextFecha);
   const fechaDate = FECHA_DATES[currentFecha] || 'Fecha Programada';
+  const nextFechaDate = FECHA_DATES[nextFecha] || 'Por Programar';
   const standings = computeStandings(teams, matches, cards, players);
   
   // Calculate top scorers and cards in fecha
@@ -73,7 +77,7 @@ export const ShareSummaryModal: React.FC<ShareSummaryModalProps> = ({
   // Generate formatted WhatsApp Text
   const generateWhatsAppText = () => {
     let txt = `🏆 *CAMPEONATO BANQUITAS SAN SIMÓN*\n`;
-    txt += `📅 *${getFechaFullTitle(currentFecha).toUpperCase()}* (${fechaDate})\n`;
+    txt += `📅 *${getFechaFullTitle(currentFecha).toUpperCase()}*\n`;
     txt += `━━━━━━━━━━━━━━━━━━━━━━\n\n`;
 
     if (includeResults) {
@@ -156,6 +160,21 @@ export const ShareSummaryModal: React.FC<ShareSummaryModalProps> = ({
       txt += `\n`;
     }
 
+    if (includeNextFecha) {
+      txt += `📅 *PRÓXIMA JORNADA - FECHA #${nextFecha}* (${nextFechaDate}):\n`;
+      if (nextMatches.length === 0) {
+        txt += `_Partidos por programar._\n`;
+      } else {
+        nextMatches.forEach((m, idx) => {
+          const homeTeam = teams.find((t) => t.id === m.homeTeamId)?.name || m.homeTeamId;
+          const awayTeam = teams.find((t) => t.id === m.awayTeamId)?.name || m.awayTeamId;
+          const timeStr = m.time ? ` ⏰ ${m.time}` : '';
+          txt += `• *P${idx + 1}:* ${homeTeam} vs ${awayTeam}${timeStr}\n`;
+        });
+      }
+      txt += `\n`;
+    }
+
     txt += `📌 _Información oficial de la Mesa Directiva - San Simón_`;
     return txt;
   };
@@ -219,53 +238,65 @@ export const ShareSummaryModal: React.FC<ShareSummaryModalProps> = ({
           <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block font-mono">
             Selecciona el contenido a incluir en el resumen:
           </span>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-mono">
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 text-xs font-mono">
             <button
               onClick={() => setIncludeResults(!includeResults)}
-              className={`p-2 rounded-xl border flex items-center gap-2 transition cursor-pointer ${
+              className={`p-2 rounded-xl border flex items-center gap-1.5 transition cursor-pointer ${
                 includeResults
                   ? 'bg-amber-500/20 border-amber-500/50 text-amber-300 font-bold'
                   : 'bg-slate-800/60 border-slate-700/60 text-slate-400 opacity-60'
               }`}
             >
-              {includeResults ? <CheckSquare className="w-4 h-4 text-amber-400" /> : <Square className="w-4 h-4" />}
-              <span>⚽ Resultados</span>
+              {includeResults ? <CheckSquare className="w-3.5 h-3.5 text-amber-400 shrink-0" /> : <Square className="w-3.5 h-3.5 shrink-0" />}
+              <span className="truncate">⚽ Resultados</span>
             </button>
 
             <button
               onClick={() => setIncludeStandings(!includeStandings)}
-              className={`p-2 rounded-xl border flex items-center gap-2 transition cursor-pointer ${
+              className={`p-2 rounded-xl border flex items-center gap-1.5 transition cursor-pointer ${
                 includeStandings
                   ? 'bg-amber-500/20 border-amber-500/50 text-amber-300 font-bold'
                   : 'bg-slate-800/60 border-slate-700/60 text-slate-400 opacity-60'
               }`}
             >
-              {includeStandings ? <CheckSquare className="w-4 h-4 text-amber-400" /> : <Square className="w-4 h-4" />}
-              <span>📊 Posiciones</span>
+              {includeStandings ? <CheckSquare className="w-3.5 h-3.5 text-amber-400 shrink-0" /> : <Square className="w-3.5 h-3.5 shrink-0" />}
+              <span className="truncate">📊 Posiciones</span>
             </button>
 
             <button
               onClick={() => setIncludeScorers(!includeScorers)}
-              className={`p-2 rounded-xl border flex items-center gap-2 transition cursor-pointer ${
+              className={`p-2 rounded-xl border flex items-center gap-1.5 transition cursor-pointer ${
                 includeScorers
                   ? 'bg-amber-500/20 border-amber-500/50 text-amber-300 font-bold'
                   : 'bg-slate-800/60 border-slate-700/60 text-slate-400 opacity-60'
               }`}
             >
-              {includeScorers ? <CheckSquare className="w-4 h-4 text-amber-400" /> : <Square className="w-4 h-4" />}
-              <span>🥇 Goleadores</span>
+              {includeScorers ? <CheckSquare className="w-3.5 h-3.5 text-amber-400 shrink-0" /> : <Square className="w-3.5 h-3.5 shrink-0" />}
+              <span className="truncate">🥇 Goleadores</span>
             </button>
 
             <button
               onClick={() => setIncludeCards(!includeCards)}
-              className={`p-2 rounded-xl border flex items-center gap-2 transition cursor-pointer ${
+              className={`p-2 rounded-xl border flex items-center gap-1.5 transition cursor-pointer ${
                 includeCards
                   ? 'bg-amber-500/20 border-amber-500/50 text-amber-300 font-bold'
                   : 'bg-slate-800/60 border-slate-700/60 text-slate-400 opacity-60'
               }`}
             >
-              {includeCards ? <CheckSquare className="w-4 h-4 text-amber-400" /> : <Square className="w-4 h-4" />}
-              <span>🟨 Tarjetas</span>
+              {includeCards ? <CheckSquare className="w-3.5 h-3.5 text-amber-400 shrink-0" /> : <Square className="w-3.5 h-3.5 shrink-0" />}
+              <span className="truncate">🟨 Tarjetas</span>
+            </button>
+
+            <button
+              onClick={() => setIncludeNextFecha(!includeNextFecha)}
+              className={`p-2 rounded-xl border flex items-center gap-1.5 transition cursor-pointer col-span-2 sm:col-span-1 ${
+                includeNextFecha
+                  ? 'bg-amber-500/20 border-amber-500/50 text-amber-300 font-bold'
+                  : 'bg-slate-800/60 border-slate-700/60 text-slate-400 opacity-60'
+              }`}
+            >
+              {includeNextFecha ? <CheckSquare className="w-3.5 h-3.5 text-amber-400 shrink-0" /> : <Square className="w-3.5 h-3.5 shrink-0" />}
+              <span className="truncate">📅 Próx. Fecha</span>
             </button>
           </div>
         </div>
@@ -359,7 +390,7 @@ export const ShareSummaryModal: React.FC<ShareSummaryModalProps> = ({
                           CAMPEONATO BANQUITAS SAN SIMÓN
                         </h2>
                         <p className="text-xs font-extrabold text-slate-200 mt-0.5">
-                          {getFechaFullTitle(currentFecha)} • {fechaDate}
+                          {getFechaFullTitle(currentFecha)}
                         </p>
                       </div>
                     </div>
@@ -532,6 +563,43 @@ export const ShareSummaryModal: React.FC<ShareSummaryModalProps> = ({
                                 </div>
                               ))}
                             </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Next Fecha Schedule Summary */}
+                  {includeNextFecha && (
+                    <div className="space-y-2">
+                      <span className="text-xs font-bold text-amber-400 uppercase tracking-wider block border-b border-slate-800 pb-1">
+                        📅 PRÓXIMA JORNADA - FECHA #{nextFecha} ({nextFechaDate})
+                      </span>
+                      <div className="bg-slate-900/90 rounded-xl border border-slate-800 p-2.5 text-xs">
+                        {nextMatches.length === 0 ? (
+                          <p className="text-slate-400 text-[11px] text-center py-1 italic">Partidos por programar.</p>
+                        ) : (
+                          <div className="grid grid-cols-2 gap-2">
+                            {nextMatches.map((m, idx) => {
+                              const home = teams.find((t) => t.id === m.homeTeamId);
+                              const away = teams.find((t) => t.id === m.awayTeamId);
+                              return (
+                                <div
+                                  key={m.id}
+                                  className="bg-slate-950/80 p-2 rounded-lg border border-slate-800/80 flex flex-col justify-between"
+                                >
+                                  <div className="flex items-center justify-between text-[10px] text-slate-400 font-bold mb-1">
+                                    <span>Partido #{idx + 1}</span>
+                                    {m.time && <span className="text-amber-400 font-semibold">{m.time}</span>}
+                                  </div>
+                                  <div className="flex items-center justify-between gap-1 text-[11px]">
+                                    <span className="font-bold text-slate-100 truncate flex-1">{home?.name}</span>
+                                    <span className="text-slate-500 font-black text-[10px]">VS</span>
+                                    <span className="font-bold text-slate-100 truncate flex-1 text-right">{away?.name}</span>
+                                  </div>
+                                </div>
+                              );
+                            })}
                           </div>
                         )}
                       </div>

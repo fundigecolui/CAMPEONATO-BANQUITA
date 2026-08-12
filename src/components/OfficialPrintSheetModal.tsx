@@ -364,7 +364,7 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
                       Resumen Oficial de Partidos, Marcadores e Incidencias (Pantalla Principal)
                     </p>
                     <p className="text-[10px] text-slate-600 font-mono">
-                      {getFechaFullTitle(currentFecha)} — {fechaDate}
+                      {getFechaFullTitle(currentFecha)}
                     </p>
                   </div>
                 </div>
@@ -596,7 +596,7 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
                           Planilla Oficial de Juzgamiento, Alineaciones y Control de Cancha
                         </p>
                         <p className="text-[11px] text-slate-600 font-mono">
-                          {getFechaFullTitle(currentFecha)} ({fechaDate}) — Cancha San Simón
+                          {getFechaFullTitle(currentFecha)} — Cancha San Simón
                         </p>
                       </div>
                     </div>
@@ -1050,7 +1050,7 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
                       Tabla de Posiciones Oficial del Torneo
                     </p>
                     <p className="text-[10px] text-slate-600 font-mono">
-                      Corte acumulado hasta el {getFechaFullTitle(currentFecha)} ({fechaDate})
+                      Corte acumulado hasta la {getFechaFullTitle(currentFecha)}
                     </p>
                   </div>
                 </div>
@@ -1432,7 +1432,7 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
                       ASISTENCIA
                     </p>
                     <p className="text-[10px] text-slate-600 font-mono">
-                      Corte a la {getFechaFullTitle(currentFecha)} — {fechaDate}
+                      Corte a la {getFechaFullTitle(currentFecha)}
                     </p>
                   </div>
                 </div>
