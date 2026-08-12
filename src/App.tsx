@@ -60,7 +60,7 @@ const getInitialDataForEdition = (editionId: string) => {
       matches: MATCHES_2026_2,
       currentFecha: 3,
       maxUnlockedFecha: 7,
-      v: 17,
+      v: 19,
     };
   }
   if (editionId === '2026-1') {
@@ -151,7 +151,7 @@ export default function App() {
       if (saved) {
         const parsed = JSON.parse(saved);
         if (
-          (selectedEditionId === '2026-2' && (!parsed.v || parsed.v < 17)) ||
+          (selectedEditionId === '2026-2' && (!parsed.v || parsed.v < 19)) ||
           (selectedEditionId === '2025-2' && (!parsed.v || parsed.v < 3)) ||
           (selectedEditionId === '2026-1' && (!parsed.v || parsed.v < 4))
         ) {
@@ -237,7 +237,7 @@ export default function App() {
       currentFecha,
       maxUnlockedFecha,
       isEditMode,
-      v: 17,
+      v: 19,
     };
     const key = selectedEditionId === '2026-2' ? STORAGE_KEY : `banquitas_edition_${selectedEditionId}`;
     try {

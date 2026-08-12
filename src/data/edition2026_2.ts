@@ -109,6 +109,9 @@ export const CARDS_2026_2: CardRecord[] = [
   // Fecha 3 (11 de Agosto)
   { id: 'c3-1', playerId: 451, fecha: 3, type: 'AZUL', createdAt: new Date('2026-08-11').toISOString() }, // YAMIR PINEDA (AMARILLO)
   { id: 'c3-2', playerId: 421, fecha: 3, type: 'AMARILLA', createdAt: new Date('2026-08-11').toISOString() }, // JHON CUARTAS (NEGRO)
+  { id: 'c3-3', playerId: 442, fecha: 3, type: 'AMARILLA', createdAt: new Date('2026-08-11').toISOString() }, // MAURICIO DIAZ (ROJO)
+  { id: 'c3-4', playerId: 463, fecha: 3, type: 'AMARILLA', createdAt: new Date('2026-08-11').toISOString() }, // IVAN DIAZ (BLANCO)
+  { id: 'c3-5', playerId: 407, fecha: 3, type: 'AMARILLA', createdAt: new Date('2026-08-11').toISOString() }, // MOISES GOMEZ (AZUL)
 ];
 
 export const GOALS_2026_2: GoalRecord[] = [
@@ -150,6 +153,16 @@ export const GOALS_2026_2: GoalRecord[] = [
   // Fecha 3 (11 de Agosto)
   { id: 'g3-1', playerId: 412, fecha: 3, teamId: 'VERDE', createdAt: new Date('2026-08-11').toISOString() }, // JAVIER MELGAREJO (VERDE)
   { id: 'g3-2', playerId: 411, fecha: 3, teamId: 'VERDE', createdAt: new Date('2026-08-11').toISOString() }, // LUIS PACHECO (VERDE)
+  { id: 'g3-3', playerId: 409, fecha: 3, teamId: 'VERDE', createdAt: new Date('2026-08-11').toISOString() }, // ANDY ACEVEDO (VERDE)
+  { id: 'g3-4', playerId: 441, fecha: 3, teamId: 'ROJO', createdAt: new Date('2026-08-11').toISOString() }, // JOSE HOYOS (ROJO)
+  { id: 'g3-5', playerId: 457, fecha: 3, teamId: 'BLANCO', createdAt: new Date('2026-08-11').toISOString() }, // DONALDO MORALES (BLANCO)
+  { id: 'g3-6', playerId: 459, fecha: 3, teamId: 'BLANCO', createdAt: new Date('2026-08-11').toISOString() }, // JOSE FIGUEROA (BLANCO)
+  { id: 'g3-7', playerId: 437, fecha: 3, teamId: 'RAYADO', createdAt: new Date('2026-08-11').toISOString() }, // MARIO VELAZCO (RAYADO)
+  { id: 'g3-8', playerId: 427, fecha: 3, teamId: 'NARANJA', createdAt: new Date('2026-08-11').toISOString() }, // JORGE LOZANO (NARANJA)
+  { id: 'g3-9', playerId: 428, fecha: 3, teamId: 'NARANJA', createdAt: new Date('2026-08-11').toISOString() }, // CESAR MIZGER (NARANJA)
+  { id: 'g3-10', playerId: 429, fecha: 3, teamId: 'NARANJA', createdAt: new Date('2026-08-11').toISOString() }, // JORGE ORREGO (NARANJA)
+  { id: 'g3-11', playerId: 401, fecha: 3, teamId: 'AZUL', createdAt: new Date('2026-08-11').toISOString() }, // ALBERTO OSORIO (AZUL - Gol 1)
+  { id: 'g3-12', playerId: 401, fecha: 3, teamId: 'AZUL', createdAt: new Date('2026-08-11').toISOString() }, // ALBERTO OSORIO (AZUL - Gol 2)
 ];
 
 // Official First 7 Fechas for II Semestre 2026 (Vuelta 1)
@@ -262,7 +275,7 @@ const INITIAL_7_FECHAS_2026_2: Match[] = [
     status: 'FINALIZADO',
     dateStr: '11 de Agosto',
     attendance: {
-      homePlayerIds: [425, 426, 427, 428, 429, 430, 431, 432],
+      homePlayerIds: [425, 426, 427, 428, 429, 430, 432], // Excludes 431 (Eduar Montiel)
       awayPlayerIds: [433, 435, 436, 437, 438, 439, 440], // Excludes 434 (Alvaro Betin)
     },
   },
@@ -276,13 +289,17 @@ const INITIAL_7_FECHAS_2026_2: Match[] = [
     isPlayed: true,
     status: 'FINALIZADO',
     dateStr: '11 de Agosto',
+    attendance: {
+      homePlayerIds: [401, 402, 403, 404, 405, 407, 408], // Excludes 406 (Leonardo Castillo)
+      awayPlayerIds: [457, 458, 459, 460, 461, 462, 463], // Excludes 464 (Daniel Borja)
+    },
   },
   {
     id: 'm3-3',
     fecha: 3,
     homeTeamId: 'ROJO',
     awayTeamId: 'VERDE',
-    homeGoals: 0,
+    homeGoals: 1,
     awayGoals: 3,
     isPlayed: true,
     status: 'FINALIZADO',
