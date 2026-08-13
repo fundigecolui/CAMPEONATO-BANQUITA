@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Team, Player, Match, CardRecord, GoalRecord, TeamId } from '../types';
 import { computeStandings, computePlayerStats } from '../utils/sanctionsEngine';
-import { CardIconVector } from './TeamColorDot';
+import { CardIconVector, GoalBallBadge } from './TeamColorDot';
 import {
   BarChart,
   Bar,
@@ -368,8 +368,8 @@ export const SeasonPerformanceReport: React.FC<SeasonPerformanceReportProps> = (
                       <td className="py-2 px-3 text-center font-bold text-cyan-400">
                         {playerPJ}
                       </td>
-                      <td className="py-2 px-3 text-center font-black text-emerald-400">
-                        {p.goles > 0 ? `⚽ ${p.goles}` : '-'}
+                      <td className="py-2 px-3 text-center font-black">
+                        <GoalBallBadge goals={p.goles} />
                       </td>
                       <td className="py-2 px-3 text-center font-bold">
                         {p.amarillas > 0 ? (

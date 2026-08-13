@@ -132,3 +132,98 @@ export const CardIconVector: React.FC<{
     />
   );
 };
+
+export interface GoalBallBadgeProps {
+  goals: number | string;
+  size?: 'sm' | 'md' | 'lg';
+  className?: string;
+}
+
+export const GoalBallBadge: React.FC<GoalBallBadgeProps> = ({
+  goals,
+  size = 'md',
+  className = '',
+}) => {
+  const numGoles = Number(goals);
+  if (isNaN(numGoles) || numGoles <= 0) {
+    return <span className="text-slate-600 font-bold text-xs">-</span>;
+  }
+
+  const dimClass =
+    size === 'sm'
+      ? 'w-7 h-7 text-[11px]'
+      : size === 'lg'
+      ? 'w-10 h-10 text-sm'
+      : 'w-8 h-8 text-xs';
+
+  return (
+    <span
+      className={`relative inline-flex items-center justify-center rounded-full shrink-0 shadow-lg font-mono select-none ${dimClass} ${className}`}
+      title={`${goals} Gol(es)`}
+    >
+      <svg
+        viewBox="0 0 40 40"
+        className="absolute inset-0 w-full h-full overflow-visible drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <defs>
+          {/* 3D Sphere gradient for realistic ball shading */}
+          <radialGradient id="ballSphere3D" cx="32%" cy="32%" r="68%">
+            <stop offset="0%" stopColor="#ffffff" />
+            <stop offset="42%" stopColor="#f8fafc" />
+            <stop offset="78%" stopColor="#cbd5e1" />
+            <stop offset="100%" stopColor="#64748b" />
+          </radialGradient>
+
+          {/* Pentagon gradient for depth */}
+          <linearGradient id="pentagonGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="#334155" />
+            <stop offset="100%" stopColor="#020617" />
+          </linearGradient>
+
+          {/* Golden glossy central badge gradient */}
+          <linearGradient id="centerRingGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#fde047" />
+            <stop offset="50%" stopColor="#eab308" />
+            <stop offset="100%" stopColor="#ca8a04" />
+          </linearGradient>
+
+          <linearGradient id="centerBgGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#0f172a" />
+            <stop offset="100%" stopColor="#020617" />
+          </linearGradient>
+        </defs>
+
+        {/* Outer 3D sphere ball */}
+        <circle cx="20" cy="20" r="18.5" fill="url(#ballSphere3D)" stroke="#0f172a" strokeWidth="1.2" />
+
+        {/* Classic 3D Pentagons around the sphere */}
+        <polygon points="20,2 24.5,6.5 22.5,11 17.5,11 15.5,6.5" fill="url(#pentagonGrad)" stroke="#0f172a" strokeWidth="0.5" />
+        <polygon points="34.5,10.5 38,15.5 34,19 29.5,16.5 31,11.5" fill="url(#pentagonGrad)" stroke="#0f172a" strokeWidth="0.5" />
+        <polygon points="32,31.5 27,33.5 23.5,29.5 26,25.5 31.5,26.5" fill="url(#pentagonGrad)" stroke="#0f172a" strokeWidth="0.5" />
+        <polygon points="8,31.5 13,33.5 16.5,29.5 14,25.5 8.5,26.5" fill="url(#pentagonGrad)" stroke="#0f172a" strokeWidth="0.5" />
+        <polygon points="5.5,10.5 2,15.5 6,19 10.5,16.5 9,11.5" fill="url(#pentagonGrad)" stroke="#0f172a" strokeWidth="0.5" />
+
+        {/* Subtle seam lines connecting pentagons */}
+        <line x1="20" y1="11" x2="20" y2="12.5" stroke="#475569" strokeWidth="0.8" />
+        <line x1="29.5" y1="16.5" x2="27.5" y2="17.5" stroke="#475569" strokeWidth="0.8" />
+        <line x1="23.5" y1="29.5" x2="22" y2="27.5" stroke="#475569" strokeWidth="0.8" />
+        <line x1="16.5" y1="29.5" x2="18" y2="27.5" stroke="#475569" strokeWidth="0.8" />
+        <line x1="10.5" y1="16.5" x2="12.5" y2="17.5" stroke="#475569" strokeWidth="0.8" />
+
+        {/* Outer Glowing Gold Ring for central number badge */}
+        <circle cx="20" cy="20" r="10.2" fill="none" stroke="url(#centerRingGrad)" strokeWidth="1.8" />
+
+        {/* Central Dark Disc for high-contrast legible number */}
+        <circle cx="20" cy="20" r="9.2" fill="url(#centerBgGrad)" />
+      </svg>
+
+      {/* Goal Number with glowing yellow text */}
+      <span className="relative z-10 font-black font-mono text-amber-300 leading-none drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]">
+        {goals}
+      </span>
+    </span>
+  );
+};
+

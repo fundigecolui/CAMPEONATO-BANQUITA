@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Search, Filter, Plus, Trash2, Edit3, X, Check, Eye, Lock } from 'lucide-react';
 import { Player, Team, CardRecord, CardType, PlayerStats, TeamId } from '../types';
 import { getFechaLabel } from '../utils/fechas';
+import { GoalBallBadge } from './TeamColorDot';
 
 interface MatrixCardTableProps {
   players: Player[];
@@ -259,9 +260,7 @@ export const MatrixCardTable: React.FC<MatrixCardTableProps> = ({
                       </button>
 
                       {stat?.goles ? (
-                        <span className="text-[10px] font-mono bg-amber-500/10 text-amber-300 px-1.5 py-0.2 rounded border border-amber-500/20 shrink-0">
-                          ⚽ {stat.goles}
-                        </span>
+                        <GoalBallBadge goals={stat.goles} size="sm" />
                       ) : null}
                     </div>
                   </td>

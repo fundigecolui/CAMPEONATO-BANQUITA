@@ -3,7 +3,7 @@ import { Match, Player, Team, CardRecord, GoalRecord, SuspensionAlert } from '..
 import { getFechaFullTitle, FECHA_DATES } from '../utils/fechas';
 import { computeStandings, computePlayerStats, groupGoalsByPlayer } from '../utils/sanctionsEngine';
 import { toPng } from 'html-to-image';
-import { TeamBadgeDot, CardIconVector, getTeamEmoji, getTeamColorHex } from './TeamColorDot';
+import { TeamBadgeDot, CardIconVector, GoalBallBadge, getTeamEmoji, getTeamColorHex } from './TeamColorDot';
 import {
   Share2,
   Copy,
@@ -740,9 +740,7 @@ export const ShareSummaryModal: React.FC<ShareSummaryModalProps> = ({
                                       </div>
                                     </div>
                                   </div>
-                                  <span className="px-1.5 py-0.5 bg-amber-500/20 border border-amber-500/40 text-amber-300 font-black text-[10px] rounded-md shrink-0 font-mono">
-                                    ⚽ {p.goles}
-                                  </span>
+                                  <GoalBallBadge goals={p.goles} size="sm" />
                                 </div>
                               );
                             })}

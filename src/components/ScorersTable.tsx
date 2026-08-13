@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Trophy, Search, Eye, Flame, Info, Filter, ArrowUpDown } from 'lucide-react';
 import { PlayerStats, Team } from '../types';
-import { TeamBadgeDot, CardIconVector } from './TeamColorDot';
+import { TeamBadgeDot, CardIconVector, GoalBallBadge } from './TeamColorDot';
 
 interface ScorersTableProps {
   playerStats: PlayerStats[];
@@ -181,13 +181,8 @@ export const ScorersTable: React.FC<ScorersTableProps> = ({ playerStats, teams, 
                   </div>
                 </div>
 
-                <div className="text-right shrink-0 pl-2">
-                  <span className="block text-2xl font-black font-mono text-amber-300 leading-none">
-                    {topScorer.goles}
-                  </span>
-                  <span className="text-[10px] font-mono font-extrabold text-amber-400/80 uppercase">
-                    {topScorer.goles === 1 ? 'Gol' : 'Goles'} ⚽
-                  </span>
+                <div className="shrink-0 pl-2 flex items-center justify-end">
+                  <GoalBallBadge goals={topScorer.goles} size="lg" />
                 </div>
               </div>
             );
@@ -274,8 +269,10 @@ export const ScorersTable: React.FC<ScorersTableProps> = ({ playerStats, teams, 
                       </div>
                     </td>
 
-                    <td className="p-3 text-center font-mono font-black text-lg text-amber-300 bg-amber-500/10">
-                      {scorer.goles}
+                    <td className="p-3 text-center">
+                      <div className="flex items-center justify-center">
+                        <GoalBallBadge goals={scorer.goles} size="md" />
+                      </div>
                     </td>
                   </tr>
                 );
