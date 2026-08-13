@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Match, Player, Team, CardRecord, GoalRecord, SuspensionAlert } from '../types';
-import { getFechaFullTitle, FECHA_DATES } from '../utils/fechas';
+import { getFechaFullTitle, FECHA_DATES, formatMatchId } from '../utils/fechas';
 import tournamentLogo from '../assets/images/san_simon_logo_dark_1785590924842.jpg';
 import {
   Printer,
@@ -420,7 +420,7 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
                       {/* Match Bar */}
                       <div className="flex items-center justify-between border-b border-slate-700 pb-1 text-[11px]">
                         <span className="font-extrabold text-amber-400">
-                          Partido #{m.id}
+                          Partido #{formatMatchId(m.id)}
                         </span>
                         <span className="text-[9.5px] text-slate-300">
                           ⏰ {scheduleTime}
@@ -617,7 +617,7 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
                     <div className="p-3 bg-slate-950 border-b border-slate-800 flex items-center justify-between text-xs">
                       <div>
                         <span className="font-extrabold text-amber-400 text-sm tracking-wide block">
-                          Partido #{m.id}
+                          Partido #{formatMatchId(m.id)}
                         </span>
                         <div className="flex flex-col gap-0.5 text-[11px] text-slate-300 font-medium mt-0.5">
                           <span className="flex items-center gap-1.5">

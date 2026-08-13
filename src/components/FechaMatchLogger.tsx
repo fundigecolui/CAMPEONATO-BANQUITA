@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Calendar, Plus, Trophy, AlertTriangle, Check, Trash2, Clock, Shield, Lock, Edit3, Printer, AlertOctagon, FileText } from 'lucide-react';
 import { Match, Player, Team, CardType, CardRecord, GoalRecord, SuspensionAlert, TeamId } from '../types';
-import { getFechaFullTitle, FECHA_DATES } from '../utils/fechas';
+import { getFechaFullTitle, FECHA_DATES, formatMatchId } from '../utils/fechas';
 import { computeStandings, checkMathematicalElimination, groupGoalsByPlayer } from '../utils/sanctionsEngine';
 import { OfficialPrintSheetModal } from './OfficialPrintSheetModal';
 import { TeamBadgeDot } from './TeamColorDot';
@@ -249,7 +249,7 @@ export const FechaMatchLogger: React.FC<FechaMatchLoggerProps> = ({
             matchCards.length > 0;
 
           // Special Match Subtitles for Playoff Fechas
-          let matchSubtitle = `Partido #${match.id}`;
+          let matchSubtitle = `Partido #${formatMatchId(match.id)}`;
           if (currentFecha === 36) {
             if (matchIdx === 0) matchSubtitle = 'Eliminatoria 1: 2° Puesto vs 7° Puesto';
             if (matchIdx === 1) matchSubtitle = 'Eliminatoria 2: 3° Puesto vs 6° Puesto';
@@ -677,7 +677,7 @@ export const FechaMatchLogger: React.FC<FechaMatchLoggerProps> = ({
               })()}
 
               {/* Match Event Timeline Log Divided by Teams (Local vs Visitor) */}
-              {(isMatchPlayedOrLive || isEditMode) && (() => {
+              {(isMatchPlayedOrLive || isEditMode || Boolean(match.attendance)) && (() => {
                 const homeAttending = match.attendance?.homePlayerIds ?? homePlayers.map((p) => p.id);
                 const awayAttending = match.attendance?.awayPlayerIds ?? awayPlayers.map((p) => p.id);
 

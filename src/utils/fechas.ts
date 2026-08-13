@@ -67,3 +67,9 @@ export function getFechaBadgeStyle(fecha: number): { bg: string; text: string; b
   }
   return { bg: 'bg-slate-800', text: 'text-amber-300', border: 'border-slate-700' };
 }
+
+export function formatMatchId(id: string): string {
+  if (!id) return '';
+  return id.replace(/^m/i, 'P');
+}
+

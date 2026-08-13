@@ -168,9 +168,9 @@ export const GOALS_2026_2: GoalRecord[] = [
 // Official First 7 Fechas for II Semestre 2026 (Vuelta 1)
 const INITIAL_7_FECHAS_2026_2: Match[] = [
   // FECHA 1 (4 de Agosto)
-  { id: 'm1-1', fecha: 1, homeTeamId: 'RAYADO', awayTeamId: 'ROJO', homeGoals: 2, awayGoals: 0, isPlayed: true, status: 'FINALIZADO', dateStr: '4 de Agosto' },
+  { id: 'P1-1', fecha: 1, homeTeamId: 'RAYADO', awayTeamId: 'ROJO', homeGoals: 2, awayGoals: 0, isPlayed: true, status: 'FINALIZADO', dateStr: '4 de Agosto' },
   {
-    id: 'm1-2',
+    id: 'P1-2',
     fecha: 1,
     homeTeamId: 'NEGRO',
     awayTeamId: 'BLANCO',
@@ -184,9 +184,9 @@ const INITIAL_7_FECHAS_2026_2: Match[] = [
       awayPlayerIds: [457, 458, 459, 460, 461, 462, 463, 464],
     },
   },
-  { id: 'm1-3', fecha: 1, homeTeamId: 'VERDE', awayTeamId: 'NARANJA', homeGoals: 1, awayGoals: 0, isPlayed: true, status: 'FINALIZADO', dateStr: '4 de Agosto' },
+  { id: 'P1-3', fecha: 1, homeTeamId: 'VERDE', awayTeamId: 'NARANJA', homeGoals: 1, awayGoals: 0, isPlayed: true, status: 'FINALIZADO', dateStr: '4 de Agosto' },
   {
-    id: 'm1-4',
+    id: 'P1-4',
     fecha: 1,
     homeTeamId: 'AZUL',
     awayTeamId: 'AMARILLO',
@@ -203,7 +203,7 @@ const INITIAL_7_FECHAS_2026_2: Match[] = [
 
   // FECHA 2 (6 de Agosto)
   {
-    id: 'm2-1',
+    id: 'P2-1',
     fecha: 2,
     homeTeamId: 'AMARILLO',
     awayTeamId: 'BLANCO',
@@ -218,7 +218,7 @@ const INITIAL_7_FECHAS_2026_2: Match[] = [
     },
   },
   {
-    id: 'm2-2',
+    id: 'P2-2',
     fecha: 2,
     homeTeamId: 'NARANJA',
     awayTeamId: 'ROJO',
@@ -233,7 +233,7 @@ const INITIAL_7_FECHAS_2026_2: Match[] = [
     },
   },
   {
-    id: 'm2-3',
+    id: 'P2-3',
     fecha: 2,
     homeTeamId: 'AZUL',
     awayTeamId: 'NEGRO',
@@ -248,7 +248,7 @@ const INITIAL_7_FECHAS_2026_2: Match[] = [
     },
   },
   {
-    id: 'm2-4',
+    id: 'P2-4',
     fecha: 2,
     homeTeamId: 'VERDE',
     awayTeamId: 'RAYADO',
@@ -265,7 +265,7 @@ const INITIAL_7_FECHAS_2026_2: Match[] = [
 
   // FECHA 3 (11 de Agosto)
   {
-    id: 'm3-1',
+    id: 'P3-1',
     fecha: 3,
     homeTeamId: 'NARANJA',
     awayTeamId: 'RAYADO',
@@ -280,7 +280,7 @@ const INITIAL_7_FECHAS_2026_2: Match[] = [
     },
   },
   {
-    id: 'm3-2',
+    id: 'P3-2',
     fecha: 3,
     homeTeamId: 'AZUL',
     awayTeamId: 'BLANCO',
@@ -295,7 +295,7 @@ const INITIAL_7_FECHAS_2026_2: Match[] = [
     },
   },
   {
-    id: 'm3-3',
+    id: 'P3-3',
     fecha: 3,
     homeTeamId: 'ROJO',
     awayTeamId: 'VERDE',
@@ -310,7 +310,7 @@ const INITIAL_7_FECHAS_2026_2: Match[] = [
     },
   },
   {
-    id: 'm3-4',
+    id: 'P3-4',
     fecha: 3,
     homeTeamId: 'NEGRO',
     awayTeamId: 'AMARILLO',
@@ -326,28 +326,80 @@ const INITIAL_7_FECHAS_2026_2: Match[] = [
   },
 
   // FECHA 4 (13 de Agosto)
-  { id: 'm4-1', fecha: 4, homeTeamId: 'ROJO', awayTeamId: 'BLANCO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '13 de Agosto' },
-  { id: 'm4-2', fecha: 4, homeTeamId: 'VERDE', awayTeamId: 'NEGRO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '13 de Agosto' },
-  { id: 'm4-3', fecha: 4, homeTeamId: 'AMARILLO', awayTeamId: 'RAYADO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '13 de Agosto' },
-  { id: 'm4-4', fecha: 4, homeTeamId: 'AZUL', awayTeamId: 'NARANJA', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '13 de Agosto' },
+  {
+    id: 'P4-1',
+    fecha: 4,
+    homeTeamId: 'ROJO',
+    awayTeamId: 'BLANCO',
+    homeGoals: 0,
+    awayGoals: 0,
+    isPlayed: false,
+    dateStr: '13 de Agosto',
+    attendance: {
+      homePlayerIds: [441, 442, 443, 445, 446, 447, 448], // Excludes 444 (Nilson Castellanos - Excusa)
+      awayPlayerIds: [457, 458, 459, 460, 461, 462, 463, 464],
+    },
+  },
+  {
+    id: 'P4-2',
+    fecha: 4,
+    homeTeamId: 'VERDE',
+    awayTeamId: 'NEGRO',
+    homeGoals: 0,
+    awayGoals: 0,
+    isPlayed: false,
+    dateStr: '13 de Agosto',
+    attendance: {
+      homePlayerIds: [409, 410, 411, 412, 413, 414, 415], // Excludes 416 (Jacit Arabia - Excusa)
+      awayPlayerIds: [417, 418, 419, 420, 421, 422, 423, 424],
+    },
+  },
+  {
+    id: 'P4-3',
+    fecha: 4,
+    homeTeamId: 'AMARILLO',
+    awayTeamId: 'RAYADO',
+    homeGoals: 0,
+    awayGoals: 0,
+    isPlayed: false,
+    dateStr: '13 de Agosto',
+    attendance: {
+      homePlayerIds: [449, 450, 451, 452, 453, 454, 455, 456],
+      awayPlayerIds: [433, 434, 435, 436, 438, 439, 440], // Excludes 437 (Mario Velazco - Excusa)
+    },
+  },
+  {
+    id: 'P4-4',
+    fecha: 4,
+    homeTeamId: 'AZUL',
+    awayTeamId: 'NARANJA',
+    homeGoals: 0,
+    awayGoals: 0,
+    isPlayed: false,
+    dateStr: '13 de Agosto',
+    attendance: {
+      homePlayerIds: [401, 402, 403, 404, 405, 406, 407, 408],
+      awayPlayerIds: [425, 426, 427, 428, 429, 430, 431, 432],
+    },
+  },
 
   // FECHA 5 (18 de Agosto)
-  { id: 'm5-1', fecha: 5, homeTeamId: 'AZUL', awayTeamId: 'VERDE', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '18 de Agosto' },
-  { id: 'm5-2', fecha: 5, homeTeamId: 'ROJO', awayTeamId: 'AMARILLO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '18 de Agosto' },
-  { id: 'm5-3', fecha: 5, homeTeamId: 'NEGRO', awayTeamId: 'NARANJA', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '18 de Agosto' },
-  { id: 'm5-4', fecha: 5, homeTeamId: 'RAYADO', awayTeamId: 'BLANCO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '18 de Agosto' },
+  { id: 'P5-1', fecha: 5, homeTeamId: 'AZUL', awayTeamId: 'VERDE', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '18 de Agosto' },
+  { id: 'P5-2', fecha: 5, homeTeamId: 'ROJO', awayTeamId: 'AMARILLO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '18 de Agosto' },
+  { id: 'P5-3', fecha: 5, homeTeamId: 'NEGRO', awayTeamId: 'NARANJA', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '18 de Agosto' },
+  { id: 'P5-4', fecha: 5, homeTeamId: 'RAYADO', awayTeamId: 'BLANCO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '18 de Agosto' },
 
   // FECHA 6 (20 de Agosto)
-  { id: 'm6-1', fecha: 6, homeTeamId: 'NARANJA', awayTeamId: 'AMARILLO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '20 de Agosto' },
-  { id: 'm6-2', fecha: 6, homeTeamId: 'AZUL', awayTeamId: 'RAYADO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '20 de Agosto' },
-  { id: 'm6-3', fecha: 6, homeTeamId: 'VERDE', awayTeamId: 'BLANCO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '20 de Agosto' },
-  { id: 'm6-4', fecha: 6, homeTeamId: 'NEGRO', awayTeamId: 'ROJO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '20 de Agosto' },
+  { id: 'P6-1', fecha: 6, homeTeamId: 'NARANJA', awayTeamId: 'AMARILLO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '20 de Agosto' },
+  { id: 'P6-2', fecha: 6, homeTeamId: 'AZUL', awayTeamId: 'RAYADO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '20 de Agosto' },
+  { id: 'P6-3', fecha: 6, homeTeamId: 'VERDE', awayTeamId: 'BLANCO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '20 de Agosto' },
+  { id: 'P6-4', fecha: 6, homeTeamId: 'NEGRO', awayTeamId: 'ROJO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '20 de Agosto' },
 
   // FECHA 7 (25 de Agosto)
-  { id: 'm7-1', fecha: 7, homeTeamId: 'NEGRO', awayTeamId: 'RAYADO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '25 de Agosto' },
-  { id: 'm7-2', fecha: 7, homeTeamId: 'VERDE', awayTeamId: 'AMARILLO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '25 de Agosto' },
-  { id: 'm7-3', fecha: 7, homeTeamId: 'AZUL', awayTeamId: 'ROJO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '25 de Agosto' },
-  { id: 'm7-4', fecha: 7, homeTeamId: 'NARANJA', awayTeamId: 'BLANCO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '25 de Agosto' },
+  { id: 'P7-1', fecha: 7, homeTeamId: 'NEGRO', awayTeamId: 'RAYADO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '25 de Agosto' },
+  { id: 'P7-2', fecha: 7, homeTeamId: 'VERDE', awayTeamId: 'AMARILLO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '25 de Agosto' },
+  { id: 'P7-3', fecha: 7, homeTeamId: 'AZUL', awayTeamId: 'ROJO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '25 de Agosto' },
+  { id: 'P7-4', fecha: 7, homeTeamId: 'NARANJA', awayTeamId: 'BLANCO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '25 de Agosto' },
 ];
 
 export const MATCHES_2026_2: Match[] = generateAllTournamentMatches(INITIAL_7_FECHAS_2026_2);
