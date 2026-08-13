@@ -771,11 +771,11 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
                               {homeAbsent.map((p) => (
                                 <div
                                   key={`abs-${p.id}`}
-                                  className="flex items-center justify-between bg-slate-950 px-2.5 py-1.5 rounded-lg border border-red-950/80 text-slate-200"
+                                  className="flex items-center justify-between bg-slate-950 px-2.5 py-1.5 rounded-lg border border-red-900/60 text-red-400"
                                 >
-                                  <span className="flex items-center gap-1.5 font-bold">
+                                  <span className="flex items-center gap-1.5 font-bold text-red-400">
                                     <span className="text-red-500 text-sm">❌</span>
-                                    <span>{p.dorsal} {p.name}</span>
+                                    <span className="text-red-400">{p.dorsal} {p.name}</span>
                                   </span>
                                   <span className="text-[9px] font-bold text-red-400 uppercase bg-red-950/90 px-1.5 py-0.5 rounded border border-red-900/40">
                                     NO ASISTE
@@ -857,11 +857,11 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
                               {awayAbsent.map((p) => (
                                 <div
                                   key={`abs-${p.id}`}
-                                  className="flex items-center justify-between bg-slate-950 px-2.5 py-1.5 rounded-lg border border-red-950/80 text-slate-200"
+                                  className="flex items-center justify-between bg-slate-950 px-2.5 py-1.5 rounded-lg border border-red-900/60 text-red-400"
                                 >
-                                  <span className="flex items-center gap-1.5 font-bold">
+                                  <span className="flex items-center gap-1.5 font-bold text-red-400">
                                     <span className="text-red-500 text-sm">❌</span>
-                                    <span>{p.dorsal} {p.name}</span>
+                                    <span className="text-red-400">{p.dorsal} {p.name}</span>
                                   </span>
                                   <span className="text-[9px] font-bold text-red-400 uppercase bg-red-950/90 px-1.5 py-0.5 rounded border border-red-900/40">
                                     NO ASISTE
@@ -889,31 +889,31 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
                     const homeAttending = m.attendance?.homePlayerIds ?? homePlayers.map((p) => p.id);
                     const awayAttending = m.attendance?.awayPlayerIds ?? awayPlayers.map((p) => p.id);
 
-                    const displayedHome = printOnlyAttending
-                      ? homePlayers.filter((p) => homeAttending.includes(p.id))
-                      : homePlayers;
-
-                    const displayedAway = printOnlyAttending
-                      ? awayPlayers.filter((p) => awayAttending.includes(p.id))
-                      : awayPlayers;
+                    const displayedHome = homePlayers;
+                    const displayedAway = awayPlayers;
 
                     return (
                       <div className="border border-black rounded-lg p-2.5 bg-white text-black font-mono text-[10px]">
                         <div className="flex items-center justify-between border-b border-black pb-1 mb-1 font-bold">
                           <span className="uppercase text-[11px] font-black">
-                            📋 ALINEACIÓN OFICIAL Y NÓMINA DE CAMPO ({printOnlyAttending ? 'SOLO ASISTENTES CONVOCADOS' : 'NÓMINA COMPLETA'})
+                            📋 ALINEACIÓN OFICIAL Y CONTROL DE ASISTENCIA
                           </span>
-                          <span className="text-[10px] text-slate-700">
-                            Local: {displayedHome.length} jug. | Visitante: {displayedAway.length} jug.
+                          <span className="text-[10px] text-slate-700 font-bold">
+                            Local: {homeAttending.length}/{homePlayers.length} asist. | Visitante: {awayAttending.length}/{awayPlayers.length} asist.
                           </span>
                         </div>
 
                         <div className="grid grid-cols-2 gap-3">
                           {/* Home Team Lineup */}
                           <div>
-                            <span className="font-extrabold text-black block mb-0.5 border-b border-black pb-0.5 uppercase text-[10px]">
-                              LOCAL: {homeTeam?.name}
-                            </span>
+                            <div className="flex items-center justify-between border-b border-black pb-0.5 mb-0.5">
+                              <span className="font-extrabold text-black uppercase text-[10px]">
+                                LOCAL: {homeTeam?.name}
+                              </span>
+                              <span className="text-[9px] font-bold text-slate-700">
+                                {homeAttending.length}/{homePlayers.length} Convocados
+                              </span>
+                            </div>
                             <table className="w-full text-left border-collapse">
                               <thead>
                                 <tr className="border-b border-black font-bold bg-slate-100">
@@ -926,17 +926,26 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
                                 {displayedHome.map((p) => {
                                   const attended = homeAttending.includes(p.id);
                                   return (
-                                    <tr key={p.id} className="border-b border-slate-200">
-                                      <td className="p-0.5 text-center font-bold">{p.dorsal}</td>
-                                      <td className="p-0.5">{p.name} {p.isCaptain ? '(C)' : ''}</td>
+                                    <tr key={p.id} className={`border-b border-slate-200 ${attended ? '' : 'bg-red-50/70'}`}>
+                                      <td className={`p-0.5 text-center font-bold ${attended ? 'text-black' : 'text-red-600'}`}>
+                                        {p.dorsal}
+                                      </td>
+                                      <td className={`p-0.5 font-bold ${attended ? 'text-black' : 'text-red-600'}`}>
+                                        {p.name} {p.isCaptain ? '(C)' : ''}
+                                        {!attended && (
+                                          <span className="text-[8px] ml-1.5 font-extrabold uppercase text-red-600 tracking-tight">
+                                            (NO ASISTE)
+                                          </span>
+                                        )}
+                                      </td>
                                       <td className="p-0.5 text-center font-bold">
                                         {attended ? (
-                                          <span className="inline-flex items-center justify-center px-1.5 py-0.5 rounded bg-emerald-600 text-white font-black text-[9px] shadow-sm">
+                                          <span className="inline-flex items-center justify-center w-4.5 h-4.5 rounded bg-emerald-600 text-white font-black text-[9.5px] shadow-sm" title="Asiste">
                                             ✓
                                           </span>
                                         ) : (
-                                          <span className="inline-flex items-center justify-center px-1.5 py-0.5 rounded bg-red-100 text-red-700 font-black text-[9px]">
-                                            ❌
+                                          <span className="inline-flex items-center justify-center w-4.5 h-4.5 rounded bg-red-600 text-white font-black text-[9.5px] shadow-sm" title="No Asiste / Ausente">
+                                            ✕
                                           </span>
                                         )}
                                       </td>
@@ -945,7 +954,7 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
                                 })}
                                 {displayedHome.length === 0 && (
                                   <tr>
-                                    <td colSpan={3} className="p-1 italic text-slate-500 text-center">Sin jugadores convocados</td>
+                                    <td colSpan={3} className="p-1 italic text-slate-500 text-center">Sin jugadores inscritos</td>
                                   </tr>
                                 )}
                               </tbody>
@@ -954,9 +963,14 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
 
                           {/* Away Team Lineup */}
                           <div>
-                            <span className="font-extrabold text-black block mb-0.5 border-b border-black pb-0.5 uppercase text-[10px]">
-                              VISITANTE: {awayTeam?.name}
-                            </span>
+                            <div className="flex items-center justify-between border-b border-black pb-0.5 mb-0.5">
+                              <span className="font-extrabold text-black uppercase text-[10px]">
+                                VISITANTE: {awayTeam?.name}
+                              </span>
+                              <span className="text-[9px] font-bold text-slate-700">
+                                {awayAttending.length}/{awayPlayers.length} Convocados
+                              </span>
+                            </div>
                             <table className="w-full text-left border-collapse">
                               <thead>
                                 <tr className="border-b border-black font-bold bg-slate-100">
@@ -969,17 +983,26 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
                                 {displayedAway.map((p) => {
                                   const attended = awayAttending.includes(p.id);
                                   return (
-                                    <tr key={p.id} className="border-b border-slate-200">
-                                      <td className="p-0.5 text-center font-bold">{p.dorsal}</td>
-                                      <td className="p-0.5">{p.name} {p.isCaptain ? '(C)' : ''}</td>
+                                    <tr key={p.id} className={`border-b border-slate-200 ${attended ? '' : 'bg-red-50/70'}`}>
+                                      <td className={`p-0.5 text-center font-bold ${attended ? 'text-black' : 'text-red-600'}`}>
+                                        {p.dorsal}
+                                      </td>
+                                      <td className={`p-0.5 font-bold ${attended ? 'text-black' : 'text-red-600'}`}>
+                                        {p.name} {p.isCaptain ? '(C)' : ''}
+                                        {!attended && (
+                                          <span className="text-[8px] ml-1.5 font-extrabold uppercase text-red-600 tracking-tight">
+                                            (NO ASISTE)
+                                          </span>
+                                        )}
+                                      </td>
                                       <td className="p-0.5 text-center font-bold">
                                         {attended ? (
-                                          <span className="inline-flex items-center justify-center px-1.5 py-0.5 rounded bg-emerald-600 text-white font-black text-[9px] shadow-sm">
+                                          <span className="inline-flex items-center justify-center w-4.5 h-4.5 rounded bg-emerald-600 text-white font-black text-[9.5px] shadow-sm" title="Asiste">
                                             ✓
                                           </span>
                                         ) : (
-                                          <span className="inline-flex items-center justify-center px-1.5 py-0.5 rounded bg-red-100 text-red-700 font-black text-[9px]">
-                                            ❌
+                                          <span className="inline-flex items-center justify-center w-4.5 h-4.5 rounded bg-red-600 text-white font-black text-[9.5px] shadow-sm" title="No Asiste / Ausente">
+                                            ✕
                                           </span>
                                         )}
                                       </td>
@@ -988,7 +1011,7 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
                                 })}
                                 {displayedAway.length === 0 && (
                                   <tr>
-                                    <td colSpan={3} className="p-1 italic text-slate-500 text-center">Sin jugadores convocados</td>
+                                    <td colSpan={3} className="p-1 italic text-slate-500 text-center">Sin jugadores inscritos</td>
                                   </tr>
                                 )}
                               </tbody>

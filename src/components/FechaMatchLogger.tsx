@@ -594,7 +594,7 @@ export const FechaMatchLogger: React.FC<FechaMatchLoggerProps> = ({
                                   className={`flex items-center justify-between p-1.5 rounded text-[11px] border cursor-pointer transition ${
                                     isChecked
                                       ? 'bg-emerald-950/40 border-emerald-800/60 text-slate-100 font-bold'
-                                      : 'bg-slate-900 border-slate-800 text-slate-500 line-through'
+                                      : 'bg-red-950/30 border-red-900/50 text-red-400 font-bold'
                                   }`}
                                 >
                                   <span className="flex items-center gap-2">
@@ -605,10 +605,26 @@ export const FechaMatchLogger: React.FC<FechaMatchLoggerProps> = ({
                                       onChange={() => onToggleAttendance && onToggleAttendance(match.id, p.id, 'home')}
                                       className="rounded text-emerald-500 focus:ring-emerald-400 bg-slate-950 border-slate-700"
                                     />
-                                    <span>#{p.dorsal} {p.name}</span>
+                                    <span className={isChecked ? 'text-slate-100 font-bold' : 'text-red-400 font-bold'}>
+                                      #{p.dorsal} {p.name}
+                                    </span>
                                   </span>
-                                  <span className="text-[10px] uppercase font-mono">
-                                    {isChecked ? '✅ Asiste' : '❌ Ausente'}
+                                  <span className="text-[10px] uppercase font-mono flex items-center gap-1">
+                                    {isChecked ? (
+                                      <span className="inline-flex items-center gap-1 text-emerald-400 font-bold">
+                                        <span className="inline-flex items-center justify-center w-4 h-4 rounded bg-emerald-600 text-white font-bold text-[9px] shadow-sm">
+                                          ✓
+                                        </span>
+                                        Asiste
+                                      </span>
+                                    ) : (
+                                      <span className="inline-flex items-center gap-1 text-red-400 font-bold">
+                                        <span className="inline-flex items-center justify-center w-4 h-4 rounded bg-red-600 text-white font-bold text-[9px] shadow-sm">
+                                          ✕
+                                        </span>
+                                        No Asiste
+                                      </span>
+                                    )}
                                   </span>
                                 </label>
                               );
@@ -649,7 +665,7 @@ export const FechaMatchLogger: React.FC<FechaMatchLoggerProps> = ({
                                   className={`flex items-center justify-between p-1.5 rounded text-[11px] border cursor-pointer transition ${
                                     isChecked
                                       ? 'bg-emerald-950/40 border-emerald-800/60 text-slate-100 font-bold'
-                                      : 'bg-slate-900 border-slate-800 text-slate-500 line-through'
+                                      : 'bg-red-950/30 border-red-900/50 text-red-400 font-bold'
                                   }`}
                                 >
                                   <span className="flex items-center gap-2">
@@ -660,10 +676,26 @@ export const FechaMatchLogger: React.FC<FechaMatchLoggerProps> = ({
                                       onChange={() => onToggleAttendance && onToggleAttendance(match.id, p.id, 'away')}
                                       className="rounded text-emerald-500 focus:ring-emerald-400 bg-slate-950 border-slate-700"
                                     />
-                                    <span>#{p.dorsal} {p.name}</span>
+                                    <span className={isChecked ? 'text-slate-100 font-bold' : 'text-red-400 font-bold'}>
+                                      #{p.dorsal} {p.name}
+                                    </span>
                                   </span>
-                                  <span className="text-[10px] uppercase font-mono">
-                                    {isChecked ? '✅ Asiste' : '❌ Ausente'}
+                                  <span className="text-[10px] uppercase font-mono flex items-center gap-1">
+                                    {isChecked ? (
+                                      <span className="inline-flex items-center gap-1 text-emerald-400 font-bold">
+                                        <span className="inline-flex items-center justify-center w-4 h-4 rounded bg-emerald-600 text-white font-bold text-[9px] shadow-sm">
+                                          ✓
+                                        </span>
+                                        Asiste
+                                      </span>
+                                    ) : (
+                                      <span className="inline-flex items-center gap-1 text-red-400 font-bold">
+                                        <span className="inline-flex items-center justify-center w-4 h-4 rounded bg-red-600 text-white font-bold text-[9px] shadow-sm">
+                                          ✕
+                                        </span>
+                                        No Asiste
+                                      </span>
+                                    )}
                                   </span>
                                 </label>
                               );
@@ -778,11 +810,11 @@ export const FechaMatchLogger: React.FC<FechaMatchLoggerProps> = ({
                         {homeAbsent.map((p) => (
                           <div
                             key={`absent-${p.id}`}
-                            className="flex items-center justify-between bg-slate-950 px-2 py-1 rounded border border-red-950/60 text-slate-300"
+                            className="flex items-center justify-between bg-slate-950 px-2 py-1 rounded border border-red-900/60 text-red-400"
                           >
-                            <span className="flex items-center gap-1.5 text-[11px]">
+                            <span className="flex items-center gap-1.5 text-[11px] font-bold text-red-400">
                               <span className="text-red-500 font-bold text-xs">❌</span>
-                              <span className="font-semibold text-slate-200">{p.dorsal} {p.name}</span>
+                              <span className="font-bold text-red-400">{p.dorsal} {p.name}</span>
                             </span>
                             <span className="text-[9px] font-bold text-red-400 uppercase bg-red-950/90 px-1.5 py-0.5 rounded border border-red-900/40">
                               NO ASISTE
@@ -885,11 +917,11 @@ export const FechaMatchLogger: React.FC<FechaMatchLoggerProps> = ({
                         {awayAbsent.map((p) => (
                           <div
                             key={`absent-${p.id}`}
-                            className="flex items-center justify-between bg-slate-950 px-2 py-1 rounded border border-red-950/60 text-slate-300"
+                            className="flex items-center justify-between bg-slate-950 px-2 py-1 rounded border border-red-900/60 text-red-400"
                           >
-                            <span className="flex items-center gap-1.5 text-[11px]">
+                            <span className="flex items-center gap-1.5 text-[11px] font-bold text-red-400">
                               <span className="text-red-500 font-bold text-xs">❌</span>
-                              <span className="font-semibold text-slate-200">{p.dorsal} {p.name}</span>
+                              <span className="font-bold text-red-400">{p.dorsal} {p.name}</span>
                             </span>
                             <span className="text-[9px] font-bold text-red-400 uppercase bg-red-950/90 px-1.5 py-0.5 rounded border border-red-900/40">
                               NO ASISTE
