@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Team, Player, Match, CardRecord, GoalRecord, TeamId } from '../types';
 import { computeStandings, computePlayerStats } from '../utils/sanctionsEngine';
+import { CardIconVector } from './TeamColorDot';
 import {
   BarChart,
   Bar,
@@ -169,9 +170,9 @@ export const SeasonPerformanceReport: React.FC<SeasonPerformanceReportProps> = (
         <div className="bg-slate-900 border border-slate-800 p-4 rounded-2xl shadow-md">
           <span className="text-slate-400 text-xs font-bold block">TARJETAS TOTALES</span>
           <div className="flex items-center gap-2 mt-1 text-xs font-bold">
-            <span className="text-yellow-400">🟨 {totalAmarillas}</span>
-            <span className="text-blue-400">🟦 {totalAzules}</span>
-            <span className="text-red-400">🟥 {totalRojas}</span>
+            <CardIconVector type="AMARILLA" count={totalAmarillas} />
+            <CardIconVector type="AZUL" count={totalAzules} />
+            <CardIconVector type="ROJA" count={totalRojas} />
           </div>
           <span className="text-[10px] text-slate-500 mt-1 block">Tarjetas del torneo</span>
         </div>
@@ -298,6 +299,7 @@ export const SeasonPerformanceReport: React.FC<SeasonPerformanceReportProps> = (
                 <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '8px' }} />
                 <Bar dataKey="PuntosFairPlay" name="Ptos Fair Play (Max 100)" fill="#fbbf24" radius={[6, 6, 0, 0]} />
                 <Bar dataKey="Amarillas" name="Amarillas" fill="#facc15" radius={[6, 6, 0, 0]} />
+                <Bar dataKey="Azules" name="Azules" fill="#06b6d4" radius={[6, 6, 0, 0]} />
                 <Bar dataKey="Rojas" name="Rojas" fill="#dc2626" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
@@ -350,7 +352,11 @@ export const SeasonPerformanceReport: React.FC<SeasonPerformanceReportProps> = (
 
                   return (
                     <tr key={p.playerId} className="hover:bg-slate-800/40 transition">
-                      <td className="py-2 px-3 font-extrabold text-amber-400">#{p.dorsal}</td>
+                      <td className="py-2 px-3 font-extrabold text-amber-400">
+                        <span className="inline-flex items-center justify-center min-w-[28px] h-6 px-1.5 bg-slate-950 border border-amber-500/40 text-amber-300 font-mono text-xs font-black rounded-md shadow-sm">
+                          #{p.dorsal}
+                        </span>
+                      </td>
                       <td className="py-2 px-3 font-bold text-slate-100">{p.name}</td>
                       <td className="py-2 px-3">
                         <span
@@ -365,14 +371,26 @@ export const SeasonPerformanceReport: React.FC<SeasonPerformanceReportProps> = (
                       <td className="py-2 px-3 text-center font-black text-emerald-400">
                         {p.goles > 0 ? `⚽ ${p.goles}` : '-'}
                       </td>
-                      <td className="py-2 px-3 text-center text-yellow-400 font-bold">
-                        {p.amarillas > 0 ? `🟨 ${p.amarillas}` : '-'}
+                      <td className="py-2 px-3 text-center font-bold">
+                        {p.amarillas > 0 ? (
+                          <CardIconVector type="AMARILLA" count={p.amarillas} />
+                        ) : (
+                          <span className="text-slate-600 font-bold text-xs">-</span>
+                        )}
                       </td>
-                      <td className="py-2 px-3 text-center text-blue-400 font-bold">
-                        {p.azules > 0 ? `🟦 ${p.azules}` : '-'}
+                      <td className="py-2 px-3 text-center font-bold">
+                        {p.azules > 0 ? (
+                          <CardIconVector type="AZUL" count={p.azules} />
+                        ) : (
+                          <span className="text-slate-600 font-bold text-xs">-</span>
+                        )}
                       </td>
-                      <td className="py-2 px-3 text-center text-red-400 font-bold">
-                        {p.rojas > 0 ? `🟥 ${p.rojas}` : '-'}
+                      <td className="py-2 px-3 text-center font-bold">
+                        {p.rojas > 0 ? (
+                          <CardIconVector type="ROJA" count={p.rojas} />
+                        ) : (
+                          <span className="text-slate-600 font-bold text-xs">-</span>
+                        )}
                       </td>
                       <td className="py-2 px-3 text-center">
                         {p.isCurrentlySuspended ? (

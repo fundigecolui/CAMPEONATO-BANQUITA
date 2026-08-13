@@ -24,7 +24,7 @@ export const PLAYERS_2026_2: Player[] = [
 
   // 3. NEGRO
   { id: 417, dorsal: 10, name: 'RIGOBERTO LOZANO', teamId: 'NEGRO' },
-  { id: 418, dorsal: 8, name: 'JORGE ACEVEDO', teamId: 'NEGRO' },
+  { id: 418, dorsal: 9, name: 'JORGE ACEVEDO', teamId: 'NEGRO' },
   { id: 419, dorsal: 70, name: 'NEL MARTINEZ', teamId: 'NEGRO' },
   { id: 420, dorsal: 7, name: 'RUSBELL VILLALBA', teamId: 'NEGRO', isCaptain: true },
   { id: 421, dorsal: 41, name: 'JHON CUARTAS', teamId: 'NEGRO' },

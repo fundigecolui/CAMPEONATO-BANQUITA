@@ -136,6 +136,65 @@ export const ScorersTable: React.FC<ScorersTableProps> = ({ playerStats, teams, 
         </span>
       </div>
 
+      {/* Top 3 Podio Goleadores Highlight Cards */}
+      {sortBy === 'GOLES' && scorersList.length >= 3 && !searchTerm && selectedTeam === 'ALL' && onlyScorers && (
+        <div className="p-4 bg-slate-950/70 border-b border-slate-800 grid grid-cols-1 md:grid-cols-3 gap-3">
+          {scorersList.slice(0, 3).map((topScorer, topIdx) => {
+            const topTeam = teams.find((t) => t.id === topScorer.teamId);
+            const isFirst = topIdx === 0;
+            const isSecond = topIdx === 1;
+
+            const badgeBg = isFirst
+              ? 'from-amber-500/20 via-slate-900 to-amber-950/30 border-amber-500/50 shadow-amber-500/10'
+              : isSecond
+              ? 'from-slate-400/20 via-slate-900 to-slate-950 border-slate-400/40 shadow-slate-400/10'
+              : 'from-amber-700/20 via-slate-900 to-amber-950/20 border-amber-700/40 shadow-amber-700/10';
+
+            const rankIcon = isFirst ? '🥇' : isSecond ? '🥈' : '🥉';
+            const rankTitle = isFirst ? 'LÍDER DE GOLEO' : isSecond ? 'SEGUNDO LUGAR' : 'TERCER LUGAR';
+
+            return (
+              <div
+                key={topScorer.playerId}
+                onClick={() => onSelectPlayer(topScorer.playerId)}
+                className={`p-3.5 rounded-xl border bg-gradient-to-br ${badgeBg} flex items-center justify-between cursor-pointer hover:scale-[1.02] transition shadow-xl relative overflow-hidden group`}
+              >
+                <div className="flex items-center gap-3 min-w-0">
+                  {/* Podio Icon & Internal Dorsal Number Badge */}
+                  <div className="flex flex-col items-center justify-center shrink-0">
+                    <span className="text-xl leading-none mb-1">{rankIcon}</span>
+                    <span className="min-w-[32px] px-2 h-7 rounded-lg bg-slate-950 text-amber-300 border border-amber-400/50 flex items-center justify-center font-mono text-xs font-black shadow-inner shadow-amber-500/20">
+                      #{topScorer.dorsal}
+                    </span>
+                  </div>
+
+                  <div className="min-w-0">
+                    <span className="text-[10px] font-mono font-extrabold tracking-wider uppercase text-amber-400/90 block">
+                      {rankTitle}
+                    </span>
+                    <h3 className="text-sm font-extrabold text-white truncate group-hover:text-amber-300 transition">
+                      {topScorer.name}
+                    </h3>
+                    <div className="mt-1">
+                      <TeamBadgeDot teamId={topScorer.teamId} teamName={topTeam?.name} size="sm" />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="text-right shrink-0 pl-2">
+                  <span className="block text-2xl font-black font-mono text-amber-300 leading-none">
+                    {topScorer.goles}
+                  </span>
+                  <span className="text-[10px] font-mono font-extrabold text-amber-400/80 uppercase">
+                    {topScorer.goles === 1 ? 'Gol' : 'Goles'} ⚽
+                  </span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
       {/* Scorers List Table */}
       {scorersList.length === 0 ? (
         <div className="p-8 text-center text-slate-400 space-y-2">
@@ -183,9 +242,10 @@ export const ScorersTable: React.FC<ScorersTableProps> = ({ playerStats, teams, 
                     </td>
 
                     <td className="p-3 font-bold">
-                      <div className="flex items-center gap-2">
-                        <span className="w-6 h-6 rounded bg-slate-800 text-slate-300 border border-slate-700 flex items-center justify-center font-mono text-xs font-black">
-                          {scorer.dorsal}
+                      <div className="flex items-center gap-2.5">
+                        {/* Internal Dorsal Number Badge Card */}
+                        <span className="min-w-[28px] px-1.5 h-7 rounded-lg bg-slate-950/90 text-amber-300 border border-amber-500/40 flex items-center justify-center font-mono text-xs font-black shadow-inner shadow-amber-500/10 shrink-0">
+                          #{scorer.dorsal}
                         </span>
                         <span className="text-slate-100 font-extrabold group-hover:text-amber-300 transition text-sm">
                           {scorer.name}
@@ -198,24 +258,18 @@ export const ScorersTable: React.FC<ScorersTableProps> = ({ playerStats, teams, 
                     </td>
 
                     <td className="p-3 text-center">
-                      <div className="flex items-center justify-center gap-2 text-[11px] font-mono">
+                      <div className="flex items-center justify-center gap-1.5 text-[11px] font-mono">
                         {scorer.amarillas > 0 && (
-                          <span className="flex items-center gap-1 text-amber-300 font-bold">
-                            <CardIconVector type="AMARILLA" /> {scorer.amarillas}
-                          </span>
+                          <CardIconVector type="AMARILLA" count={scorer.amarillas} />
                         )}
                         {scorer.azules > 0 && (
-                          <span className="flex items-center gap-1 text-cyan-300 font-bold">
-                            <CardIconVector type="AZUL" /> {scorer.azules}
-                          </span>
+                          <CardIconVector type="AZUL" count={scorer.azules} />
                         )}
                         {scorer.rojas > 0 && (
-                          <span className="flex items-center gap-1 text-rose-400 font-bold">
-                            <CardIconVector type="ROJA" /> {scorer.rojas}
-                          </span>
+                          <CardIconVector type="ROJA" count={scorer.rojas} />
                         )}
                         {scorer.amarillas === 0 && scorer.azules === 0 && scorer.rojas === 0 && (
-                          <span className="text-slate-600 text-xs">-</span>
+                          <span className="text-slate-600 text-xs font-bold">-</span>
                         )}
                       </div>
                     </td>

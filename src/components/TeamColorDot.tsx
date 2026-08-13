@@ -70,14 +70,49 @@ export const TeamBadgeDot: React.FC<TeamBadgeDotProps> = ({
   );
 };
 
-export const CardIconVector: React.FC<{ type: 'AMARILLA' | 'AZUL' | 'ROJA' | string; className?: string }> = ({
-  type,
-  className = 'w-3 h-4 inline-block',
-}) => {
+export const CardIconVector: React.FC<{
+  type: 'AMARILLA' | 'AZUL' | 'ROJA' | string;
+  count?: number | string;
+  className?: string;
+  children?: React.ReactNode;
+}> = ({ type, count, className, children }) => {
+  const content = count !== undefined ? count : children;
+
+  if (content !== undefined) {
+    if (type === 'AMARILLA') {
+      return (
+        <span
+          className={`inline-flex items-center justify-center min-w-[22px] h-7 px-1 rounded-[4px] bg-gradient-to-b from-amber-300 via-amber-400 to-amber-500 text-slate-950 border border-amber-200 shadow-md font-mono font-black text-xs shrink-0 ${className || ''}`}
+          title={`Tarjeta Amarilla (${content})`}
+        >
+          {content}
+        </span>
+      );
+    }
+    if (type === 'AZUL') {
+      return (
+        <span
+          className={`inline-flex items-center justify-center min-w-[22px] h-7 px-1 rounded-[4px] bg-gradient-to-b from-cyan-300 via-cyan-400 to-cyan-500 text-slate-950 border border-cyan-200 shadow-md font-mono font-black text-xs shrink-0 ${className || ''}`}
+          title={`Tarjeta Azul (${content})`}
+        >
+          {content}
+        </span>
+      );
+    }
+    return (
+      <span
+        className={`inline-flex items-center justify-center min-w-[22px] h-7 px-1 rounded-[4px] bg-gradient-to-b from-rose-500 via-rose-600 to-rose-700 text-white border border-rose-300 shadow-md font-mono font-black text-xs shrink-0 ${className || ''}`}
+        title={`Tarjeta Roja (${content})`}
+      >
+        {content}
+      </span>
+    );
+  }
+
   if (type === 'AMARILLA') {
     return (
       <span
-        className={`inline-block rounded-xs bg-amber-400 border border-amber-300 shadow-xs shrink-0 ${className}`}
+        className={`inline-block rounded-xs bg-amber-400 border border-amber-300 shadow-xs shrink-0 ${className || 'w-3 h-4'}`}
         title="Tarjeta Amarilla"
       />
     );
@@ -85,14 +120,14 @@ export const CardIconVector: React.FC<{ type: 'AMARILLA' | 'AZUL' | 'ROJA' | str
   if (type === 'AZUL') {
     return (
       <span
-        className={`inline-block rounded-xs bg-cyan-400 border border-cyan-300 shadow-xs shrink-0 ${className}`}
+        className={`inline-block rounded-xs bg-cyan-400 border border-cyan-300 shadow-xs shrink-0 ${className || 'w-3 h-4'}`}
         title="Tarjeta Azul"
       />
     );
   }
   return (
     <span
-      className={`inline-block rounded-xs bg-rose-600 border border-rose-400 shadow-xs shrink-0 ${className}`}
+      className={`inline-block rounded-xs bg-rose-600 border border-rose-400 shadow-xs shrink-0 ${className || 'w-3 h-4'}`}
       title="Tarjeta Roja"
     />
   );

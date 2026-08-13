@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X, Shield, Trophy, AlertTriangle, Plus, Trash2, Calendar, CheckCircle2 } from 'lucide-react';
 import { Player, Team, CardRecord, GoalRecord, PlayerStats, CardType } from '../types';
+import { CardIconVector } from './TeamColorDot';
 
 interface PlayerProfileModalProps {
   player: Player | null;
@@ -72,17 +73,17 @@ export const PlayerProfileModal: React.FC<PlayerProfileModalProps> = ({
             <span className="block text-[10px] text-slate-400">⚽ GOLES</span>
             <span className="font-black text-amber-300 text-base">{playerStats?.goles || 0}</span>
           </div>
-          <div className="bg-slate-800/80 p-3 rounded-xl border border-slate-700">
-            <span className="block text-[10px] text-slate-400">🟨 AMARILLAS</span>
-            <span className="font-black text-yellow-300 text-base">{playerStats?.amarillas || 0}</span>
+          <div className="bg-slate-800/80 p-3 rounded-xl border border-slate-700 flex flex-col items-center justify-center">
+            <span className="block text-[10px] text-slate-400 mb-1">AMARILLAS</span>
+            <CardIconVector type="AMARILLA" count={playerStats?.amarillas || 0} />
           </div>
-          <div className="bg-slate-800/80 p-3 rounded-xl border border-slate-700">
-            <span className="block text-[10px] text-slate-400">🟦 AZULES</span>
-            <span className="font-black text-blue-300 text-base">{playerStats?.azules || 0}</span>
+          <div className="bg-slate-800/80 p-3 rounded-xl border border-slate-700 flex flex-col items-center justify-center">
+            <span className="block text-[10px] text-slate-400 mb-1">AZULES</span>
+            <CardIconVector type="AZUL" count={playerStats?.azules || 0} />
           </div>
-          <div className="bg-slate-800/80 p-3 rounded-xl border border-slate-700">
-            <span className="block text-[10px] text-slate-400">🟥 ROJAS</span>
-            <span className="font-black text-red-400 text-base">{playerStats?.rojas || 0}</span>
+          <div className="bg-slate-800/80 p-3 rounded-xl border border-slate-700 flex flex-col items-center justify-center">
+            <span className="block text-[10px] text-slate-400 mb-1">ROJAS</span>
+            <CardIconVector type="ROJA" count={playerStats?.rojas || 0} />
           </div>
         </div>
 

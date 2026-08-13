@@ -725,10 +725,10 @@ export const ShareSummaryModal: React.FC<ShareSummaryModalProps> = ({
                               return (
                                 <div
                                   key={p.playerId}
-                                  className="flex items-center justify-between p-1.5 rounded-lg bg-slate-950/80 border border-slate-800/80"
+                                  className="flex items-center justify-between p-1.5 rounded-lg bg-slate-950/90 border border-slate-800/80 shadow-sm"
                                 >
                                   <div className="flex items-center gap-1.5 min-w-0">
-                                    <span className="font-extrabold text-amber-400 text-[10px] font-mono">
+                                    <span className="min-w-[26px] h-6 px-1 rounded-md bg-slate-900 border border-amber-500/40 text-amber-300 font-mono font-extrabold text-[10px] flex items-center justify-center shrink-0 shadow-inner">
                                       #{p.dorsal}
                                     </span>
                                     <div className="min-w-0">
