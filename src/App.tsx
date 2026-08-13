@@ -51,6 +51,8 @@ import { syncMatchStatuses } from './utils/matchSync';
 const STORAGE_KEY = 'banquitas_san_simon_db_v4';
 const EDITIONS_KEY = 'banquitas_editions_list_v1';
 
+const getStorageKey = (editionId: string) => `banquitas_edition_${editionId}`;
+
 const getInitialDataForEdition = (editionId: string) => {
   if (editionId === '2026-2') {
     return {
@@ -60,7 +62,7 @@ const getInitialDataForEdition = (editionId: string) => {
       matches: MATCHES_2026_2,
       currentFecha: 3,
       maxUnlockedFecha: 7,
-      v: 20,
+      v: 25,
     };
   }
   if (editionId === '2026-1') {
@@ -144,17 +146,13 @@ export default function App() {
   // Load initial data from localStorage on mount or when edition changes
   useEffect(() => {
     try {
-      const key = `banquitas_edition_${selectedEditionId}`;
-      const saved = localStorage.getItem(key);
+      const key = getStorageKey(selectedEditionId);
       const defaults = getInitialDataForEdition(selectedEditionId);
+      const saved = localStorage.getItem(key) || (selectedEditionId === '2026-2' ? localStorage.getItem(STORAGE_KEY) : null);
 
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (
-          (selectedEditionId === '2026-2' && (!parsed.v || parsed.v < 20)) ||
-          (selectedEditionId === '2025-2' && (!parsed.v || parsed.v < 3)) ||
-          (selectedEditionId === '2026-1' && (!parsed.v || parsed.v < 4))
-        ) {
+        if (!parsed.v || parsed.v < defaults.v) {
           setTeams(INITIAL_TEAMS);
           setPlayers(defaults.players);
           setCards(defaults.cards);
@@ -183,7 +181,7 @@ export default function App() {
         if (parsed.goals) setGoals(parsed.goals);
         else setGoals(defaults.goals);
 
-        if (parsed.matches && parsed.matches.length >= 38) {
+        if (parsed.matches && parsed.matches.length >= defaults.matches.length) {
           setMatches(parsed.matches);
         } else {
           setMatches(defaults.matches);
@@ -229,6 +227,7 @@ export default function App() {
 
   // Save to localStorage & broadcast real-time tab updates
   useEffect(() => {
+    const defaults = getInitialDataForEdition(selectedEditionId);
     const dataToSave = {
       players,
       cards,
@@ -237,9 +236,9 @@ export default function App() {
       currentFecha,
       maxUnlockedFecha,
       isEditMode,
-      v: 19,
+      v: defaults.v,
     };
-    const key = selectedEditionId === '2026-2' ? STORAGE_KEY : `banquitas_edition_${selectedEditionId}`;
+    const key = getStorageKey(selectedEditionId);
     try {
       localStorage.setItem(key, JSON.stringify(dataToSave));
     } catch (e) {
