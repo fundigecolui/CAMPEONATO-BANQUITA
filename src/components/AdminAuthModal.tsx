@@ -39,8 +39,10 @@ export const AdminAuthModal: React.FC<AdminAuthModalProps> = ({
     const savedPin = getSavedPin();
     if (pinInput.trim() === savedPin) {
       setPinInput('');
-      onSuccessEnter();
       onClose();
+      setTimeout(() => {
+        onSuccessEnter();
+      }, 50);
     } else {
       setErrorMessage('❌ Contraseña / PIN incorrecto. Acceso denegado.');
     }
