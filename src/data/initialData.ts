@@ -56,11 +56,11 @@ export const INITIAL_TEAMS: Team[] = [
   {
     id: 'NEGRO',
     name: 'NEGRO',
-    colorHex: '#1f2937',
-    badgeBg: 'bg-zinc-900',
-    badgeText: 'text-zinc-100',
+    colorHex: '#000000',
+    badgeBg: 'bg-black',
+    badgeText: 'text-white',
     badgeBorder: 'border-zinc-700',
-    secondaryColor: '#111827',
+    secondaryColor: '#09090b',
     delegate: 'RUSBELL VILLALBA',
   },
   {
@@ -106,11 +106,11 @@ export const INITIAL_TEAMS: Team[] = [
   {
     id: 'BLANCO',
     name: 'BLANCO',
-    colorHex: '#f8fafc',
-    badgeBg: 'bg-slate-100',
-    badgeText: 'text-slate-900',
-    badgeBorder: 'border-slate-300',
-    secondaryColor: '#e2e8f0',
+    colorHex: '#ffffff',
+    badgeBg: 'bg-white',
+    badgeText: 'text-slate-950',
+    badgeBorder: 'border border-black/50',
+    secondaryColor: '#f1f5f9',
     delegate: 'CAMILO PACHECO',
   },
 ];

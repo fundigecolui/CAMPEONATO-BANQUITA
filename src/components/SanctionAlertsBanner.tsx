@@ -82,7 +82,7 @@ export const SanctionAlertsBanner: React.FC<SanctionAlertsBannerProps> = ({
                         {s.playerName}
                       </p>
                       <div className="flex items-center gap-1.5 mt-0.5">
-                        <span className={`text-[10px] px-1.5 py-0.2 rounded font-bold uppercase ${team?.badgeBg || 'bg-slate-700'} ${team?.badgeText || 'text-white'}`}>
+                        <span className={`text-[10px] px-1.5 py-0.2 rounded font-bold uppercase border ${team?.badgeBg || 'bg-slate-700'} ${team?.badgeText || 'text-white'} ${team?.badgeBorder || 'border-transparent'}`}>
                           {s.teamId}
                         </span>
                         <span className="text-[10px] text-red-400 font-medium truncate">

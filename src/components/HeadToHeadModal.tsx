@@ -111,9 +111,9 @@ export const HeadToHeadModal: React.FC<HeadToHeadModalProps> = ({ isOpen, onClos
           <div className="flex items-center justify-between text-center font-mono">
             <div className="space-y-1">
               <span
-                className={`inline-block px-3 py-1 rounded-lg font-black text-xs uppercase ${
+                className={`inline-block px-3 py-1 rounded-lg font-black text-xs uppercase border ${
                   teamA?.badgeBg || 'bg-slate-800'
-                } ${teamA?.badgeText || 'text-white'}`}
+                } ${teamA?.badgeText || 'text-white'} ${teamA?.badgeBorder || 'border-transparent'}`}
               >
                 {teamA?.name}
               </span>
@@ -129,9 +129,9 @@ export const HeadToHeadModal: React.FC<HeadToHeadModalProps> = ({ isOpen, onClos
 
             <div className="space-y-1">
               <span
-                className={`inline-block px-3 py-1 rounded-lg font-black text-xs uppercase ${
+                className={`inline-block px-3 py-1 rounded-lg font-black text-xs uppercase border ${
                   teamB?.badgeBg || 'bg-slate-800'
-                } ${teamB?.badgeText || 'text-white'}`}
+                } ${teamB?.badgeText || 'text-white'} ${teamB?.badgeBorder || 'border-transparent'}`}
               >
                 {teamB?.name}
               </span>

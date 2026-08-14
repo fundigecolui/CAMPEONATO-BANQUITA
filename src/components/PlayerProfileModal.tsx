@@ -57,7 +57,7 @@ export const PlayerProfileModal: React.FC<PlayerProfileModalProps> = ({
           <div>
             <div className="flex items-center gap-2">
               <h2 className="text-xl font-black font-mono text-white uppercase">{player.name}</h2>
-              <span className={`px-2.5 py-0.5 rounded text-xs font-black uppercase ${team?.badgeBg} ${team?.badgeText}`}>
+              <span className={`px-2.5 py-0.5 rounded text-xs font-black uppercase border ${team?.badgeBg} ${team?.badgeText} ${team?.badgeBorder || 'border-transparent'}`}>
                 {player.teamId}
               </span>
             </div>

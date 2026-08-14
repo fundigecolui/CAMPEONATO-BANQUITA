@@ -98,7 +98,7 @@ export const TeamsManagement: React.FC<TeamsManagementProps> = ({
               }`}
             >
               <span
-                className={`px-2.5 py-0.5 rounded font-black text-[10px] uppercase tracking-wider ${t.badgeBg} ${t.badgeText}`}
+                className={`px-2.5 py-0.5 rounded font-black text-[10px] uppercase tracking-wider border ${t.badgeBg} ${t.badgeText} ${t.badgeBorder || 'border-transparent'}`}
               >
                 {t.id}
               </span>

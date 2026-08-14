@@ -4,12 +4,24 @@ import { Team } from '../types';
 export const TEAM_COLOR_MAP: Record<string, { bg: string; dotHex: string; border: string; text: string; emoji: string }> = {
   AZUL: { bg: 'bg-blue-600', dotHex: '#2563eb', border: 'border-blue-400', text: 'text-blue-300', emoji: '🔹' },
   VERDE: { bg: 'bg-emerald-600', dotHex: '#16a34a', border: 'border-emerald-400', text: 'text-emerald-300', emoji: '🟢' },
-  NEGRO: { bg: 'bg-zinc-900', dotHex: '#18181b', border: 'border-zinc-500', text: 'text-zinc-300', emoji: '⬛' },
+  NEGRO: {
+    bg: 'bg-black',
+    dotHex: '#000000',
+    border: 'border-zinc-700',
+    text: 'text-black font-black dark:text-black',
+    emoji: '⬛',
+  },
   NARANJA: { bg: 'bg-orange-600', dotHex: '#ea580c', border: 'border-orange-400', text: 'text-orange-300', emoji: '🟧' },
   RAYADO: { bg: 'bg-purple-700', dotHex: '#9333ea', border: 'border-purple-400', text: 'text-purple-300', emoji: '🟣' },
   ROJO: { bg: 'bg-red-600', dotHex: '#dc2626', border: 'border-red-400', text: 'text-red-300', emoji: '🔴' },
   AMARILLO: { bg: 'bg-yellow-500', dotHex: '#eab308', border: 'border-yellow-300', text: 'text-yellow-300', emoji: '🟡' },
-  BLANCO: { bg: 'bg-slate-100', dotHex: '#f8fafc', border: 'border-slate-400', text: 'text-slate-100', emoji: '⚪' },
+  BLANCO: {
+    bg: 'bg-white',
+    dotHex: '#ffffff',
+    border: 'border border-black/60',
+    text: 'text-white font-bold [text-shadow:_0_0_1px_#000,_-0.4px_-0.4px_0_#000,_0.4px_-0.4px_0_#000,_-0.4px_0.4px_0_#000,_0.4px_0.4px_0_#000] [-webkit-text-stroke:_0.35px_#000000]',
+    emoji: '⚪',
+  },
 };
 
 export const getTeamEmoji = (teamId?: string): string => {
@@ -44,6 +56,18 @@ export const TeamBadgeDot: React.FC<TeamBadgeDotProps> = ({
   const name = teamName || teamId || 'Equipo';
   const hex = colorHex || getTeamColorHex(teamId);
   const info = teamId ? TEAM_COLOR_MAP[teamId.toUpperCase()] : null;
+  const isWhite =
+    teamId?.toUpperCase() === 'BLANCO' ||
+    name.toUpperCase().includes('BLANCO') ||
+    hex?.toLowerCase() === '#ffffff' ||
+    hex?.toLowerCase() === '#f8fafc';
+
+  const isNegro =
+    teamId?.toUpperCase() === 'NEGRO' ||
+    name.toUpperCase().includes('NEGRO') ||
+    hex?.toLowerCase() === '#000000' ||
+    hex?.toLowerCase() === '#18181b' ||
+    hex?.toLowerCase() === '#1f2937';
 
   const dotSizeClass =
     size === 'sm'
@@ -55,14 +79,50 @@ export const TeamBadgeDot: React.FC<TeamBadgeDotProps> = ({
   return (
     <span className={`inline-flex items-center gap-1.5 align-middle ${className}`}>
       <span
-        className={`${dotSizeClass} rounded-full shrink-0 shadow-sm border border-white/20`}
+        className={`${dotSizeClass} rounded-full shrink-0 shadow-xs ${
+          isWhite
+            ? 'border border-black/75'
+            : isNegro
+            ? 'border border-zinc-500 ring-1 ring-zinc-700/50'
+            : 'border border-white/20'
+        }`}
         style={{
-          backgroundColor: hex,
-          boxShadow: `0 0 6px ${hex}80`,
+          backgroundColor: isWhite ? '#ffffff' : isNegro ? '#000000' : hex,
+          boxShadow: isWhite
+            ? '0 0 1px rgba(0,0,0,0.4)'
+            : isNegro
+            ? '0 0 4px rgba(0,0,0,0.9), 0 0 0 1px #27272a'
+            : `0 0 6px ${hex}80`,
         }}
       />
       {showName && (
-        <span className={`font-bold truncate ${info?.text || 'text-slate-200'}`}>
+        <span
+          className={`font-bold truncate ${
+            isWhite
+              ? 'text-white font-bold'
+              : isNegro
+              ? 'text-zinc-950 dark:text-zinc-900 font-black'
+              : info?.text || 'text-slate-200'
+          }`}
+          style={
+            isWhite
+              ? {
+                  color: '#ffffff',
+                  textShadow:
+                    '-0.4px -0.4px 0 #000, 0.4px -0.4px 0 #000, -0.4px 0.4px 0 #000, 0.4px 0.4px 0 #000, 0 0 1px rgba(0,0,0,0.8)',
+                  WebkitTextStroke: '0.35px #000000',
+                  fontWeight: 700,
+                }
+              : isNegro
+              ? {
+                  color: '#050505',
+                  fontWeight: 900,
+                  textShadow:
+                    '0 0 1px rgba(255,255,255,0.4), 0 0 0.5px rgba(255,255,255,0.8)',
+                }
+              : undefined
+          }
+        >
           {name}
         </span>
       )}

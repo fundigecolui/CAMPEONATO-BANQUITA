@@ -391,7 +391,7 @@ const INITIAL_7_FECHAS_2026_2: Match[] = [
     dateStr: '13 de Agosto',
     attendance: {
       homePlayerIds: [409, 410, 411, 412, 413, 414, 415], // Excludes 416 (Jacit Arabia - Excusa)
-      awayPlayerIds: [417, 418, 419, 420, 421, 422, 423, 424],
+      awayPlayerIds: [417, 418, 419, 420, 423, 424], // Excludes 421 (Jhon Cuartas/Peña) and 422 (Manuel Peña) - No asisten
     },
   },
   {
