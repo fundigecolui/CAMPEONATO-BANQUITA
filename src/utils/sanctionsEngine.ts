@@ -33,33 +33,37 @@ export function computePlayerStats(
 
   // Aggregate goals (Only goals <= Fecha 35 count for the Goleador title per official rules)
   goals.forEach((g) => {
+    const f = g.fecha ?? (g as any).fechaNumber;
     if (statsMap[g.playerId]) {
-      statsMap[g.playerId].goalsPerFecha[g.fecha] = (statsMap[g.playerId].goalsPerFecha[g.fecha] || 0) + 1;
-      if (g.fecha <= 35) {
-        statsMap[g.playerId].goles += 1;
+      statsMap[g.playerId].goalsPerFecha[f] = (statsMap[g.playerId].goalsPerFecha[f] || 0) + (g.count || 1);
+      if (f <= 35) {
+        statsMap[g.playerId].goles += (g.count || 1);
       }
     }
   });
 
   // Aggregate cards & compute suspensions chronologically per player
   players.forEach((p) => {
-    const playerCards = cards.filter((c) => c.playerId === p.id).sort((a, b) => a.fecha - b.fecha);
+    const playerCards = cards
+      .filter((c) => c.playerId === p.id)
+      .sort((a, b) => (a.fecha ?? (a as any).fechaNumber) - (b.fecha ?? (b as any).fechaNumber));
     const pStat = statsMap[p.id];
 
     let yellowAccumulator = 0;
 
     playerCards.forEach((c) => {
+      const cFecha = c.fecha ?? (c as any).fechaNumber;
       // Record card count per fecha
-      if (!pStat.cardsPerFecha[c.fecha]) {
-        pStat.cardsPerFecha[c.fecha] = { amarillas: 0, azules: 0, rojas: 0 };
+      if (!pStat.cardsPerFecha[cFecha]) {
+        pStat.cardsPerFecha[cFecha] = { amarillas: 0, azules: 0, rojas: 0 };
       }
 
       if (c.type === 'AMARILLA') {
         pStat.amarillas += 1;
-        pStat.cardsPerFecha[c.fecha].amarillas += 1;
+        pStat.cardsPerFecha[cFecha].amarillas += 1;
         yellowAccumulator += 1;
 
-        // Rule: 3 Yellow cards -> 1 Match Suspension for next fecha (c.fecha + 1)
+        // Rule: 3 Yellow cards -> 1 Match Suspension for next fecha (cFecha + 1)
         if (yellowAccumulator % 3 === 0) {
           allSuspensions.push({
             playerId: p.id,
@@ -67,28 +71,28 @@ export function computePlayerStats(
             teamId: p.teamId,
             dorsal: p.dorsal,
             reason: '3_AMARILLAS',
-            suspendedForFecha: c.fecha + 1,
-            status: c.fecha + 1 <= currentActiveFecha ? (c.fecha + 1 === currentActiveFecha ? 'PENDIENTE' : 'CUMPLIDA') : 'PENDIENTE',
-            details: `Acumuló ${yellowAccumulator} amarillas en Fecha ${c.fecha}. Suspendido para Fecha ${c.fecha + 1}.`,
+            suspendedForFecha: cFecha + 1,
+            status: cFecha + 1 <= currentActiveFecha ? (cFecha + 1 === currentActiveFecha ? 'PENDIENTE' : 'CUMPLIDA') : 'PENDIENTE',
+            details: `Acumuló ${yellowAccumulator} amarillas en Fecha ${cFecha}. Suspendido para Fecha ${cFecha + 1}.`,
           });
         }
       } else if (c.type === 'AZUL') {
         pStat.azules += 1;
-        pStat.cardsPerFecha[c.fecha].azules += 1;
+        pStat.cardsPerFecha[cFecha].azules += 1;
       } else if (c.type === 'ROJA') {
         pStat.rojas += 1;
-        pStat.cardsPerFecha[c.fecha].rojas += 1;
+        pStat.cardsPerFecha[cFecha].rojas += 1;
 
-        // Rule: 1 Red Card -> Automatic 1 Match Suspension for next fecha (c.fecha + 1)
+        // Rule: 1 Red Card -> Automatic 1 Match Suspension for next fecha (cFecha + 1)
         allSuspensions.push({
           playerId: p.id,
           playerName: p.name,
           teamId: p.teamId,
           dorsal: p.dorsal,
           reason: '1_ROJA',
-          suspendedForFecha: c.fecha + 1,
-          status: c.fecha + 1 <= currentActiveFecha ? (c.fecha + 1 === currentActiveFecha ? 'PENDIENTE' : 'CUMPLIDA') : 'PENDIENTE',
-          details: `Tarjeta roja directa en Fecha ${c.fecha}. Suspendido para Fecha ${c.fecha + 1}.`,
+          suspendedForFecha: cFecha + 1,
+          status: cFecha + 1 <= currentActiveFecha ? (cFecha + 1 === currentActiveFecha ? 'PENDIENTE' : 'CUMPLIDA') : 'PENDIENTE',
+          details: `Tarjeta roja directa en Fecha ${cFecha}. Suspendido para Fecha ${cFecha + 1}.`,
         });
       }
 
@@ -148,8 +152,10 @@ export function computeStandings(
 
   // Process Played Matches up to maxFecha (Fase Regular Todos contra Todos)
   matches.forEach((m) => {
-    if (!m.isPlayed) return;
-    if (m.fecha > maxFecha) return;
+    const isPlayedMatch = m.isPlayed || m.played;
+    if (!isPlayedMatch) return;
+    const mFecha = m.fecha ?? (m as any).fechaNumber;
+    if (mFecha > maxFecha) return;
 
     const home = standingsMap[m.homeTeamId];
     const away = standingsMap[m.awayTeamId];
@@ -188,7 +194,8 @@ export function computeStandings(
 
   // Deduct Fair Play Points based on team cards (only up to maxFecha)
   cards.forEach((c) => {
-    if (c.fecha > maxFecha) return;
+    const cFecha = c.fecha ?? (c as any).fechaNumber;
+    if (cFecha > maxFecha) return;
     const p = players.find((player) => player.id === c.playerId);
     if (p && standingsMap[p.teamId]) {
       const t = standingsMap[p.teamId];
@@ -265,8 +272,8 @@ export function checkMathematicalElimination(
   // Count remaining unplayed regular season matches (fechas 1 to 35) for 8th team
   const unplayedMatchesForEighth = matches.filter(
     (m) =>
-      m.fecha <= 35 &&
-      !m.isPlayed &&
+      (m.fecha ?? (m as any).fechaNumber) <= 35 &&
+      !(m.isPlayed || m.played) &&
       (m.homeTeamId === eighth.teamId || m.awayTeamId === eighth.teamId)
   );
 
@@ -274,7 +281,7 @@ export function checkMathematicalElimination(
   const maxPossiblePts = eighth.pts + remainingMatchesCount * 3;
 
   // Condition: Last team mathematically CANNOT reach 7th place (maxPossiblePts < seventh.pts)
-  const totalRegularPlayed = matches.filter((m) => m.fecha <= 35 && m.isPlayed).length;
+  const totalRegularPlayed = matches.filter((m) => (m.fecha ?? (m as any).fechaNumber) <= 35 && (m.isPlayed || m.played)).length;
   const isEliminated = totalRegularPlayed > 0 && maxPossiblePts < seventh.pts;
 
   return {

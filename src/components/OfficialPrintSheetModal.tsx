@@ -59,7 +59,7 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
   const [printAttendance, setPrintAttendance] = useState(false);
   const [printOnlyAttending, setPrintOnlyAttending] = useState(true);
 
-  const currentMatches = matches.filter((m) => m.fecha === currentFecha);
+  const currentMatches = matches.filter((m) => (m.fecha ?? m.fechaNumber) === currentFecha);
   const fechaDate = FECHA_DATES[currentFecha] || 'Fecha Programada';
 
   // Compute official standings and player stats for printable pages

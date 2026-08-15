@@ -211,76 +211,88 @@ export const GoalBallBadge: React.FC<GoalBallBadgeProps> = ({
 
   const dimClass =
     size === 'sm'
-      ? 'w-7 h-7 text-[11px]'
+      ? 'w-8 h-8 text-xs'
       : size === 'lg'
-      ? 'w-10 h-10 text-sm'
-      : 'w-8 h-8 text-xs';
+      ? 'w-11 h-11 text-base'
+      : 'w-9 h-9 text-sm';
 
   return (
     <span
-      className={`relative inline-flex items-center justify-center rounded-full shrink-0 shadow-lg font-mono select-none ${dimClass} ${className}`}
+      className={`relative inline-flex items-center justify-center rounded-full shrink-0 select-none ${dimClass} ${className}`}
       title={`${goals} Gol(es)`}
     >
       <svg
-        viewBox="0 0 40 40"
-        className="absolute inset-0 w-full h-full overflow-visible drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]"
+        viewBox="0 0 100 100"
+        className="w-full h-full overflow-visible drop-shadow-[0_3px_6px_rgba(0,0,0,0.35)]"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
         <defs>
-          {/* 3D Sphere gradient for realistic ball shading */}
-          <radialGradient id="ballSphere3D" cx="32%" cy="32%" r="68%">
+          {/* Spherical 3D Ball Lighting */}
+          <radialGradient id="ballShading3D" cx="30%" cy="28%" r="72%">
             <stop offset="0%" stopColor="#ffffff" />
-            <stop offset="42%" stopColor="#f8fafc" />
-            <stop offset="78%" stopColor="#cbd5e1" />
-            <stop offset="100%" stopColor="#64748b" />
+            <stop offset="35%" stopColor="#f8fafc" />
+            <stop offset="65%" stopColor="#e2e8f0" />
+            <stop offset="88%" stopColor="#94a3b8" />
+            <stop offset="100%" stopColor="#475569" />
           </radialGradient>
 
-          {/* Pentagon gradient for depth */}
-          <linearGradient id="pentagonGrad" x1="0" y1="0" x2="1" y2="1">
+          {/* Warm ambient leather tint */}
+          <radialGradient id="leatherWarmth" cx="40%" cy="35%" r="65%">
+            <stop offset="0%" stopColor="#ffffff" stopOpacity="0.8" />
+            <stop offset="60%" stopColor="#fef3c7" stopOpacity="0.25" />
+            <stop offset="100%" stopColor="#b45309" stopOpacity="0.35" />
+          </radialGradient>
+
+          {/* Realistic Black Leather Pentagon with subtle bevel */}
+          <linearGradient id="pentagonLeather" x1="0" y1="0" x2="1" y2="1">
             <stop offset="0%" stopColor="#334155" />
-            <stop offset="100%" stopColor="#020617" />
+            <stop offset="40%" stopColor="#1e293b" />
+            <stop offset="100%" stopColor="#090d16" />
           </linearGradient>
 
-          {/* Golden glossy central badge gradient */}
-          <linearGradient id="centerRingGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#fde047" />
-            <stop offset="50%" stopColor="#eab308" />
-            <stop offset="100%" stopColor="#ca8a04" />
+          {/* Golden Metallic Ring */}
+          <linearGradient id="goldRing" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="#fef08a" />
+            <stop offset="30%" stopColor="#eab308" />
+            <stop offset="70%" stopColor="#ca8a04" />
+            <stop offset="100%" stopColor="#854d0e" />
           </linearGradient>
 
-          <linearGradient id="centerBgGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#0f172a" />
+          {/* Central Dark Disc */}
+          <radialGradient id="centerDiscGrad" cx="35%" cy="30%" r="70%">
+            <stop offset="0%" stopColor="#1e293b" />
+            <stop offset="70%" stopColor="#0f172a" />
             <stop offset="100%" stopColor="#020617" />
-          </linearGradient>
+          </radialGradient>
         </defs>
 
-        {/* Outer 3D sphere ball */}
-        <circle cx="20" cy="20" r="18.5" fill="url(#ballSphere3D)" stroke="#0f172a" strokeWidth="1.2" />
+        {/* Base Sphere */}
+        <circle cx="50" cy="50" r="47" fill="url(#ballShading3D)" stroke="#334155" strokeWidth="1.5" />
+        <circle cx="50" cy="50" r="47" fill="url(#leatherWarmth)" />
 
-        {/* Classic 3D Pentagons around the sphere */}
-        <polygon points="20,2 24.5,6.5 22.5,11 17.5,11 15.5,6.5" fill="url(#pentagonGrad)" stroke="#0f172a" strokeWidth="0.5" />
-        <polygon points="34.5,10.5 38,15.5 34,19 29.5,16.5 31,11.5" fill="url(#pentagonGrad)" stroke="#0f172a" strokeWidth="0.5" />
-        <polygon points="32,31.5 27,33.5 23.5,29.5 26,25.5 31.5,26.5" fill="url(#pentagonGrad)" stroke="#0f172a" strokeWidth="0.5" />
-        <polygon points="8,31.5 13,33.5 16.5,29.5 14,25.5 8.5,26.5" fill="url(#pentagonGrad)" stroke="#0f172a" strokeWidth="0.5" />
-        <polygon points="5.5,10.5 2,15.5 6,19 10.5,16.5 9,11.5" fill="url(#pentagonGrad)" stroke="#0f172a" strokeWidth="0.5" />
+        {/* Stitched Pentagons / Hexagons on leather surface */}
+        <polygon points="50,4 62,15 57,26 43,26 38,15" fill="url(#pentagonLeather)" stroke="#0f172a" strokeWidth="1.2" />
+        <polygon points="86,24 96,36 87,46 75,40 78,28" fill="url(#pentagonLeather)" stroke="#0f172a" strokeWidth="1.2" />
+        <polygon points="82,76 71,83 62,72 68,61 80,64" fill="url(#pentagonLeather)" stroke="#0f172a" strokeWidth="1.2" />
+        <polygon points="20,78 32,83 38,72 32,61 19,64" fill="url(#pentagonLeather)" stroke="#0f172a" strokeWidth="1.2" />
+        <polygon points="14,24 22,28 25,40 13,46 4,36" fill="url(#pentagonLeather)" stroke="#0f172a" strokeWidth="1.2" />
 
-        {/* Subtle seam lines connecting pentagons */}
-        <line x1="20" y1="11" x2="20" y2="12.5" stroke="#475569" strokeWidth="0.8" />
-        <line x1="29.5" y1="16.5" x2="27.5" y2="17.5" stroke="#475569" strokeWidth="0.8" />
-        <line x1="23.5" y1="29.5" x2="22" y2="27.5" stroke="#475569" strokeWidth="0.8" />
-        <line x1="16.5" y1="29.5" x2="18" y2="27.5" stroke="#475569" strokeWidth="0.8" />
-        <line x1="10.5" y1="16.5" x2="12.5" y2="17.5" stroke="#475569" strokeWidth="0.8" />
+        {/* Panel Seam Stitch Lines */}
+        <line x1="50" y1="26" x2="50" y2="34" stroke="#64748b" strokeWidth="1.2" strokeLinecap="round" />
+        <line x1="75" y1="40" x2="68" y2="44" stroke="#64748b" strokeWidth="1.2" strokeLinecap="round" />
+        <line x1="68" y1="61" x2="63" y2="57" stroke="#64748b" strokeWidth="1.2" strokeLinecap="round" />
+        <line x1="32" y1="61" x2="37" y2="57" stroke="#64748b" strokeWidth="1.2" strokeLinecap="round" />
+        <line x1="25" y1="40" x2="32" y2="44" stroke="#64748b" strokeWidth="1.2" strokeLinecap="round" />
 
-        {/* Outer Glowing Gold Ring for central number badge */}
-        <circle cx="20" cy="20" r="10.2" fill="none" stroke="url(#centerRingGrad)" strokeWidth="1.8" />
-
-        {/* Central Dark Disc for high-contrast legible number */}
-        <circle cx="20" cy="20" r="9.2" fill="url(#centerBgGrad)" />
+        {/* Central Beveled Goal Badge */}
+        <circle cx="50" cy="50" r="23" fill="none" stroke="url(#goldRing)" strokeWidth="3" />
+        <circle cx="50" cy="50" r="21" fill="url(#centerDiscGrad)" />
+        <circle cx="50" cy="50" r="21" stroke="#000000" strokeWidth="0.8" opacity="0.6" />
       </svg>
 
-      {/* Goal Number with glowing yellow text */}
-      <span className="relative z-10 font-black font-mono text-amber-300 leading-none drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]">
+      {/* Goal Number */}
+      <span className="absolute z-10 font-black font-mono text-amber-300 drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)] leading-none">
         {goals}
       </span>
     </span>

@@ -56,7 +56,7 @@ export const FechaMatchLogger: React.FC<FechaMatchLoggerProps> = ({
   onRemoveCard,
   onRemoveGoal,
 }) => {
-  const currentMatches = matches.filter((m) => m.fecha === currentFecha);
+  const currentMatches = matches.filter((m) => (m.fecha ?? m.fechaNumber) === currentFecha);
 
   // Compute standings & mathematical elimination check
   const standings = computeStandings(teams, matches, cards, players);
@@ -218,12 +218,12 @@ export const FechaMatchLogger: React.FC<FechaMatchLoggerProps> = ({
 
           // Cards logged in this match date for these teams
           const matchCards = cards.filter(
-            (c) => c.fecha === currentFecha && allMatchPlayers.some((p) => p.id === c.playerId)
+            (c) => (c.fecha ?? (c as any).fechaNumber) === currentFecha && allMatchPlayers.some((p) => p.id === c.playerId)
           );
 
           // Goals logged in this match date for these teams
           const matchGoals = goals.filter(
-            (g) => g.fecha === currentFecha && allMatchPlayers.some((p) => p.id === g.playerId)
+            (g) => (g.fecha ?? (g as any).fechaNumber) === currentFecha && allMatchPlayers.some((p) => p.id === g.playerId)
           );
 
           const selectedPlayerId = selectedPlayerPerMatch[match.id] || allMatchPlayers[0]?.id;
