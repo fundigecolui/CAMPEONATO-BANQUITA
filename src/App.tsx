@@ -60,9 +60,9 @@ const getInitialDataForEdition = (editionId: string) => {
       cards: CARDS_2026_2,
       goals: GOALS_2026_2,
       matches: MATCHES_2026_2,
-      currentFecha: 4,
+      currentFecha: 5,
       maxUnlockedFecha: 7,
-      v: 32,
+      v: 33,
     };
   }
   if (editionId === '2026-1') {

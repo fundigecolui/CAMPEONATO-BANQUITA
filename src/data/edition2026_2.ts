@@ -426,10 +426,62 @@ const INITIAL_7_FECHAS_2026_2: Match[] = [
   },
 
   // FECHA 5 (18 de Agosto)
-  { id: 'P5-1', fecha: 5, homeTeamId: 'AZUL', awayTeamId: 'VERDE', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '18 de Agosto' },
-  { id: 'P5-2', fecha: 5, homeTeamId: 'ROJO', awayTeamId: 'AMARILLO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '18 de Agosto' },
-  { id: 'P5-3', fecha: 5, homeTeamId: 'NEGRO', awayTeamId: 'NARANJA', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '18 de Agosto' },
-  { id: 'P5-4', fecha: 5, homeTeamId: 'RAYADO', awayTeamId: 'BLANCO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '18 de Agosto' },
+  {
+    id: 'P5-1',
+    fecha: 5,
+    homeTeamId: 'AZUL',
+    awayTeamId: 'VERDE',
+    homeGoals: 0,
+    awayGoals: 0,
+    isPlayed: false,
+    dateStr: '18 de Agosto',
+    attendance: {
+      homePlayerIds: [401, 402, 403, 404, 405, 406, 408], // Excluye 407 (Moises Gomez - No asiste hoy)
+      awayPlayerIds: [409, 410, 411, 412, 413, 414, 415, 416],
+    },
+  },
+  {
+    id: 'P5-2',
+    fecha: 5,
+    homeTeamId: 'ROJO',
+    awayTeamId: 'AMARILLO',
+    homeGoals: 0,
+    awayGoals: 0,
+    isPlayed: false,
+    dateStr: '18 de Agosto',
+    attendance: {
+      homePlayerIds: [441, 442, 443, 444, 445, 446, 447, 448],
+      awayPlayerIds: [449, 450, 451, 452, 453, 454, 455, 456],
+    },
+  },
+  {
+    id: 'P5-3',
+    fecha: 5,
+    homeTeamId: 'NEGRO',
+    awayTeamId: 'NARANJA',
+    homeGoals: 0,
+    awayGoals: 0,
+    isPlayed: false,
+    dateStr: '18 de Agosto',
+    attendance: {
+      homePlayerIds: [417, 418, 419, 421, 423, 424], // Excluye 420 (Rusbell Villalba - No asiste hoy) y 422 (Manuel Peña - No asiste hoy)
+      awayPlayerIds: [425, 426, 427, 428, 429, 430, 431, 432],
+    },
+  },
+  {
+    id: 'P5-4',
+    fecha: 5,
+    homeTeamId: 'RAYADO',
+    awayTeamId: 'BLANCO',
+    homeGoals: 0,
+    awayGoals: 0,
+    isPlayed: false,
+    dateStr: '18 de Agosto',
+    attendance: {
+      homePlayerIds: [433, 434, 435, 436, 437, 438, 439, 440],
+      awayPlayerIds: [457, 458, 459, 460, 461, 462, 463, 464],
+    },
+  },
 
   // FECHA 6 (20 de Agosto)
   { id: 'P6-1', fecha: 6, homeTeamId: 'NARANJA', awayTeamId: 'AMARILLO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '20 de Agosto' },
