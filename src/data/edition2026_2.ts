@@ -479,7 +479,7 @@ const INITIAL_7_FECHAS_2026_2: Match[] = [
     dateStr: '18 de Agosto',
     attendance: {
       homePlayerIds: [433, 434, 435, 436, 437, 438, 439, 440],
-      awayPlayerIds: [457, 458, 459, 460, 461, 462, 463, 464],
+      awayPlayerIds: [457, 458, 459, 461, 462, 463, 464], // Excluye 460 (Juan Alvarez - No asiste hoy)
     },
   },
 
