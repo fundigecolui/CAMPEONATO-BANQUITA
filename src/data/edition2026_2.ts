@@ -464,8 +464,8 @@ const INITIAL_7_FECHAS_2026_2: Match[] = [
     isPlayed: false,
     dateStr: '18 de Agosto',
     attendance: {
-      homePlayerIds: [417, 418, 419, 421, 423, 424], // Excluye 420 (Rusbell Villalba - No asiste hoy) y 422 (Manuel Peña - No asiste hoy)
-      awayPlayerIds: [425, 426, 427, 428, 429, 430, 431, 432],
+      homePlayerIds: [417, 419, 421, 423, 424], // Excluye 418 (Jorge Acevedo - No asiste), 420 (Rusbell Villalba - No asiste) y 422 (Manuel Peña - No asiste)
+      awayPlayerIds: [426, 427, 428, 429, 430, 431, 432], // Excluye 425 (Diego Lopez - No asiste)
     },
   },
   {
@@ -479,7 +479,7 @@ const INITIAL_7_FECHAS_2026_2: Match[] = [
     dateStr: '18 de Agosto',
     attendance: {
       homePlayerIds: [433, 434, 435, 436, 437, 438, 439, 440],
-      awayPlayerIds: [457, 458, 459, 461, 462, 463, 464], // Excluye 460 (Juan Alvarez - No asiste hoy)
+      awayPlayerIds: [457, 458, 459, 461, 463, 464], // Excluye 460 (Juan Alvarez - No asiste) y 462 (Dairo Mercado - No asiste)
     },
   },
 
