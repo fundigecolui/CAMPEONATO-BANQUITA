@@ -315,6 +315,16 @@ export const Header: React.FC<HeaderProps> = ({
               </button>
             )}
 
+            {/* Sincronizar / Restablecer Datos Oficiales */}
+            <button
+              onClick={onResetData}
+              className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-amber-300 hover:text-amber-200 border border-slate-700 hover:border-amber-500/50 text-xs transition flex items-center gap-1 px-2 cursor-pointer"
+              title="Sincronizar y actualizar a los últimos datos oficiales cargados"
+            >
+              <RotateCcw className="w-3.5 h-3.5 text-amber-400" />
+              <span className="hidden xl:inline text-[11px] font-bold">Sincronizar Datos</span>
+            </button>
+
             <button
               onClick={onExportData}
               className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs transition"
@@ -346,14 +356,6 @@ export const Header: React.FC<HeaderProps> = ({
                   title="Cambiar PIN de Administrador"
                 >
                   <Key className="w-3.5 h-3.5" />
-                </button>
-
-                <button
-                  onClick={onResetData}
-                  className="p-1.5 rounded-lg bg-red-950/60 hover:bg-red-900 border border-red-800/50 text-red-300 text-xs transition"
-                  title="Restablecer Datos de Fábrica San Simón"
-                >
-                  <RotateCcw className="w-3.5 h-3.5" />
                 </button>
               </>
             )}

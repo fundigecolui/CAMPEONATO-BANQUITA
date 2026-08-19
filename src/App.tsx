@@ -62,7 +62,7 @@ const getInitialDataForEdition = (editionId: string) => {
       matches: MATCHES_2026_2,
       currentFecha: 5,
       maxUnlockedFecha: 7,
-      v: 43,
+      v: 50,
     };
   }
   if (editionId === '2026-1') {
@@ -99,9 +99,11 @@ const getInitialDataForEdition = (editionId: string) => {
 };
 
 export default function App() {
-  // Navigation & Fecha state
-  const [currentFecha, setCurrentFecha] = useState<number>(1);
-  const [maxUnlockedFecha, setMaxUnlockedFecha] = useState<number>(7);
+  const default2026_2 = getInitialDataForEdition('2026-2');
+
+  // Navigation & Fecha state (Starts directly on current active Fecha 5)
+  const [currentFecha, setCurrentFecha] = useState<number>(default2026_2.currentFecha);
+  const [maxUnlockedFecha, setMaxUnlockedFecha] = useState<number>(default2026_2.maxUnlockedFecha);
   const [activeTab, setActiveTab] = useState<'matrix' | 'matches' | 'standings' | 'scorers' | 'teams' | 'reglamento' | 'reports'>('matches');
 
   // Editions Management
@@ -126,7 +128,6 @@ export default function App() {
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
 
   // Database core state
-  const default2026_2 = getInitialDataForEdition('2026-2');
   const [teams, setTeams] = useState<Team[]>(INITIAL_TEAMS);
   const [players, setPlayers] = useState<Player[]>(default2026_2.players);
   const [cards, setCards] = useState<CardRecord[]>(default2026_2.cards);
@@ -160,6 +161,22 @@ export default function App() {
           setMatches(defaults.matches);
           setCurrentFecha(defaults.currentFecha);
           setMaxUnlockedFecha(defaults.maxUnlockedFecha);
+          setIsEditMode(false);
+          try {
+            localStorage.removeItem(STORAGE_KEY);
+            localStorage.setItem(key, JSON.stringify({
+              players: defaults.players,
+              cards: defaults.cards,
+              goals: defaults.goals,
+              matches: defaults.matches,
+              currentFecha: defaults.currentFecha,
+              maxUnlockedFecha: defaults.maxUnlockedFecha,
+              isEditMode: false,
+              v: defaults.v,
+            }));
+          } catch (e) {
+            console.warn('Could not write updated defaults:', e);
+          }
           return;
         }
 
@@ -451,11 +468,25 @@ export default function App() {
       setGoals(defaults.goals);
       setMatches(defaults.matches);
       setCurrentFecha(defaults.currentFecha);
-      setIsEditMode(true);
+      setMaxUnlockedFecha(defaults.maxUnlockedFecha);
+      setIsEditMode(false);
       const key = `banquitas_edition_${selectedEditionId}`;
-      localStorage.removeItem(key);
-      if (selectedEditionId === '2026-2') {
+      try {
+        localStorage.removeItem(key);
         localStorage.removeItem(STORAGE_KEY);
+        localStorage.setItem(key, JSON.stringify({
+          players: defaults.players,
+          cards: defaults.cards,
+          goals: defaults.goals,
+          matches: defaults.matches,
+          currentFecha: defaults.currentFecha,
+          maxUnlockedFecha: defaults.maxUnlockedFecha,
+          isEditMode: false,
+          v: defaults.v,
+        }));
+        alert('✅ ¡Datos oficiales restablecidos y sincronizados exitosamente!');
+      } catch (e) {
+        console.warn(e);
       }
     }
   };
