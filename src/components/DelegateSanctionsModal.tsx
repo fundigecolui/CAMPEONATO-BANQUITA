@@ -39,16 +39,20 @@ export const DelegateSanctionsModal: React.FC<DelegateSanctionsModalProps> = ({
 
   if (!isOpen) return null;
 
-  // Identify players "Apercibidos" (2 Yellow Cards accumulated - 1 away from 3-card suspension)
+  // Identify players "Apercibidos / En Capilla" (2 Cards accumulated - 1 away from 3-card suspension: Amarillas / Azules)
   const playersEnCapilla = players.map((p) => {
-    const playerCards = cards.filter((c) => c.playerId === p.id && c.type === 'AMARILLA');
-    const yellowCount = playerCards.length;
-    // Condition: yellowCount % 3 === 2 means 2, 5, 8... yellow cards!
-    const isEnCapilla = yellowCount % 3 === 2;
+    const accumCards = cards.filter((c) => c.playerId === p.id && (c.type === 'AMARILLA' || c.type === 'AZUL'));
+    const totalAccum = accumCards.length;
+    // Condition: totalAccum % 3 === 2 means 2, 5, 8... accumulated cards (1 card away from suspension)!
+    const isEnCapilla = totalAccum % 3 === 2;
+    const amarillasCount = accumCards.filter((c) => c.type === 'AMARILLA').length;
+    const azulesCount = accumCards.filter((c) => c.type === 'AZUL').length;
     return {
       player: p,
       team: teams.find((t) => t.id === p.teamId),
-      yellowCount,
+      totalAccum,
+      amarillasCount,
+      azulesCount,
       isEnCapilla,
     };
   }).filter((item) => item.isEnCapilla);
@@ -81,7 +85,7 @@ export const DelegateSanctionsModal: React.FC<DelegateSanctionsModalProps> = ({
     if (teamSuspensions.length > 0) {
       msg += `⛔ *JUGADORES SUSPENDIDOS (NO PUEDEN JUGAR FECHA ${currentFecha}):*\n`;
       teamSuspensions.forEach((s) => {
-        msg += `• *#${s.dorsal} ${s.playerName}* → Motivo: ${s.reason === '3_AMARILLAS' ? 'Acumuló 3 Tarjetas Amarillas' : 'Tarjeta Roja Directa'}\n`;
+        msg += `• *#${s.dorsal} ${s.playerName}* → Motivo: ${s.reason === '1_ROJA' ? 'Tarjeta Roja Directa' : 'Acumuló 3 Tarjetas (Amarillas / Azules)'}\n`;
       });
       msg += `\n`;
     } else {
@@ -91,7 +95,8 @@ export const DelegateSanctionsModal: React.FC<DelegateSanctionsModalProps> = ({
     if (teamCapilla.length > 0) {
       msg += `⚠️ *JUGADORES APERCIBIDOS (A 1 TARJETA DE SUSPENSIÓN):*\n`;
       teamCapilla.forEach((c) => {
-        msg += `• *#${c.player.dorsal} ${c.player.name}* (Tiene ${c.yellowCount} amarillas acum). Si recibe 1 amarilla más en esta fecha, será suspendido la fecha siguiente.\n`;
+        const detail = `${c.amarillasCount > 0 ? `${c.amarillasCount} 🟨` : ''}${c.amarillasCount > 0 && c.azulesCount > 0 ? ' + ' : ''}${c.azulesCount > 0 ? `${c.azulesCount} 🟦` : ''}`;
+        msg += `• *#${c.player.dorsal} ${c.player.name}* (Tiene ${c.totalAccum} tarjetas acumuladas: ${detail}). Si recibe 1 tarjeta más (amarilla o azul), será suspendido la fecha siguiente.\n`;
       });
       msg += `\n`;
     }
@@ -201,7 +206,7 @@ export const DelegateSanctionsModal: React.FC<DelegateSanctionsModalProps> = ({
                           </span>
                         </div>
                         <p className="text-[11px] text-red-200 mt-1">
-                          Motivo: <strong className="text-amber-300">{s.reason === '3_AMARILLAS' ? 'Acumuló 3 Tarjetas Amarillas' : 'Tarjeta Roja Directa'}</strong>
+                          Motivo: <strong className="text-amber-300">{s.reason === '1_ROJA' ? 'Tarjeta Roja Directa' : 'Acumuló 3 Tarjetas (Amarillas / Azules)'}</strong>
                         </p>
                         <p className="text-[10px] text-slate-400 mt-0.5">
                           Delegado responsable: <strong>{teamObj?.delegate || 'Delegado de Equipo'}</strong>
@@ -217,7 +222,7 @@ export const DelegateSanctionsModal: React.FC<DelegateSanctionsModalProps> = ({
             )}
           </div>
 
-          {/* Section 2: Players Apercibidos (2 Yellow Cards) */}
+          {/* Section 2: Players Apercibidos (2 Cards: Amarillas / Azules) */}
           <div className="space-y-3">
             <div className="flex items-center justify-between border-b border-slate-800 pb-1.5">
               <div className="flex items-center gap-2 text-amber-400 font-black text-sm">
@@ -231,11 +236,11 @@ export const DelegateSanctionsModal: React.FC<DelegateSanctionsModalProps> = ({
 
             {filteredCapilla.length === 0 ? (
               <div className="p-4 bg-slate-950 rounded-xl border border-slate-800 text-center text-slate-400 italic">
-                ✅ Ningún jugador tiene acumuladas 2 tarjetas amarillas actualmente en este filtro.
+                ✅ Ningún jugador tiene acumuladas 2 tarjetas actualmente en este filtro.
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
-                {filteredCapilla.map(({ player: p, team: t, yellowCount }) => (
+                {filteredCapilla.map(({ player: p, team: t, totalAccum, amarillasCount, azulesCount }) => (
                   <div
                     key={p.id}
                     className="p-3 bg-amber-950/30 border border-amber-800/60 rounded-xl flex items-center justify-between gap-2 shadow-md"
@@ -252,11 +257,11 @@ export const DelegateSanctionsModal: React.FC<DelegateSanctionsModalProps> = ({
                         </span>
                       </div>
                       <p className="text-[10px] text-slate-300 mt-1">
-                        Acumuladas: <strong className="text-yellow-400">🟨 {yellowCount} Amarillas</strong>. Próxima amarilla = Suspensión.
+                        Acumuladas: <strong className="text-yellow-400">{totalAccum} Tarjetas ({amarillasCount > 0 ? `${amarillasCount} 🟨` : ''}{amarillasCount > 0 && azulesCount > 0 ? ' + ' : ''}{azulesCount > 0 ? `${azulesCount} 🟦` : ''})</strong>. Próxima tarjeta = Suspensión.
                       </p>
                     </div>
                     <span className="px-2 py-1 rounded bg-yellow-500 text-slate-950 font-black text-[10px] uppercase shrink-0">
-                      APERCIBIDO 🟨
+                      APERCIBIDO
                     </span>
                   </div>
                 ))}

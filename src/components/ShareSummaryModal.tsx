@@ -90,8 +90,8 @@ export const ShareSummaryModal: React.FC<ShareSummaryModalProps> = ({
   // Compute standings up to selected Fecha
   const standings = computeStandings(teams, matches, cards, players);
   
-  // Calculate top scorers and cards in selected fecha
-  const { stats } = computePlayerStats(players, cards, goals, currentFecha);
+  // Calculate top scorers, cards, and suspensions for selected and next fecha
+  const { stats, allSuspensions } = computePlayerStats(players, cards, goals, currentFecha);
   const topScorers = stats
     .filter((s) => s.goles > 0)
     .sort((a, b) => b.goles - a.goles || a.name.localeCompare(b.name))
@@ -99,6 +99,11 @@ export const ShareSummaryModal: React.FC<ShareSummaryModalProps> = ({
 
   // Cards shown in selected fecha
   const cardsInFecha = cards.filter((c) => c.fecha === currentFecha);
+
+  // Suspensions for the NEXT FECHA (Fecha selected + 1)
+  const nextFechaSuspensions = allSuspensions.filter(
+    (s) => s.suspendedForFecha === nextFecha
+  );
 
   // Helper for short name formatting (e.g., "Manuel Peña" -> "M. Peña")
   const formatShortName = (name?: string): string => {
@@ -212,14 +217,12 @@ export const ShareSummaryModal: React.FC<ShareSummaryModalProps> = ({
         txt += `\n`;
       }
 
-      if (activeSuspensions.length > 0) {
-        txt += `⚠️ *JUGADORES SUSPENDIDOS (PRÓXIMA FECHA):*\n`;
-        activeSuspensions.forEach((s) => {
+      if (nextFechaSuspensions.length > 0) {
+        txt += `⚠️ *JUGADORES SUSPENDIDOS (PRÓXIMA FECHA #${nextFecha}):*\n`;
+        nextFechaSuspensions.forEach((s) => {
           const teamEmoji = getTeamEmoji(s.teamId);
           const teamObj = teams.find((t) => t.id === s.teamId);
-          txt += `• ⛔ #${s.dorsal} ${s.playerName} (${teamEmoji} ${teamObj?.name || s.teamId}) ➔ ${
-            s.reason === '3_AMARILLAS' ? '3 Amarillas acumuladas' : 'Tarjeta Roja Directa'
-          }\n`;
+          txt += `• ⛔ #${s.dorsal} ${s.playerName} (${teamEmoji} ${teamObj?.name || s.teamId}) ➔ Suspendido\n`;
         });
         txt += `\n`;
       } else if (cardsInFecha.length === 0) {
@@ -802,27 +805,27 @@ export const ShareSummaryModal: React.FC<ShareSummaryModalProps> = ({
                           )}
                         </div>
 
-                        {/* Active Suspensions for Next Fecha */}
-                        {activeSuspensions.length > 0 && (
+                        {/* Suspensions for Next Fecha */}
+                        {nextFechaSuspensions.length > 0 && (
                           <div className="pt-2 border-t-2 border-slate-200">
                             <p className="text-[9.5px] font-black text-red-900 uppercase tracking-wider mb-1.5 flex items-center gap-1 font-mono">
-                              <span>⚠️ Suspendidos Próxima Fecha:</span>
+                              <span>⚠️ Suspendidos Próxima Fecha (#{nextFecha}):</span>
                             </p>
                             <div className="space-y-1">
-                              {activeSuspensions.map((s, idx) => (
+                              {nextFechaSuspensions.map((s, idx) => (
                                 <div
                                   key={idx}
                                   className="flex items-center justify-between text-[9.5px] bg-red-50 border border-red-300 p-1.5 rounded-lg text-red-950 font-bold"
                                 >
                                   <div className="flex items-center gap-1.5">
-                                    <CardIconVector type={s.reason === '3_AMARILLAS' ? 'AMARILLA' : 'ROJA'} />
+                                    <span className="w-2 h-3.5 rounded-xs bg-red-600 inline-block shadow-2xs"></span>
                                     <span className="font-extrabold">
                                       #{s.dorsal} {s.playerName}
                                     </span>
                                     <TeamBadgeDot teamId={s.teamId} size="sm" showName={false} />
                                   </div>
-                                  <span className="font-black text-red-900 font-mono">
-                                    {s.reason === '3_AMARILLAS' ? '3 Amarillas' : 'Roja Directa'}
+                                  <span className="font-black text-red-700 font-mono text-[10px]">
+                                    Suspendido
                                   </span>
                                 </div>
                               ))}

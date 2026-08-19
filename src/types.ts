@@ -76,7 +76,7 @@ export interface SuspensionAlert {
   playerName: string;
   teamId: TeamId;
   dorsal: number;
-  reason: '3_AMARILLAS' | '1_ROJA' | 'MANUAL';
+  reason: '3_TARJETAS' | '3_AMARILLAS' | '1_ROJA' | 'MANUAL';
   suspendedForFecha: number; // The fecha where player MUST NOT play
   status: 'PENDIENTE' | 'CUMPLIDA' | 'EXPIRADA';
   details: string;
