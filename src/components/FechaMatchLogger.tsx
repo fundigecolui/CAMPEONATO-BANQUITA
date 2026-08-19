@@ -35,6 +35,51 @@ interface FechaMatchLoggerProps {
   onRemoveGoal: (goalId: string) => void;
 }
 
+interface UnifiedPlayerEvent {
+  player: Player;
+  goals: GoalRecord[];
+  cards: CardRecord[];
+}
+
+export function getUnifiedPlayerEvents(
+  teamGoals: GoalRecord[],
+  teamCards: CardRecord[],
+  playersList: Player[]
+): UnifiedPlayerEvent[] {
+  const playerIdsWithEvents = Array.from(
+    new Set([
+      ...teamGoals.map((g) => g.playerId),
+      ...teamCards.map((c) => c.playerId),
+    ])
+  );
+
+  const results: UnifiedPlayerEvent[] = [];
+
+  playerIdsWithEvents.forEach((pid) => {
+    const p = playersList.find((pl) => pl.id === pid);
+    if (!p) return;
+    const pGoals = teamGoals.filter((g) => g.playerId === pid);
+    const pCards = teamCards.filter((c) => c.playerId === pid);
+    results.push({
+      player: p,
+      goals: pGoals,
+      cards: pCards,
+    });
+  });
+
+  results.sort((a, b) => {
+    if (b.goals.length !== a.goals.length) {
+      return b.goals.length - a.goals.length;
+    }
+    if (b.cards.length !== a.cards.length) {
+      return b.cards.length - a.cards.length;
+    }
+    return a.player.dorsal - b.player.dorsal;
+  });
+
+  return results;
+}
+
 export const FechaMatchLogger: React.FC<FechaMatchLoggerProps> = ({
   currentFecha,
   setCurrentFecha,
@@ -750,61 +795,77 @@ export const FechaMatchLogger: React.FC<FechaMatchLoggerProps> = ({
                           </div>
                         ))}
 
-                        {/* Goals */}
-                        {groupGoalsByPlayer(homeGoals, players).map(({ playerId, player: p, count, goalIds }) => (
+                        {/* Player Events (Goals + Cards unified in a single row per player) */}
+                        {getUnifiedPlayerEvents(homeGoals, homeCards, players).map(({ player: p, goals: pGoals, cards: pCards }) => (
                           <div
-                            key={goalIds[0]}
-                            className="flex items-center justify-between bg-slate-950 px-2 py-1 rounded border border-slate-800 text-slate-200"
+                            key={`event-player-${p.id}`}
+                            className="flex items-center justify-between bg-slate-950 px-2 py-1.5 rounded border border-slate-800 text-slate-200"
                           >
-                            <span className="flex items-center gap-1.5 font-bold">
-                              <span className="text-amber-400 text-xs tracking-tight font-black">{Array(count).fill('⚽').join('')}</span>
-                              <span>{p?.dorsal} {p?.name}</span>
-                            </span>
+                            <div className="flex items-center gap-2 flex-wrap font-bold min-w-0">
+                              {/* Event Icons (Goals + Cards together) */}
+                              <div className="flex items-center gap-1.5 shrink-0">
+                                {pGoals.length > 0 && (
+                                  <span className="text-amber-400 text-xs tracking-tight font-black" title={`${pGoals.length} gol${pGoals.length > 1 ? 'es' : ''}`}>
+                                    {Array(pGoals.length).fill('⚽').join('')}
+                                  </span>
+                                )}
+                                {pCards.map((c) => (
+                                  <span
+                                    key={c.id}
+                                    className={`w-3 h-4 rounded-[1px] inline-block shrink-0 shadow-sm ${
+                                      c.type === 'AMARILLA'
+                                        ? 'bg-yellow-400'
+                                        : c.type === 'AZUL'
+                                        ? 'bg-blue-600'
+                                        : 'bg-red-600'
+                                    }`}
+                                    title={`Tarjeta ${c.type}`}
+                                  />
+                                ))}
+                              </div>
+
+                              {/* Player Number and Name */}
+                              <span className="text-slate-100 truncate">
+                                {p.dorsal} {p.name}
+                              </span>
+                            </div>
+
+                            {/* Quick Delete Actions in Edit Mode */}
                             {isEditMode && (
-                              <button
-                                onClick={() => onRemoveGoal(goalIds[goalIds.length - 1])}
-                                className="text-slate-500 hover:text-red-400 transition ml-1 shrink-0 text-[10px] bg-slate-900 px-1 py-0.5 rounded border border-slate-700 hover:border-red-600"
-                                title="Quitar un gol"
-                              >
-                                <Trash2 className="w-3.5 h-3.5" />
-                              </button>
+                              <div className="flex items-center gap-1 shrink-0 ml-1.5">
+                                {pGoals.length > 0 && (
+                                  <button
+                                    onClick={() => onRemoveGoal(pGoals[pGoals.length - 1].id)}
+                                    className="text-slate-500 hover:text-red-400 transition text-[10px] bg-slate-900 px-1.5 py-0.5 rounded border border-slate-700 hover:border-red-600 flex items-center gap-0.5"
+                                    title="Quitar 1 gol a este jugador"
+                                  >
+                                    <span>-⚽</span>
+                                    <Trash2 className="w-3 h-3" />
+                                  </button>
+                                )}
+                                {pCards.map((c) => (
+                                  <button
+                                    key={`del-${c.id}`}
+                                    onClick={() => onRemoveCard(c.id)}
+                                    className="text-slate-500 hover:text-red-400 transition text-[10px] bg-slate-900 px-1.5 py-0.5 rounded border border-slate-700 hover:border-red-600 flex items-center gap-0.5"
+                                    title={`Eliminar tarjeta ${c.type}`}
+                                  >
+                                    <span
+                                      className={`w-2 h-2.5 rounded-[1px] inline-block ${
+                                        c.type === 'AMARILLA'
+                                          ? 'bg-yellow-400'
+                                          : c.type === 'AZUL'
+                                          ? 'bg-blue-600'
+                                          : 'bg-red-600'
+                                      }`}
+                                    />
+                                    <Trash2 className="w-3 h-3" />
+                                  </button>
+                                ))}
+                              </div>
                             )}
                           </div>
                         ))}
-
-                        {/* Cards */}
-                        {homeCards.map((c) => {
-                          const p = players.find((pl) => pl.id === c.playerId);
-                          return (
-                            <div
-                              key={c.id}
-                              className="flex items-center justify-between bg-slate-950 px-2 py-1 rounded border border-slate-800 text-slate-200"
-                            >
-                              <span className="flex items-center gap-1.5 font-bold">
-                                <span
-                                  className={`w-3 h-4 rounded-[1px] inline-block shrink-0 ${
-                                    c.type === 'AMARILLA'
-                                      ? 'bg-yellow-400'
-                                      : c.type === 'AZUL'
-                                      ? 'bg-blue-600'
-                                      : 'bg-red-600'
-                                  }`}
-                                  title={`Tarjeta ${c.type}`}
-                                ></span>
-                                <span>{p?.dorsal} {p?.name}</span>
-                              </span>
-                              {isEditMode && (
-                                <button
-                                  onClick={() => onRemoveCard(c.id)}
-                                  className="text-slate-500 hover:text-red-400 transition ml-1 shrink-0"
-                                  title="Eliminar tarjeta"
-                                >
-                                  <Trash2 className="w-3.5 h-3.5" />
-                                </button>
-                              )}
-                            </div>
-                          );
-                        })}
 
                         {/* Absent players (NO ASISTE) */}
                         {homeAbsent.map((p) => (
@@ -857,61 +918,77 @@ export const FechaMatchLogger: React.FC<FechaMatchLoggerProps> = ({
                           </div>
                         ))}
 
-                        {/* Goals */}
-                        {groupGoalsByPlayer(awayGoals, players).map(({ playerId, player: p, count, goalIds }) => (
+                        {/* Player Events (Goals + Cards unified in a single row per player) */}
+                        {getUnifiedPlayerEvents(awayGoals, awayCards, players).map(({ player: p, goals: pGoals, cards: pCards }) => (
                           <div
-                            key={goalIds[0]}
-                            className="flex items-center justify-between bg-slate-950 px-2 py-1 rounded border border-slate-800 text-slate-200"
+                            key={`event-player-${p.id}`}
+                            className="flex items-center justify-between bg-slate-950 px-2 py-1.5 rounded border border-slate-800 text-slate-200"
                           >
-                            <span className="flex items-center gap-1.5 font-bold">
-                              <span className="text-amber-400 text-xs tracking-tight font-black">{Array(count).fill('⚽').join('')}</span>
-                              <span>{p?.dorsal} {p?.name}</span>
-                            </span>
+                            <div className="flex items-center gap-2 flex-wrap font-bold min-w-0">
+                              {/* Event Icons (Goals + Cards together) */}
+                              <div className="flex items-center gap-1.5 shrink-0">
+                                {pGoals.length > 0 && (
+                                  <span className="text-amber-400 text-xs tracking-tight font-black" title={`${pGoals.length} gol${pGoals.length > 1 ? 'es' : ''}`}>
+                                    {Array(pGoals.length).fill('⚽').join('')}
+                                  </span>
+                                )}
+                                {pCards.map((c) => (
+                                  <span
+                                    key={c.id}
+                                    className={`w-3 h-4 rounded-[1px] inline-block shrink-0 shadow-sm ${
+                                      c.type === 'AMARILLA'
+                                        ? 'bg-yellow-400'
+                                        : c.type === 'AZUL'
+                                        ? 'bg-blue-600'
+                                        : 'bg-red-600'
+                                    }`}
+                                    title={`Tarjeta ${c.type}`}
+                                  />
+                                ))}
+                              </div>
+
+                              {/* Player Number and Name */}
+                              <span className="text-slate-100 truncate">
+                                {p.dorsal} {p.name}
+                              </span>
+                            </div>
+
+                            {/* Quick Delete Actions in Edit Mode */}
                             {isEditMode && (
-                              <button
-                                onClick={() => onRemoveGoal(goalIds[goalIds.length - 1])}
-                                className="text-slate-500 hover:text-red-400 transition ml-1 shrink-0 text-[10px] bg-slate-900 px-1 py-0.5 rounded border border-slate-700 hover:border-red-600"
-                                title="Quitar un gol"
-                              >
-                                <Trash2 className="w-3.5 h-3.5" />
-                              </button>
+                              <div className="flex items-center gap-1 shrink-0 ml-1.5">
+                                {pGoals.length > 0 && (
+                                  <button
+                                    onClick={() => onRemoveGoal(pGoals[pGoals.length - 1].id)}
+                                    className="text-slate-500 hover:text-red-400 transition text-[10px] bg-slate-900 px-1.5 py-0.5 rounded border border-slate-700 hover:border-red-600 flex items-center gap-0.5"
+                                    title="Quitar 1 gol a este jugador"
+                                  >
+                                    <span>-⚽</span>
+                                    <Trash2 className="w-3 h-3" />
+                                  </button>
+                                )}
+                                {pCards.map((c) => (
+                                  <button
+                                    key={`del-${c.id}`}
+                                    onClick={() => onRemoveCard(c.id)}
+                                    className="text-slate-500 hover:text-red-400 transition text-[10px] bg-slate-900 px-1.5 py-0.5 rounded border border-slate-700 hover:border-red-600 flex items-center gap-0.5"
+                                    title={`Eliminar tarjeta ${c.type}`}
+                                  >
+                                    <span
+                                      className={`w-2 h-2.5 rounded-[1px] inline-block ${
+                                        c.type === 'AMARILLA'
+                                          ? 'bg-yellow-400'
+                                          : c.type === 'AZUL'
+                                          ? 'bg-blue-600'
+                                          : 'bg-red-600'
+                                      }`}
+                                    />
+                                    <Trash2 className="w-3 h-3" />
+                                  </button>
+                                ))}
+                              </div>
                             )}
                           </div>
                         ))}
-
-                        {/* Cards */}
-                        {awayCards.map((c) => {
-                          const p = players.find((pl) => pl.id === c.playerId);
-                          return (
-                            <div
-                              key={c.id}
-                              className="flex items-center justify-between bg-slate-950 px-2 py-1 rounded border border-slate-800 text-slate-200"
-                            >
-                              <span className="flex items-center gap-1.5 font-bold">
-                                <span
-                                  className={`w-3 h-4 rounded-[1px] inline-block shrink-0 ${
-                                    c.type === 'AMARILLA'
-                                      ? 'bg-yellow-400'
-                                      : c.type === 'AZUL'
-                                      ? 'bg-blue-600'
-                                      : 'bg-red-600'
-                                  }`}
-                                  title={`Tarjeta ${c.type}`}
-                                ></span>
-                                <span>{p?.dorsal} {p?.name}</span>
-                              </span>
-                              {isEditMode && (
-                                <button
-                                  onClick={() => onRemoveCard(c.id)}
-                                  className="text-slate-500 hover:text-red-400 transition ml-1 shrink-0"
-                                  title="Eliminar tarjeta"
-                                >
-                                  <Trash2 className="w-3.5 h-3.5" />
-                                </button>
-                              )}
-                            </div>
-                          );
-                        })}
 
                         {/* Absent players (NO ASISTE) */}
                         {awayAbsent.map((p) => (

@@ -18,6 +18,7 @@ import {
   Calendar,
 } from 'lucide-react';
 import { computeStandings, computePlayerStats, checkMathematicalElimination, groupGoalsByPlayer } from '../utils/sanctionsEngine';
+import { getUnifiedPlayerEvents } from './FechaMatchLogger';
 
 interface OfficialPrintSheetModalProps {
   isOpen: boolean;
@@ -468,21 +469,18 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
                           <span className="font-black text-slate-900 block text-[9px] border-b border-slate-200 pb-0.5 uppercase tracking-wide">
                             {homeTeam?.name}
                           </span>
-                          {groupGoalsByPlayer(homeGoals, players).map(({ playerId, player: p, count, goalIds }) => (
-                            <div key={goalIds[0]} className="text-slate-900 flex items-center gap-1">
-                              <span className="tracking-tight font-black">{Array(count).fill('⚽').join('')}</span>
-                              <span className="font-bold">{p ? `${p.dorsal} ${p.name}` : 'Gol'}</span>
+                          {/* Home Team Events */}
+                          {getUnifiedPlayerEvents(homeGoals, homeCards, players).map(({ player: p, goals: pGoals, cards: pCards }) => (
+                            <div key={`print-event-${p.id}`} className="text-slate-900 flex items-center gap-1.5 text-[8.5px]">
+                              <span className="flex items-center gap-1 shrink-0 font-black">
+                                {pGoals.length > 0 && <span>{Array(pGoals.length).fill('⚽').join('')}</span>}
+                                {pCards.map((c) => (
+                                  <span key={c.id}>{c.type === 'AMARILLA' ? '🟨' : c.type === 'AZUL' ? '🟦' : '🟥'}</span>
+                                ))}
+                              </span>
+                              <span className="font-bold">{p.dorsal} {p.name}</span>
                             </div>
                           ))}
-                          {homeCards.map((c) => {
-                            const p = players.find((pl) => pl.id === c.playerId);
-                            return (
-                              <div key={c.id} className="flex items-center gap-1 text-slate-900">
-                                <span>{c.type === 'AMARILLA' ? '🟨' : c.type === 'AZUL' ? '🟦' : '🟥'}</span>
-                                <span className="font-medium">{p ? `${p.dorsal} ${p.name}` : 'Tarjeta'}</span>
-                              </div>
-                            );
-                          })}
                           {homeSuspensions.map((s) => (
                             <div key={s.playerId} className="text-red-900 bg-red-100/90 p-1 rounded border border-red-300 flex items-center gap-1 font-bold text-[8.5px]">
                               <span>⚠️</span>
@@ -507,21 +505,17 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
                           <span className="font-black text-slate-900 block text-[9px] border-b border-slate-200 pb-0.5 uppercase tracking-wide">
                             {awayTeam?.name}
                           </span>
-                          {groupGoalsByPlayer(awayGoals, players).map(({ playerId, player: p, count, goalIds }) => (
-                            <div key={goalIds[0]} className="text-slate-900 flex items-center gap-1">
-                              <span className="tracking-tight font-black">{Array(count).fill('⚽').join('')}</span>
-                              <span className="font-bold">{p ? `${p.dorsal} ${p.name}` : 'Gol'}</span>
+                          {getUnifiedPlayerEvents(awayGoals, awayCards, players).map(({ player: p, goals: pGoals, cards: pCards }) => (
+                            <div key={`print-event-${p.id}`} className="text-slate-900 flex items-center gap-1.5 text-[8.5px]">
+                              <span className="flex items-center gap-1 shrink-0 font-black">
+                                {pGoals.length > 0 && <span>{Array(pGoals.length).fill('⚽').join('')}</span>}
+                                {pCards.map((c) => (
+                                  <span key={c.id}>{c.type === 'AMARILLA' ? '🟨' : c.type === 'AZUL' ? '🟦' : '🟥'}</span>
+                                ))}
+                              </span>
+                              <span className="font-bold">{p.dorsal} {p.name}</span>
                             </div>
                           ))}
-                          {awayCards.map((c) => {
-                            const p = players.find((pl) => pl.id === c.playerId);
-                            return (
-                              <div key={c.id} className="flex items-center gap-1 text-slate-900">
-                                <span>{c.type === 'AMARILLA' ? '🟨' : c.type === 'AZUL' ? '🟦' : '🟥'}</span>
-                                <span className="font-medium">{p ? `${p.dorsal} ${p.name}` : 'Tarjeta'}</span>
-                              </div>
-                            );
-                          })}
                           {awaySuspensions.map((s) => (
                             <div key={s.playerId} className="text-red-900 bg-red-100/90 p-1 rounded border border-red-300 flex items-center gap-1 font-bold text-[8.5px]">
                               <span>⚠️</span>

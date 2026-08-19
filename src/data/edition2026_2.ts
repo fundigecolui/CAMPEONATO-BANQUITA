@@ -124,6 +124,20 @@ export const CARDS_2026_2: CardRecord[] = [
   { id: 'c4-8', playerId: 412, fecha: 4, type: 'AMARILLA', createdAt: new Date('2026-08-13').toISOString() }, // JAVIER MELGAREJO (VERDE) - Amarilla
   { id: 'c4-9', playerId: 447, fecha: 4, type: 'AMARILLA', createdAt: new Date('2026-08-13').toISOString() }, // ANTONIO ORTEGA (ROJO) - Amarilla
   { id: 'c4-10', playerId: 459, fecha: 4, type: 'AMARILLA', createdAt: new Date('2026-08-13').toISOString() }, // JOSE FIGUEROA (BLANCO) - Amarilla
+
+  // Fecha 5 (18 de Agosto)
+  { id: 'c5-1', playerId: 405, fecha: 5, type: 'AMARILLA', createdAt: new Date('2026-08-18').toISOString() }, // ALBEIRO BUELVAS (AZUL) - Amarilla
+  { id: 'c5-2', playerId: 443, fecha: 5, type: 'AMARILLA', createdAt: new Date('2026-08-18').toISOString() }, // URIEL ZAMBRANO (ROJO) - Amarilla
+  { id: 'c5-3', playerId: 438, fecha: 5, type: 'AMARILLA', createdAt: new Date('2026-08-18').toISOString() }, // ANUAR OJEDA (RAYADO) - Amarilla
+  { id: 'c5-4', playerId: 444, fecha: 5, type: 'AZUL', createdAt: new Date('2026-08-18').toISOString() }, // NILSON CASTELLANOS (ROJO) - Azul
+  { id: 'c5-5', playerId: 411, fecha: 5, type: 'AMARILLA', createdAt: new Date('2026-08-18').toISOString() }, // LUIS PACHECO (VERDE) - Amarilla
+  { id: 'c5-6', playerId: 420, fecha: 5, type: 'AMARILLA', createdAt: new Date('2026-08-18').toISOString() }, // RUSBELL VILLALBA (NEGRO) - Amarilla
+  { id: 'c5-7', playerId: 421, fecha: 5, type: 'AZUL', createdAt: new Date('2026-08-18').toISOString() }, // JHON CUARTAS (NEGRO) - Azul
+  { id: 'c5-8', playerId: 427, fecha: 5, type: 'AZUL', createdAt: new Date('2026-08-18').toISOString() }, // JORGE LOZANO (NARANJA) - Azul
+  { id: 'c5-9', playerId: 428, fecha: 5, type: 'AMARILLA', createdAt: new Date('2026-08-18').toISOString() }, // CESAR MIZGER (NARANJA) - Amarilla
+  { id: 'c5-10', playerId: 429, fecha: 5, type: 'AMARILLA', createdAt: new Date('2026-08-18').toISOString() }, // JORGE ORREGO (NARANJA) - Amarilla
+  { id: 'c5-11', playerId: 431, fecha: 5, type: 'AMARILLA', createdAt: new Date('2026-08-18').toISOString() }, // EDUAR MONTIEL (NARANJA) - Amarilla
+  { id: 'c5-12', playerId: 432, fecha: 5, type: 'AMARILLA', createdAt: new Date('2026-08-18').toISOString() }, // JOSE ARROYO (NARANJA) - Amarilla
 ];
 
 export const GOALS_2026_2: GoalRecord[] = [
@@ -201,6 +215,35 @@ export const GOALS_2026_2: GoalRecord[] = [
   { id: 'g4-15', playerId: 404, fecha: 4, teamId: 'AZUL', createdAt: new Date('2026-08-13').toISOString() }, // ALBERT MONTERROZA (AZUL - Gol 3)
   { id: 'g4-16', playerId: 406, fecha: 4, teamId: 'AZUL', createdAt: new Date('2026-08-13').toISOString() }, // LEONARDO CASTILLO (AZUL)
   { id: 'g4-17', playerId: 425, fecha: 4, teamId: 'NARANJA', createdAt: new Date('2026-08-13').toISOString() }, // DIEGO LOPEZ (NARANJA)
+
+  // Fecha 5 (18 de Agosto)
+  // AZUL (3) vs VERDE (2)
+  { id: 'g5-1', playerId: 404, fecha: 5, teamId: 'AZUL', createdAt: new Date('2026-08-18').toISOString() }, // ALBERT MONTERROZA (AZUL - Gol 1)
+  { id: 'g5-2', playerId: 404, fecha: 5, teamId: 'AZUL', createdAt: new Date('2026-08-18').toISOString() }, // ALBERT MONTERROZA (AZUL - Gol 2)
+  { id: 'g5-3', playerId: 404, fecha: 5, teamId: 'AZUL', createdAt: new Date('2026-08-18').toISOString() }, // ALBERT MONTERROZA (AZUL - Gol 3)
+  { id: 'g5-18', playerId: 410, fecha: 5, teamId: 'VERDE', createdAt: new Date('2026-08-18').toISOString() }, // MARCOS FIGUEROA (VERDE)
+  { id: 'g5-19', playerId: 412, fecha: 5, teamId: 'VERDE', createdAt: new Date('2026-08-18').toISOString() }, // JAVIER MELGAREJO (VERDE)
+
+  // ROJO (2) vs AMARILLO (1)
+  { id: 'g5-4', playerId: 445, fecha: 5, teamId: 'ROJO', createdAt: new Date('2026-08-18').toISOString() }, // ROBERTO PERTUZ (ROJO - Gol 1)
+  { id: 'g5-5', playerId: 445, fecha: 5, teamId: 'ROJO', createdAt: new Date('2026-08-18').toISOString() }, // ROBERTO PERTUZ (ROJO - Gol 2)
+  { id: 'g5-6', playerId: 451, fecha: 5, teamId: 'AMARILLO', createdAt: new Date('2026-08-18').toISOString() }, // YAMIR PINEDA (AMARILLO)
+
+  // NEGRO (5) vs NARANJA (4)
+  { id: 'g5-7', playerId: 420, fecha: 5, teamId: 'NEGRO', createdAt: new Date('2026-08-18').toISOString() }, // RUSBELL VILLALBA (NEGRO - Gol 1)
+  { id: 'g5-8', playerId: 420, fecha: 5, teamId: 'NEGRO', createdAt: new Date('2026-08-18').toISOString() }, // RUSBELL VILLALBA (NEGRO - Gol 2)
+  { id: 'g5-9', playerId: 420, fecha: 5, teamId: 'NEGRO', createdAt: new Date('2026-08-18').toISOString() }, // RUSBELL VILLALBA (NEGRO - Gol 3)
+  { id: 'g5-10', playerId: 423, fecha: 5, teamId: 'NEGRO', createdAt: new Date('2026-08-18').toISOString() }, // HUGO MERCADO (NEGRO)
+  { id: 'g5-11', playerId: 421, fecha: 5, teamId: 'NEGRO', createdAt: new Date('2026-08-18').toISOString() }, // JHON CUARTAS (NEGRO)
+  { id: 'g5-12', playerId: 426, fecha: 5, teamId: 'NARANJA', createdAt: new Date('2026-08-18').toISOString() }, // CARLOS FIGUEROA (NARANJA)
+  { id: 'g5-13', playerId: 429, fecha: 5, teamId: 'NARANJA', createdAt: new Date('2026-08-18').toISOString() }, // JORGE ORREGO (NARANJA - Gol 1)
+  { id: 'g5-14', playerId: 429, fecha: 5, teamId: 'NARANJA', createdAt: new Date('2026-08-18').toISOString() }, // JORGE ORREGO (NARANJA - Gol 2)
+  { id: 'g5-20', playerId: 430, fecha: 5, teamId: 'NARANJA', createdAt: new Date('2026-08-18').toISOString() }, // ALBEIRO OJEDA (NARANJA)
+
+  // RAYADO (3) vs BLANCO (0)
+  { id: 'g5-15', playerId: 437, fecha: 5, teamId: 'RAYADO', createdAt: new Date('2026-08-18').toISOString() }, // MARIO VELAZCO (RAYADO - Gol 1)
+  { id: 'g5-16', playerId: 437, fecha: 5, teamId: 'RAYADO', createdAt: new Date('2026-08-18').toISOString() }, // MARIO VELAZCO (RAYADO - Gol 2)
+  { id: 'g5-17', playerId: 436, fecha: 5, teamId: 'RAYADO', createdAt: new Date('2026-08-18').toISOString() }, // WALTER GOEZ (RAYADO)
 ];
 
 // Official First 7 Fechas for II Semestre 2026 (Vuelta 1)
@@ -431,13 +474,14 @@ const INITIAL_7_FECHAS_2026_2: Match[] = [
     fecha: 5,
     homeTeamId: 'AZUL',
     awayTeamId: 'VERDE',
-    homeGoals: 0,
-    awayGoals: 0,
-    isPlayed: false,
+    homeGoals: 3,
+    awayGoals: 2,
+    isPlayed: true,
+    status: 'FINALIZADO',
     dateStr: '18 de Agosto',
     attendance: {
       homePlayerIds: [401, 402, 403, 404, 405, 406, 408], // Excluye 407 (Moises Gomez - No asiste hoy)
-      awayPlayerIds: [409, 410, 411, 412, 413, 414, 415, 416],
+      awayPlayerIds: [409, 410, 411, 412, 413, 414, 415], // Excluye 416 (Jacit Arabia - No asiste hoy)
     },
   },
   {
@@ -445,9 +489,10 @@ const INITIAL_7_FECHAS_2026_2: Match[] = [
     fecha: 5,
     homeTeamId: 'ROJO',
     awayTeamId: 'AMARILLO',
-    homeGoals: 0,
-    awayGoals: 0,
-    isPlayed: false,
+    homeGoals: 2,
+    awayGoals: 1,
+    isPlayed: true,
+    status: 'FINALIZADO',
     dateStr: '18 de Agosto',
     attendance: {
       homePlayerIds: [441, 442, 443, 444, 445, 446, 447, 448],
@@ -459,12 +504,13 @@ const INITIAL_7_FECHAS_2026_2: Match[] = [
     fecha: 5,
     homeTeamId: 'NEGRO',
     awayTeamId: 'NARANJA',
-    homeGoals: 0,
-    awayGoals: 0,
-    isPlayed: false,
+    homeGoals: 5,
+    awayGoals: 4,
+    isPlayed: true,
+    status: 'FINALIZADO',
     dateStr: '18 de Agosto',
     attendance: {
-      homePlayerIds: [417, 419, 421, 423, 424], // Excluye 418 (Jorge Acevedo - No asiste), 420 (Rusbell Villalba - No asiste) y 422 (Manuel Peña - No asiste)
+      homePlayerIds: [417, 419, 420, 421, 423, 424], // Excluye 418 (Jorge Acevedo - No asiste) y 422 (Manuel Peña - No asiste). Rusbell Villalba (420) presente.
       awayPlayerIds: [426, 427, 428, 429, 430, 431, 432], // Excluye 425 (Diego Lopez - No asiste)
     },
   },
@@ -473,9 +519,10 @@ const INITIAL_7_FECHAS_2026_2: Match[] = [
     fecha: 5,
     homeTeamId: 'RAYADO',
     awayTeamId: 'BLANCO',
-    homeGoals: 0,
+    homeGoals: 3,
     awayGoals: 0,
-    isPlayed: false,
+    isPlayed: true,
+    status: 'FINALIZADO',
     dateStr: '18 de Agosto',
     attendance: {
       homePlayerIds: [433, 434, 435, 436, 437, 438, 439, 440],
