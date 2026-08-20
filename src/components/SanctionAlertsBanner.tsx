@@ -45,7 +45,7 @@ export const SanctionAlertsBanner: React.FC<SanctionAlertsBannerProps> = ({
             </span>
           </div>
           <span className="text-[10px] text-emerald-400/70 font-mono hidden md:inline">
-            REGLAMENTO: 3 Tarjetas / 1 Roja = 1 Fecha Suspensión
+            REGLAMENTO: 3 Tarjetas / 1 Roja = 1 Fecha Suspensión (Vence al finalizar la jornada o pagar la sanción)
           </span>
         </div>
       ) : (
@@ -103,7 +103,7 @@ export const SanctionAlertsBanner: React.FC<SanctionAlertsBannerProps> = ({
             })}
           </div>
           <p className="text-[10px] text-slate-400 mt-2 font-mono italic">
-            * Nota de regla: La suspensión se aplica únicamente durante la Fecha {currentFecha}. Al ingresar datos en la Fecha {currentFecha + 1}, la sanción vence automáticamente.
+            * Nota de la regla: La suspensión vence al finalizar la jornada o pagar la sanción.
           </p>
         </div>
       )}

@@ -233,19 +233,19 @@ export const ReglamentoViewer: React.FC<ReglamentoViewerProps> = ({
           num: 'Art. 15',
           titulo: 'Tarjeta Amarilla (🟨 Amonestación)',
           texto:
-            '• Valor económico: $2.000 por tarjeta.\n• Acumulación: Tres (3) tarjetas amarillas acumuladas acarrean suspensión automática por una (1) fecha o en su defecto multa de $10.000 más el valor de la tarjeta.\n• Las tarjetas amarillas no se borran al pasar de una vuelta a otra.',
+            '• Valor económico: $2.000 por tarjeta.\n• Acumulación: Tres (3) tarjetas amarillas acumuladas acarrean suspensión por una (1) fecha o en su defecto multa de $10.000 más el valor de la tarjeta.\n• Nota de la regla: La suspensión vence al finalizar la jornada o pagar la sanción.\n• Las tarjetas amarillas no se borran al pasar de una vuelta a otra.',
         },
         {
           num: 'Art. 16',
           titulo: 'Tarjeta Azul (🟦 Cambio Forzoso)',
           texto:
-            '• Valor económico: $5.000 por tarjeta.\n• Implica cambio forzoso inmediato del jugador sancionado. Si el equipo ya agotó sus cambios o queda con 3 jugadores, perderá el partido por sustracción de materia.\n• Acumulación: Tres (3) tarjetas azules acarrean una (1) fecha de suspensión o $10.000 de multa más el valor de la tarjeta.\n• Nota: 2 Amarillas + 1 Azul acumuladas = 1 Fecha de Suspensión.',
+            '• Valor económico: $5.000 por tarjeta.\n• Implica cambio forzoso inmediato del jugador sancionado. Si el equipo ya agotó sus cambios o queda con 3 jugadores, perderá el partido por sustracción de materia.\n• Acumulación: Tres (3) tarjetas azules acarrean una (1) fecha de suspensión o $10.000 de multa más el valor de la tarjeta.\n• Nota: 2 Amarillas + 1 Azul acumuladas = 1 Fecha de Suspensión (la suspensión vence al finalizar la jornada o pagar la sanción).',
         },
         {
           num: 'Art. 17',
           titulo: 'Tarjeta Roja (🟥 Expulsión)',
           texto:
-            '• Valor económico: $10.000 más una (1) fecha de sanción automática.\n• Acumulación: Dos (2) tarjetas rojas en el torneo acarrean 4 fechas de suspensión más $50.000 de multa.\n• Tipificación según informe arbitral:\n  1) Falta de juego sin alteración: 1 fecha sin multa.\n  2) Falta de juego + palabras soeces: 1 fecha + $10.000 multa.\n  3) Falta de juego + agresión verbal/física a rivales/árbitro: 2 fechas + $20.000 multa.\n  4) Agresión grave / lenguaje obsceno a dirigentes o espectadores: 4 fechas + $50.000 multa.',
+            '• Valor económico: $10.000 más una (1) fecha de sanción automática (la suspensión vence al finalizar la jornada o pagar la sanción).\n• Acumulación: Dos (2) tarjetas rojas en el torneo acarrean 4 fechas de suspensión más $50.000 de multa.\n• Tipificación según informe arbitral:\n  1) Falta de juego sin alteración: 1 fecha sin multa.\n  2) Falta de juego + palabras soeces: 1 fecha + $10.000 multa.\n  3) Falta de juego + agresión verbal/física a rivales/árbitro: 2 fechas + $20.000 multa.\n  4) Agresión grave / lenguaje obsceno a dirigentes o espectadores: 4 fechas + $50.000 multa.',
         },
         {
           num: 'Art. 18',

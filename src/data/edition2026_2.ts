@@ -47,7 +47,7 @@ export const PLAYERS_2026_2: Player[] = [
   { id: 434, dorsal: 8, name: 'ALVARO BETIN', teamId: 'RAYADO' },
   { id: 435, dorsal: 9, name: 'MARIO GUERRA', teamId: 'RAYADO' },
   { id: 436, dorsal: 39, name: 'WALTER GOEZ', teamId: 'RAYADO' },
-  { id: 437, dorsal: 21, name: 'MARIO VELAZCO', teamId: 'RAYADO' },
+  { id: 437, dorsal: 21, name: 'MARIO VELASCO', teamId: 'RAYADO' },
   { id: 438, dorsal: 13, name: 'ANUAR OJEDA', teamId: 'RAYADO' },
   { id: 439, dorsal: 20, name: 'JORGE LUIS PINTO', teamId: 'RAYADO' },
   { id: 440, dorsal: 11, name: 'FERNANDO HUMANEZ', teamId: 'RAYADO' },
@@ -532,7 +532,20 @@ const INITIAL_7_FECHAS_2026_2: Match[] = [
 
   // FECHA 6 (20 de Agosto)
   { id: 'P6-1', fecha: 6, homeTeamId: 'NARANJA', awayTeamId: 'AMARILLO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '20 de Agosto' },
-  { id: 'P6-2', fecha: 6, homeTeamId: 'AZUL', awayTeamId: 'RAYADO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '20 de Agosto' },
+  {
+    id: 'P6-2',
+    fecha: 6,
+    homeTeamId: 'AZUL',
+    awayTeamId: 'RAYADO',
+    homeGoals: 0,
+    awayGoals: 0,
+    isPlayed: false,
+    dateStr: '20 de Agosto',
+    attendance: {
+      homePlayerIds: [401, 402, 403, 404, 405, 406, 407, 408],
+      awayPlayerIds: [433, 434, 435, 436, 438, 439, 440], // Excluye 437 (Mario Velasco - No asiste)
+    },
+  },
   { id: 'P6-3', fecha: 6, homeTeamId: 'VERDE', awayTeamId: 'BLANCO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '20 de Agosto' },
   { id: 'P6-4', fecha: 6, homeTeamId: 'NEGRO', awayTeamId: 'ROJO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '20 de Agosto' },
 

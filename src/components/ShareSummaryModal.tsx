@@ -224,7 +224,7 @@ export const ShareSummaryModal: React.FC<ShareSummaryModalProps> = ({
           const teamObj = teams.find((t) => t.id === s.teamId);
           txt += `• ⛔ #${s.dorsal} ${s.playerName} (${teamEmoji} ${teamObj?.name || s.teamId}) ➔ Suspendido\n`;
         });
-        txt += `\n`;
+        txt += `_Nota: La suspensión vence al finalizar la jornada o pagar la sanción._\n\n`;
       } else if (cardsInFecha.length === 0) {
         txt += `_Sin tarjetas ni suspensiones en esta jornada._\n\n`;
       }
@@ -830,6 +830,9 @@ export const ShareSummaryModal: React.FC<ShareSummaryModalProps> = ({
                                 </div>
                               ))}
                             </div>
+                            <p className="text-[8.5px] text-slate-500 font-mono italic mt-1 text-right">
+                              * La suspensión vence al finalizar la jornada o pagar la sanción.
+                            </p>
                           </div>
                         )}
                       </div>

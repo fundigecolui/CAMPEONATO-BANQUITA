@@ -1430,6 +1430,11 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
                 })()}
               </div>
 
+              {/* Rule Note */}
+              <p className="text-[8px] font-mono italic text-slate-700">
+                * Nota de la regla: La suspensión vence al finalizar la jornada o pagar la sanción.
+              </p>
+
               {/* Signature Line */}
               <div className="pt-2 border-t border-black grid grid-cols-2 gap-8 text-center font-mono text-[9.5px]">
                 <div className="space-y-1">

@@ -101,7 +101,8 @@ export const DelegateSanctionsModal: React.FC<DelegateSanctionsModalProps> = ({
       msg += `\n`;
     }
 
-    msg += `📌 _Agradecemos su colaboración para evitar la alineación indebida de jugadores sancionados._`;
+    msg += `📌 *Nota de la regla:* La suspensión vence al finalizar la jornada o pagar la sanción.\n`;
+    msg += `_Agradecemos su colaboración para evitar la alineación indebida de jugadores sancionados._`;
     return msg;
   };
 
