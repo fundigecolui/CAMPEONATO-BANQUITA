@@ -564,6 +564,7 @@ const INITIAL_7_FECHAS_2026_2: Match[] = [
     homeGoals: 4,
     awayGoals: 0,
     isPlayed: true,
+    status: 'FINALIZADO',
     dateStr: '20 de Agosto',
     attendance: {
       homePlayerIds: [401, 402, 403, 404, 405, 406, 407, 408],
@@ -575,9 +576,10 @@ const INITIAL_7_FECHAS_2026_2: Match[] = [
     fecha: 6,
     homeTeamId: 'VERDE',
     awayTeamId: 'BLANCO',
-    homeGoals: 0,
-    awayGoals: 0,
-    isPlayed: false,
+    homeGoals: 1,
+    awayGoals: 2,
+    isPlayed: true,
+    status: 'FINALIZADO',
     dateStr: '20 de Agosto',
     attendance: {
       homePlayerIds: [409, 410, 411, 412, 413, 414, 415, 416],
@@ -589,9 +591,10 @@ const INITIAL_7_FECHAS_2026_2: Match[] = [
     fecha: 6,
     homeTeamId: 'NEGRO',
     awayTeamId: 'ROJO',
-    homeGoals: 0,
-    awayGoals: 0,
-    isPlayed: false,
+    homeGoals: 1,
+    awayGoals: 3,
+    isPlayed: true,
+    status: 'FINALIZADO',
     dateStr: '20 de Agosto',
     attendance: {
       homePlayerIds: [417, 418, 419, 420, 422, 423, 424], // Excluye 421 (Jhon Cuartas - No asiste)
