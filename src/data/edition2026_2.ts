@@ -249,6 +249,11 @@ export const GOALS_2026_2: GoalRecord[] = [
   // NARANJA (1) vs AMARILLO (1)
   { id: 'g6-1', playerId: 429, fecha: 6, teamId: 'NARANJA', createdAt: new Date('2026-08-20').toISOString() }, // JORGE ORREGO (NARANJA)
   { id: 'g6-2', playerId: 452, fecha: 6, teamId: 'AMARILLO', createdAt: new Date('2026-08-20').toISOString() }, // PEDRO DE LEON (AMARILLO)
+  // AZUL vs RAYADO
+  { id: 'g6-3', playerId: 404, fecha: 6, teamId: 'AZUL', createdAt: new Date('2026-08-20').toISOString() }, // ALBERT MONTERROZA (AZUL - Gol 1)
+  { id: 'g6-4', playerId: 401, fecha: 6, teamId: 'AZUL', createdAt: new Date('2026-08-20').toISOString() }, // ALBERTO OSORIO (AZUL)
+  { id: 'g6-5', playerId: 404, fecha: 6, teamId: 'AZUL', createdAt: new Date('2026-08-20').toISOString() }, // ALBERT MONTERROZA (AZUL - Gol 2)
+  { id: 'g6-6', playerId: 405, fecha: 6, teamId: 'AZUL', createdAt: new Date('2026-08-20').toISOString() }, // ALBEIRO BUELVAS (AZUL)
 ];
 
 // Official First 7 Fechas for II Semestre 2026 (Vuelta 1)
@@ -556,9 +561,9 @@ const INITIAL_7_FECHAS_2026_2: Match[] = [
     fecha: 6,
     homeTeamId: 'AZUL',
     awayTeamId: 'RAYADO',
-    homeGoals: 0,
+    homeGoals: 4,
     awayGoals: 0,
-    isPlayed: false,
+    isPlayed: true,
     dateStr: '20 de Agosto',
     attendance: {
       homePlayerIds: [401, 402, 403, 404, 405, 406, 407, 408],
