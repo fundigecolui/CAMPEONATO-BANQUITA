@@ -244,6 +244,11 @@ export const GOALS_2026_2: GoalRecord[] = [
   { id: 'g5-15', playerId: 437, fecha: 5, teamId: 'RAYADO', createdAt: new Date('2026-08-18').toISOString() }, // MARIO VELAZCO (RAYADO - Gol 1)
   { id: 'g5-16', playerId: 437, fecha: 5, teamId: 'RAYADO', createdAt: new Date('2026-08-18').toISOString() }, // MARIO VELAZCO (RAYADO - Gol 2)
   { id: 'g5-17', playerId: 436, fecha: 5, teamId: 'RAYADO', createdAt: new Date('2026-08-18').toISOString() }, // WALTER GOEZ (RAYADO)
+
+  // Fecha 6 (20 de Agosto)
+  // NARANJA (1) vs AMARILLO (1)
+  { id: 'g6-1', playerId: 429, fecha: 6, teamId: 'NARANJA', createdAt: new Date('2026-08-20').toISOString() }, // JORGE ORREGO (NARANJA)
+  { id: 'g6-2', playerId: 452, fecha: 6, teamId: 'AMARILLO', createdAt: new Date('2026-08-20').toISOString() }, // PEDRO DE LEON (AMARILLO)
 ];
 
 // Official First 7 Fechas for II Semestre 2026 (Vuelta 1)
@@ -531,7 +536,21 @@ const INITIAL_7_FECHAS_2026_2: Match[] = [
   },
 
   // FECHA 6 (20 de Agosto)
-  { id: 'P6-1', fecha: 6, homeTeamId: 'NARANJA', awayTeamId: 'AMARILLO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '20 de Agosto' },
+  {
+    id: 'P6-1',
+    fecha: 6,
+    homeTeamId: 'NARANJA',
+    awayTeamId: 'AMARILLO',
+    homeGoals: 1,
+    awayGoals: 1,
+    isPlayed: true,
+    status: 'FINALIZADO',
+    dateStr: '20 de Agosto',
+    attendance: {
+      homePlayerIds: [425, 426, 427, 428, 429, 430, 431, 432],
+      awayPlayerIds: [449, 450, 451, 452, 454, 455, 456], // Excluye 453 (Jose Sierra - No asiste)
+    },
+  },
   {
     id: 'P6-2',
     fecha: 6,
@@ -546,8 +565,34 @@ const INITIAL_7_FECHAS_2026_2: Match[] = [
       awayPlayerIds: [433, 434, 435, 436, 438, 439, 440], // Excluye 437 (Mario Velasco - No asiste)
     },
   },
-  { id: 'P6-3', fecha: 6, homeTeamId: 'VERDE', awayTeamId: 'BLANCO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '20 de Agosto' },
-  { id: 'P6-4', fecha: 6, homeTeamId: 'NEGRO', awayTeamId: 'ROJO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '20 de Agosto' },
+  {
+    id: 'P6-3',
+    fecha: 6,
+    homeTeamId: 'VERDE',
+    awayTeamId: 'BLANCO',
+    homeGoals: 0,
+    awayGoals: 0,
+    isPlayed: false,
+    dateStr: '20 de Agosto',
+    attendance: {
+      homePlayerIds: [409, 410, 411, 412, 413, 414, 415, 416],
+      awayPlayerIds: [457, 458, 459, 460, 461, 463, 464], // Excluye 462 (Dairo Mercado - No asiste)
+    },
+  },
+  {
+    id: 'P6-4',
+    fecha: 6,
+    homeTeamId: 'NEGRO',
+    awayTeamId: 'ROJO',
+    homeGoals: 0,
+    awayGoals: 0,
+    isPlayed: false,
+    dateStr: '20 de Agosto',
+    attendance: {
+      homePlayerIds: [417, 418, 419, 420, 422, 423, 424], // Excluye 421 (Jhon Cuartas - No asiste)
+      awayPlayerIds: [441, 442, 443, 444, 445, 446, 447, 448],
+    },
+  },
 
   // FECHA 7 (25 de Agosto)
   { id: 'P7-1', fecha: 7, homeTeamId: 'NEGRO', awayTeamId: 'RAYADO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '25 de Agosto' },
