@@ -165,6 +165,7 @@ export const INITIAL_PLAYERS: Player[] = [
   { id: 38, dorsal: 6, name: 'ANUAR OJEDA', teamId: 'RAYADO' },
   { id: 39, dorsal: 20, name: 'JORGE LUIS PINTO', teamId: 'RAYADO' },
   { id: 40, dorsal: 12, name: 'FERNANDO HUMANEZ', teamId: 'RAYADO' },
+  { id: 65, dorsal: 11, name: 'CARLOS MIRANDA', teamId: 'RAYADO' },
 
   // 6. ROJO
   { id: 41, dorsal: 1, name: 'JOSE HOYOS', teamId: 'ROJO', isCaptain: true },

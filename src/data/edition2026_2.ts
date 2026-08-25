@@ -50,7 +50,8 @@ export const PLAYERS_2026_2: Player[] = [
   { id: 437, dorsal: 21, name: 'MARIO VELASCO', teamId: 'RAYADO' },
   { id: 438, dorsal: 13, name: 'ANUAR OJEDA', teamId: 'RAYADO' },
   { id: 439, dorsal: 20, name: 'JORGE LUIS PINTO', teamId: 'RAYADO' },
-  { id: 440, dorsal: 11, name: 'FERNANDO HUMANEZ', teamId: 'RAYADO' },
+  { id: 440, dorsal: 12, name: 'FERNANDO HUMANEZ', teamId: 'RAYADO' },
+  { id: 465, dorsal: 11, name: 'CARLOS MIRANDA', teamId: 'RAYADO' },
 
   // 6. ROJO
   { id: 441, dorsal: 5, name: 'JOSE HOYOS', teamId: 'ROJO', isCaptain: true },
