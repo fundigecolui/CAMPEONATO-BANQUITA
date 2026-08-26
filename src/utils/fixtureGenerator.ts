@@ -1,21 +1,22 @@
 import { Match, Team, TeamId, TeamStandings } from '../types';
 
-// Standard 8 teams round-robin fixture template (7 rounds)
+// Standard 8 teams round-robin fixture template (7 rounds) matching official tournament calendar
+// 1: BLANCO, 2: ROJO, 3: NARANJA, 4: AZUL, 5: VERDE, 6: AMARILLO, 7: NEGRO, 8: RAYADO
 const ROUND_ROBIN_7: [TeamId, TeamId][][] = [
-  // Round 1
-  [['AZUL', 'AMARILLO'], ['NARANJA', 'NEGRO'], ['BLANCO', 'ROJO'], ['RAYADO', 'VERDE']],
-  // Round 2
-  [['AMARILLO', 'NARANJA'], ['NEGRO', 'BLANCO'], ['ROJO', 'RAYADO'], ['VERDE', 'AZUL']],
-  // Round 3
-  [['AZUL', 'NEGRO'], ['AMARILLO', 'ROJO'], ['NARANJA', 'VERDE'], ['BLANCO', 'RAYADO']],
-  // Round 4
-  [['VERDE', 'AMARILLO'], ['ROJO', 'AZUL'], ['NEGRO', 'RAYADO'], ['NARANJA', 'BLANCO']],
-  // Round 5
-  [['AZUL', 'RAYADO'], ['AMARILLO', 'BLANCO'], ['ROJO', 'NARANJA'], ['VERDE', 'NEGRO']],
-  // Round 6
-  [['BLANCO', 'AZUL'], ['RAYADO', 'AMARILLO'], ['NARANJA', 'ROJO'], ['NEGRO', 'VERDE']],
-  // Round 7
-  [['AZUL', 'NARANJA'], ['AMARILLO', 'NEGRO'], ['BLANCO', 'VERDE'], ['RAYADO', 'ROJO']],
+  // 1. FECHA (1 Vs 3, 7 Vs 8, 4 Vs 6, 2 Vs 5)
+  [['BLANCO', 'NARANJA'], ['NEGRO', 'RAYADO'], ['AZUL', 'AMARILLO'], ['ROJO', 'VERDE']],
+  // 2. FECHA (6 Vs 7, 1 Vs 2, 5 Vs 8, 4 Vs 3)
+  [['AMARILLO', 'NEGRO'], ['BLANCO', 'ROJO'], ['VERDE', 'RAYADO'], ['AZUL', 'NARANJA']],
+  // 3. FECHA (3 Vs 5, 4 Vs 8, 1 Vs 6, 2 Vs 7)
+  [['NARANJA', 'VERDE'], ['AZUL', 'RAYADO'], ['BLANCO', 'AMARILLO'], ['ROJO', 'NEGRO']],
+  // 4. FECHA (1 Vs 4, 2 Vs 3, 7 Vs 5, 6 Vs 8)
+  [['BLANCO', 'AZUL'], ['ROJO', 'NARANJA'], ['NEGRO', 'VERDE'], ['AMARILLO', 'RAYADO']],
+  // 5. FECHA (3 Vs 7, 1 Vs 8, 2 Vs 6, 4 Vs 5)
+  [['NARANJA', 'NEGRO'], ['BLANCO', 'RAYADO'], ['ROJO', 'AMARILLO'], ['AZUL', 'VERDE']],
+  // 6. FECHA (5 Vs 6, 2 Vs 4, 3 Vs 8, 1 Vs 7)
+  [['VERDE', 'AMARILLO'], ['ROJO', 'AZUL'], ['NARANJA', 'RAYADO'], ['BLANCO', 'NEGRO']],
+  // 7. FECHA (2 Vs 8, 1 Vs 5, 4 Vs 7, 3 Vs 6)
+  [['ROJO', 'RAYADO'], ['BLANCO', 'VERDE'], ['AZUL', 'NEGRO'], ['NARANJA', 'AMARILLO']],
 ];
 
 export function generateAllTournamentMatches(initialMatches: Match[], teams?: Team[], standings?: TeamStandings[]): Match[] {

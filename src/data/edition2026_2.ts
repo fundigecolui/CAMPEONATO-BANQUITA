@@ -148,6 +148,13 @@ export const CARDS_2026_2: CardRecord[] = [
   { id: 'c6-5', playerId: 444, fecha: 6, type: 'AMARILLA', createdAt: new Date('2026-08-20').toISOString() }, // NILSON CASTELLANOS (ROJO) - Amarilla
   { id: 'c6-6', playerId: 404, fecha: 6, type: 'AMARILLA', createdAt: new Date('2026-08-20').toISOString() }, // ALBERT MONTERROZA (AZUL) - Amarilla
   { id: 'c6-7', playerId: 406, fecha: 6, type: 'AZUL', createdAt: new Date('2026-08-20').toISOString() }, // LEONARDO CASTILLO (AZUL) - Azul
+
+  // Fecha 7 (25 de Agosto)
+  { id: 'c7-1', playerId: 417, fecha: 7, type: 'AMARILLA', createdAt: new Date('2026-08-25').toISOString() }, // RIGOBERTO LOZANO (NEGRO) - Amarilla
+  { id: 'c7-2', playerId: 421, fecha: 7, type: 'AMARILLA', createdAt: new Date('2026-08-25').toISOString() }, // JHON CUARTAS (NEGRO) - Amarilla
+  { id: 'c7-3', playerId: 436, fecha: 7, type: 'AMARILLA', createdAt: new Date('2026-08-25').toISOString() }, // WALTER GOEZ (RAYADO) - Amarilla
+  { id: 'c7-4', playerId: 410, fecha: 7, type: 'AZUL', createdAt: new Date('2026-08-25').toISOString() }, // MARCOS FIGUEROA (VERDE) - Azul
+  { id: 'c7-5', playerId: 450, fecha: 7, type: 'AMARILLA', createdAt: new Date('2026-08-25').toISOString() }, // EDWIN TEJADA (AMARILLO) - Amarilla
 ];
 
 export const GOALS_2026_2: GoalRecord[] = [
@@ -274,10 +281,21 @@ export const GOALS_2026_2: GoalRecord[] = [
   { id: 'g6-12', playerId: 442, fecha: 6, teamId: 'ROJO', createdAt: new Date('2026-08-20').toISOString() }, // MAURICIO DIAZ (ROJO)
   { id: 'g6-13', playerId: 445, fecha: 6, teamId: 'ROJO', createdAt: new Date('2026-08-20').toISOString() }, // ROBERTO PERTUZ (ROJO - Gol 1)
   { id: 'g6-14', playerId: 445, fecha: 6, teamId: 'ROJO', createdAt: new Date('2026-08-20').toISOString() }, // ROBERTO PERTUZ (ROJO - Gol 2)
+
+  // Fecha 7 (25 de Agosto)
+  // NEGRO (1) vs RAYADO (3)
+  { id: 'g7-1', playerId: 417, fecha: 7, teamId: 'NEGRO', createdAt: new Date('2026-08-25').toISOString() }, // RIGOBERTO LOZANO (NEGRO)
+  { id: 'g7-2', playerId: 436, fecha: 7, teamId: 'RAYADO', createdAt: new Date('2026-08-25').toISOString() }, // WALTER GOEZ (RAYADO - Gol 1)
+  { id: 'g7-3', playerId: 437, fecha: 7, teamId: 'RAYADO', createdAt: new Date('2026-08-25').toISOString() }, // MARIO VELASCO (RAYADO)
+  { id: 'g7-4', playerId: 436, fecha: 7, teamId: 'RAYADO', createdAt: new Date('2026-08-25').toISOString() }, // WALTER GOEZ (RAYADO - Gol 2)
+
+  // VERDE (1) vs AMARILLO (1)
+  { id: 'g7-5', playerId: 412, fecha: 7, teamId: 'VERDE', createdAt: new Date('2026-08-25').toISOString() }, // JAVIER MELGAREJO (VERDE)
+  { id: 'g7-6', playerId: 451, fecha: 7, teamId: 'AMARILLO', createdAt: new Date('2026-08-25').toISOString() }, // YAMIR PINEDA (AMARILLO)
 ];
 
-// Official First 7 Fechas for II Semestre 2026 (Vuelta 1)
-const INITIAL_7_FECHAS_2026_2: Match[] = [
+// Official Fechas for II Semestre 2026 (Vuelta 1: Fechas 1 a 7, Vuelta 2: Fechas 8 a 14)
+const INITIAL_FECHAS_2026_2: Match[] = [
   // FECHA 1 (4 de Agosto)
   { id: 'P1-1', fecha: 1, homeTeamId: 'RAYADO', awayTeamId: 'ROJO', homeGoals: 2, awayGoals: 0, isPlayed: true, status: 'FINALIZADO', dateStr: '4 de Agosto' },
   {
@@ -623,10 +641,84 @@ const INITIAL_7_FECHAS_2026_2: Match[] = [
   },
 
   // FECHA 7 (25 de Agosto)
-  { id: 'P7-1', fecha: 7, homeTeamId: 'NEGRO', awayTeamId: 'RAYADO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '25 de Agosto' },
-  { id: 'P7-2', fecha: 7, homeTeamId: 'VERDE', awayTeamId: 'AMARILLO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '25 de Agosto' },
+  {
+    id: 'P7-1',
+    fecha: 7,
+    homeTeamId: 'NEGRO',
+    awayTeamId: 'RAYADO',
+    homeGoals: 1,
+    awayGoals: 3,
+    isPlayed: true,
+    status: 'FINALIZADO',
+    dateStr: '25 de Agosto',
+    attendance: {
+      homePlayerIds: [417, 418, 419, 420, 421, 422, 423, 424],
+      awayPlayerIds: [433, 434, 435, 436, 437, 438, 439, 440, 465],
+    },
+  },
+  {
+    id: 'P7-2',
+    fecha: 7,
+    homeTeamId: 'VERDE',
+    awayTeamId: 'AMARILLO',
+    homeGoals: 1,
+    awayGoals: 1,
+    isPlayed: true,
+    status: 'FINALIZADO',
+    dateStr: '25 de Agosto',
+    attendance: {
+      homePlayerIds: [409, 410, 411, 412, 413, 414, 415, 416],
+      awayPlayerIds: [449, 450, 451, 452, 453, 454, 455, 456],
+    },
+  },
   { id: 'P7-3', fecha: 7, homeTeamId: 'AZUL', awayTeamId: 'ROJO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '25 de Agosto' },
   { id: 'P7-4', fecha: 7, homeTeamId: 'NARANJA', awayTeamId: 'BLANCO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '25 de Agosto' },
+
+  // ==========================================
+  // II RONDA (FECHAS 8 a 14) - CALENDARIO OFICIAL
+  // ==========================================
+
+  // FECHA 8 (1. FECHA II Ronda: 1 Vs 3, 7 Vs 8, 4 Vs 6, 2 Vs 5)
+  { id: 'P8-1', fecha: 8, homeTeamId: 'BLANCO', awayTeamId: 'NARANJA', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: 'II Ronda - F1' },
+  { id: 'P8-2', fecha: 8, homeTeamId: 'NEGRO', awayTeamId: 'RAYADO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: 'II Ronda - F1' },
+  { id: 'P8-3', fecha: 8, homeTeamId: 'AZUL', awayTeamId: 'AMARILLO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: 'II Ronda - F1' },
+  { id: 'P8-4', fecha: 8, homeTeamId: 'ROJO', awayTeamId: 'VERDE', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: 'II Ronda - F1' },
+
+  // FECHA 9 (2. FECHA II Ronda: 6 Vs 7, 1 Vs 2, 5 Vs 8, 4 Vs 3)
+  { id: 'P9-1', fecha: 9, homeTeamId: 'AMARILLO', awayTeamId: 'NEGRO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: 'II Ronda - F2' },
+  { id: 'P9-2', fecha: 9, homeTeamId: 'BLANCO', awayTeamId: 'ROJO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: 'II Ronda - F2' },
+  { id: 'P9-3', fecha: 9, homeTeamId: 'VERDE', awayTeamId: 'RAYADO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: 'II Ronda - F2' },
+  { id: 'P9-4', fecha: 9, homeTeamId: 'AZUL', awayTeamId: 'NARANJA', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: 'II Ronda - F2' },
+
+  // FECHA 10 (3. FECHA II Ronda: 3 Vs 5, 4 Vs 8, 1 Vs 6, 2 Vs 7)
+  { id: 'P10-1', fecha: 10, homeTeamId: 'NARANJA', awayTeamId: 'VERDE', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: 'II Ronda - F3' },
+  { id: 'P10-2', fecha: 10, homeTeamId: 'AZUL', awayTeamId: 'RAYADO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: 'II Ronda - F3' },
+  { id: 'P10-3', fecha: 10, homeTeamId: 'BLANCO', awayTeamId: 'AMARILLO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: 'II Ronda - F3' },
+  { id: 'P10-4', fecha: 10, homeTeamId: 'ROJO', awayTeamId: 'NEGRO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: 'II Ronda - F3' },
+
+  // FECHA 11 (4. FECHA II Ronda: 1 Vs 4, 2 Vs 3, 7 Vs 5, 6 Vs 8)
+  { id: 'P11-1', fecha: 11, homeTeamId: 'BLANCO', awayTeamId: 'AZUL', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: 'II Ronda - F4' },
+  { id: 'P11-2', fecha: 11, homeTeamId: 'ROJO', awayTeamId: 'NARANJA', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: 'II Ronda - F4' },
+  { id: 'P11-3', fecha: 11, homeTeamId: 'NEGRO', awayTeamId: 'VERDE', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: 'II Ronda - F4' },
+  { id: 'P11-4', fecha: 11, homeTeamId: 'AMARILLO', awayTeamId: 'RAYADO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: 'II Ronda - F4' },
+
+  // FECHA 12 (5. FECHA II Ronda: 3 Vs 7, 1 Vs 8, 2 Vs 6, 4 Vs 5)
+  { id: 'P12-1', fecha: 12, homeTeamId: 'NARANJA', awayTeamId: 'NEGRO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: 'II Ronda - F5' },
+  { id: 'P12-2', fecha: 12, homeTeamId: 'BLANCO', awayTeamId: 'RAYADO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: 'II Ronda - F5' },
+  { id: 'P12-3', fecha: 12, homeTeamId: 'ROJO', awayTeamId: 'AMARILLO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: 'II Ronda - F5' },
+  { id: 'P12-4', fecha: 12, homeTeamId: 'AZUL', awayTeamId: 'VERDE', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: 'II Ronda - F5' },
+
+  // FECHA 13 (6. FECHA II Ronda: 5 Vs 6, 2 Vs 4, 3 Vs 8, 1 Vs 7)
+  { id: 'P13-1', fecha: 13, homeTeamId: 'VERDE', awayTeamId: 'AMARILLO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: 'II Ronda - F6' },
+  { id: 'P13-2', fecha: 13, homeTeamId: 'ROJO', awayTeamId: 'AZUL', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: 'II Ronda - F6' },
+  { id: 'P13-3', fecha: 13, homeTeamId: 'NARANJA', awayTeamId: 'RAYADO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: 'II Ronda - F6' },
+  { id: 'P13-4', fecha: 13, homeTeamId: 'BLANCO', awayTeamId: 'NEGRO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: 'II Ronda - F6' },
+
+  // FECHA 14 (7. FECHA II Ronda: 2 Vs 8, 1 Vs 5, 4 Vs 7, 3 Vs 6)
+  { id: 'P14-1', fecha: 14, homeTeamId: 'ROJO', awayTeamId: 'RAYADO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: 'II Ronda - F7' },
+  { id: 'P14-2', fecha: 14, homeTeamId: 'BLANCO', awayTeamId: 'VERDE', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: 'II Ronda - F7' },
+  { id: 'P14-3', fecha: 14, homeTeamId: 'AZUL', awayTeamId: 'NEGRO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: 'II Ronda - F7' },
+  { id: 'P14-4', fecha: 14, homeTeamId: 'NARANJA', awayTeamId: 'AMARILLO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: 'II Ronda - F7' },
 ];
 
-export const MATCHES_2026_2: Match[] = generateAllTournamentMatches(INITIAL_7_FECHAS_2026_2);
+export const MATCHES_2026_2: Match[] = generateAllTournamentMatches(INITIAL_FECHAS_2026_2);
