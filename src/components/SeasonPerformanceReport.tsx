@@ -395,7 +395,7 @@ export const SeasonPerformanceReport: React.FC<SeasonPerformanceReportProps> = (
                       <td className="py-2 px-3 text-center">
                         {p.isCurrentlySuspended ? (
                           <span className="px-2 py-0.5 rounded bg-red-950 text-red-400 border border-red-800 font-bold text-[10px]">
-                            ⚠️ SUSPENDIDO ({p.suspensionReason})
+                            ⚠️ SUSPENDIDO
                           </span>
                         ) : p.amarillas % 3 === 2 ? (
                           <span className="px-2 py-0.5 rounded bg-yellow-950 text-yellow-400 border border-yellow-800 font-bold text-[10px]">

@@ -363,6 +363,10 @@ export const FechaMatchLogger: React.FC<FechaMatchLoggerProps> = ({
                         </span>
                         <span>EN VIVO</span>
                       </div>
+                    ) : match.status === 'SUSPENDIDO' ? (
+                      <span className="px-3 py-1 rounded-lg bg-sky-950/90 border border-sky-500/80 text-sky-300 font-bold text-xs font-mono flex items-center gap-1 shadow-md">
+                        🌧️ SUSPENDIDO
+                      </span>
                     ) : match.status === 'FINALIZADO' || (match.isPlayed && match.status !== 'PROGRAMADO') ? (
                       <span className="px-3 py-1 rounded-lg bg-emerald-950/60 border border-emerald-500/80 text-emerald-400 font-bold text-xs font-mono">
                         FINALIZADO
@@ -375,7 +379,6 @@ export const FechaMatchLogger: React.FC<FechaMatchLoggerProps> = ({
 
                     {isEditMode && onUpdateMatchStatus && !isMatchCancelledByElimination && (
                       <div className="flex items-center gap-1 bg-slate-950/80 p-0.5 rounded-lg border border-slate-800">
-
                         <button
                           onClick={() => onUpdateMatchStatus(match.id, 'EN_VIVO')}
                           title="Marcar como Partido En Vivo"
@@ -397,6 +400,17 @@ export const FechaMatchLogger: React.FC<FechaMatchLoggerProps> = ({
                           }`}
                         >
                           ✓ FIN
+                        </button>
+                        <button
+                          onClick={() => onUpdateMatchStatus(match.id, 'SUSPENDIDO')}
+                          title="Marcar como Suspendido (por lluvia / fuerza mayor)"
+                          className={`px-1.5 py-0.5 rounded text-[10px] font-extrabold transition cursor-pointer ${
+                            match.status === 'SUSPENDIDO'
+                              ? 'bg-sky-600 text-white'
+                              : 'text-slate-400 hover:text-sky-400'
+                          }`}
+                        >
+                          🌧️ SUSP
                         </button>
                         <button
                           onClick={() => onUpdateMatchStatus(match.id, 'PROGRAMADO')}

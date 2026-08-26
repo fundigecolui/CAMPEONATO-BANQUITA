@@ -62,7 +62,7 @@ export interface Match {
   played?: boolean;
   homePenalties?: number;
   awayPenalties?: number;
-  status?: 'PROGRAMADO' | 'EN_VIVO' | 'FINALIZADO';
+  status?: 'PROGRAMADO' | 'EN_VIVO' | 'FINALIZADO' | 'SUSPENDIDO';
   dateStr?: string;
   time?: string;
   attendance?: {
