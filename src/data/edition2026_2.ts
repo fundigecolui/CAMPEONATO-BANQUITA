@@ -685,9 +685,9 @@ const INITIAL_FECHAS_2026_2: Match[] = [
     awayTeamId: 'ROJO',
     homeGoals: 1,
     awayGoals: 1,
-    isPlayed: true,
-    status: 'FINALIZADO',
-    dateStr: '25 de Agosto',
+    isPlayed: false,
+    status: 'SUSPENDIDO',
+    dateStr: '26 de Agosto (Reprogramado)',
     attendance: {
       homePlayerIds: [401, 402, 403, 404, 406, 407, 408], // Sin asistencia: Albeiro Buelvas (405)
       awayPlayerIds: [441, 442, 443, 444, 445, 446, 447, 448],
@@ -702,7 +702,7 @@ const INITIAL_FECHAS_2026_2: Match[] = [
     awayGoals: 0,
     isPlayed: false,
     status: 'SUSPENDIDO',
-    dateStr: '25 de Agosto (Aplazado por lluvia)',
+    dateStr: '26 de Agosto (Reprogramado)',
   },
 
   // ==========================================

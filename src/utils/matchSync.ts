@@ -150,6 +150,10 @@ export function syncMatchStatuses(
     const matchIdxInFecha = fechaCounts[f] || 0;
     fechaCounts[f] = matchIdxInFecha + 1;
 
+    if (match.status === 'SUSPENDIDO') {
+      return match;
+    }
+
     const { startDate, endDate } = getMatchStartAndEndDates(match, matchIdxInFecha, defaultYear);
 
     let targetStatus: 'PROGRAMADO' | 'EN_VIVO' | 'FINALIZADO';
