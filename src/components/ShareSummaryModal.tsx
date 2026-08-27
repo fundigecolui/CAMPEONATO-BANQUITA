@@ -222,9 +222,10 @@ export const ShareSummaryModal: React.FC<ShareSummaryModalProps> = ({
         nextFechaSuspensions.forEach((s) => {
           const teamEmoji = getTeamEmoji(s.teamId);
           const teamObj = teams.find((t) => t.id === s.teamId);
-          txt += `• ⛔ #${s.dorsal} ${s.playerName} (${teamEmoji} ${teamObj?.name || s.teamId}) ➔ Suspendido\n`;
+          const reasonLabel = s.reason === '1_ROJA' ? 'Tarjeta Roja Directa' : 'Acumulación 3 Tarjetas (Amarillas / Azules)';
+          txt += `• ⛔ #${s.dorsal} ${s.playerName} (${teamEmoji} ${teamObj?.name || s.teamId}) ➔ Suspendido [${reasonLabel}]\n`;
         });
-        txt += `_Nota: La suspensión vence al finalizar la jornada o pagar la sanción._\n\n`;
+        txt += `_Nota: La suspensión vence al finalizar la jornada o pagar la sanción respectiva._\n\n`;
       } else if (cardsInFecha.length === 0) {
         txt += `_Sin tarjetas ni suspensiones en esta jornada._\n\n`;
       }
@@ -812,26 +813,31 @@ export const ShareSummaryModal: React.FC<ShareSummaryModalProps> = ({
                               <span>⚠️ Suspendidos Próxima Fecha (#{nextFecha}):</span>
                             </p>
                             <div className="space-y-1">
-                              {nextFechaSuspensions.map((s, idx) => (
-                                <div
-                                  key={idx}
-                                  className="flex items-center justify-between text-[9.5px] bg-red-50 border border-red-300 p-1.5 rounded-lg text-red-950 font-bold"
-                                >
-                                  <div className="flex items-center gap-1.5">
-                                    <span className="w-2 h-3.5 rounded-xs bg-red-600 inline-block shadow-2xs"></span>
-                                    <span className="font-extrabold">
-                                      #{s.dorsal} {s.playerName}
+                              {nextFechaSuspensions.map((s, idx) => {
+                                const teamObj = teams.find((t) => t.id === s.teamId);
+                                const reasonLabel = s.reason === '1_ROJA' ? 'Tarjeta Roja Directa' : 'Acumuló 3 Tarjetas';
+                                return (
+                                  <div
+                                    key={idx}
+                                    className="flex items-center justify-between text-[9.5px] bg-red-50 border border-red-300 p-1.5 rounded-lg text-red-950 font-bold"
+                                  >
+                                    <div className="flex items-center gap-1.5">
+                                      <span className="w-2 h-3.5 rounded-xs bg-red-600 inline-block shadow-2xs"></span>
+                                      <span className="font-extrabold">
+                                        #{s.dorsal} {s.playerName}
+                                      </span>
+                                      <TeamBadgeDot teamId={s.teamId} teamName={teamObj?.name} size="sm" showName={false} />
+                                      <span className="text-[8.5px] text-red-800 font-mono font-medium">({teamObj?.name || s.teamId})</span>
+                                    </div>
+                                    <span className="font-black text-red-700 font-mono text-[9px] bg-red-100 px-1 py-0.5 rounded border border-red-200">
+                                      {reasonLabel}
                                     </span>
-                                    <TeamBadgeDot teamId={s.teamId} size="sm" showName={false} />
                                   </div>
-                                  <span className="font-black text-red-700 font-mono text-[10px]">
-                                    Suspendido
-                                  </span>
-                                </div>
-                              ))}
+                                );
+                              })}
                             </div>
                             <p className="text-[8.5px] text-slate-500 font-mono italic mt-1 text-right">
-                              * La suspensión vence al finalizar la jornada o pagar la sanción.
+                              * La suspensión vence al finalizar la jornada o pagar la sanción respectiva.
                             </p>
                           </div>
                         )}

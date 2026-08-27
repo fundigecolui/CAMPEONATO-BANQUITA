@@ -65,7 +65,10 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
 
   // Compute official standings and player stats for printable pages
   const standings = computeStandings(teams, matches, cards, players);
-  const { stats: playerStats } = computePlayerStats(players, cards, goals, currentFecha);
+  const { stats: playerStats, allSuspensions } = computePlayerStats(players, cards, goals, currentFecha);
+  const nextFecha = currentFecha + 1;
+  const nextFechaSuspensions = allSuspensions.filter((s) => s.suspendedForFecha === nextFecha);
+  const cardsInFecha = cards.filter((c) => (c.fecha ?? (c as any).fechaNumber) === currentFecha);
 
   // Identify Valla Menos Vencida & Top Scorer
   const playedStandings = standings.filter((s) => s.pj > 0);
@@ -538,6 +541,92 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
                     </div>
                   );
                 })}
+              </div>
+
+              {/* Tarjetas & Sanciones e Informe de Suspendidos para la Próxima Fecha */}
+              <div className="border-2 border-black rounded-xl p-2.5 bg-slate-50 font-mono space-y-2">
+                <div className="flex items-center justify-between border-b border-slate-300 pb-1">
+                  <div className="flex items-center gap-1.5 font-black text-[11px] uppercase">
+                    <AlertTriangle className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                    <span>TARJETAS & SANCIONES (INCIDENCIAS Y SUSPENDIDOS)</span>
+                  </div>
+                  <span className="text-[9px] font-bold text-slate-700">
+                    Corte Jornada #{currentFecha}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2 print:grid-cols-2">
+                  {/* Amonestaciones de la Jornada */}
+                  <div className="space-y-1 bg-white p-2 rounded-lg border border-slate-200">
+                    <span className="font-extrabold text-[9.5px] uppercase text-slate-900 block border-b border-slate-200 pb-0.5">
+                      🟨 Amonestaciones Registradas Fecha #{currentFecha} ({cardsInFecha.length})
+                    </span>
+                    {cardsInFecha.length === 0 ? (
+                      <p className="text-[8.5px] text-slate-500 italic">Sin amonestaciones registradas en esta fecha.</p>
+                    ) : (
+                      <div className="flex flex-wrap gap-1">
+                        {cardsInFecha.map((c, i) => {
+                          const player = players.find((p) => p.id === c.playerId);
+                          const team = teams.find((t) => t.id === player?.teamId);
+                          const icon = c.type === 'AMARILLA' ? '🟨' : c.type === 'AZUL' ? '🟦' : '🟥';
+                          return (
+                            <span
+                              key={i}
+                              className="px-1.5 py-0.5 rounded bg-slate-100 border border-slate-300 text-[8.5px] font-bold text-slate-950 flex items-center gap-1"
+                            >
+                              <span>{icon}</span>
+                              <span>#{player?.dorsal} {player?.name}</span>
+                              <span className="text-[8px] text-slate-600 font-extrabold">({team?.name || player?.teamId})</span>
+                            </span>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Suspendidos Próxima Fecha */}
+                  <div className="space-y-1 bg-white p-2 rounded-lg border border-slate-200">
+                    <span className="font-extrabold text-[9.5px] uppercase text-red-950 block border-b border-red-200 pb-0.5 flex items-center justify-between">
+                      <span>⛔ Suspendidos Próxima Fecha (#{nextFecha})</span>
+                      <span className="text-[8.5px] px-1.5 py-0.2 bg-red-100 text-red-900 rounded font-black border border-red-300">
+                        {nextFechaSuspensions.length} Sancionado{nextFechaSuspensions.length !== 1 ? 's' : ''}
+                      </span>
+                    </span>
+                    {nextFechaSuspensions.length === 0 ? (
+                      <p className="text-[8.5px] text-emerald-700 font-bold">
+                        ✅ No hay jugadores suspendidos para la Fecha #{nextFecha}. Todos habilitados.
+                      </p>
+                    ) : (
+                      <div className="space-y-1">
+                        {nextFechaSuspensions.map((s, idx) => {
+                          const team = teams.find((t) => t.id === s.teamId);
+                          const reasonLabel =
+                            s.reason === '1_ROJA'
+                              ? 'Tarjeta Roja Directa'
+                              : 'Acumulación de 3 Tarjetas (Amarillas / Azules)';
+                          return (
+                            <div
+                              key={idx}
+                              className="p-1 rounded bg-red-50 border border-red-300 text-[8.5px] flex items-center justify-between text-red-950 font-bold"
+                            >
+                              <div className="flex items-center gap-1 font-extrabold">
+                                <span className="text-red-700">⛔</span>
+                                <span>#{s.dorsal} {s.playerName}</span>
+                                <span className="text-slate-700 font-bold">({team?.name || s.teamId})</span>
+                              </div>
+                              <span className="text-[8px] font-black text-red-700 bg-red-100 px-1 py-0.5 rounded border border-red-200">
+                                {reasonLabel}
+                              </span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                    <p className="text-[7.5px] text-slate-500 italic text-right mt-0.5">
+                      * La suspensión vence al finalizar la jornada o pagar la sanción respectiva.
+                    </p>
+                  </div>
+                </div>
               </div>
 
               {/* Signatures */}
@@ -1238,67 +1327,106 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
                 </div>
               </div>
 
-              {/* Side-by-side Layout for Active Suspensions & Fair Play */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 print:grid-cols-2 print:gap-2">
-                {/* Active Suspensions List */}
-                <div className="space-y-1 font-mono">
-                  <h3 className="text-[10.5px] font-black text-black font-mono uppercase flex items-center gap-1">
-                    <AlertTriangle className="w-3.5 h-3.5 text-red-600 shrink-0" />
-                    <span>SANCIONADOS JORNADA #{currentFecha} ({activeSuspensions.length})</span>
-                  </h3>
+              {/* Side-by-side Layout for Suspensions (Current & Next stacked) & Fair Play */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 print:grid-cols-2 print:gap-2">
+                {/* Column 1: Sancionados Fecha Actual y Debajo Suspendidos Próxima Fecha */}
+                <div className="space-y-2.5 font-mono">
+                  {/* Sancionados Fecha Actual */}
+                  <div className="space-y-1">
+                    <h3 className="text-[10px] font-black text-black font-mono uppercase flex items-center gap-1">
+                      <AlertTriangle className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                      <span>SANCIONADOS FECHA #{currentFecha} ({activeSuspensions.length})</span>
+                    </h3>
 
-                  {activeSuspensions.length === 0 ? (
-                    <p className="text-[9.5px] font-mono p-2 bg-slate-100 border border-black rounded text-emerald-800 font-bold">
-                      ✅ No hay jugadores sancionados para esta fecha. Todos habilitados.
-                    </p>
-                  ) : (
-                    <table className="w-full text-left font-sans text-[9px] border-collapse border border-black font-mono">
-                      <thead>
-                        <tr className="bg-black text-white font-bold text-[8.5px]">
-                          <th className="p-1 border border-slate-700">Dorsal</th>
-                          <th className="p-1 border border-slate-700">Jugador</th>
-                          <th className="p-1 border border-slate-700">Equipo</th>
-                          <th className="p-1 border border-slate-700">Causa</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {activeSuspensions.map((s) => (
-                          <tr key={s.playerId} className="bg-red-50 text-red-950 font-bold">
-                            <td className="p-1 border border-black font-black">{s.dorsal}</td>
-                            <td className="p-1 border border-black font-extrabold truncate max-w-[100px]">{s.playerName}</td>
-                            <td className="p-1 border border-black truncate max-w-[70px]">{s.teamId}</td>
-                            <td className="p-1 border border-black text-red-700 text-[8px]">{s.details}</td>
+                    {activeSuspensions.length === 0 ? (
+                      <p className="text-[8.5px] font-mono p-1 bg-slate-100 border border-black rounded text-emerald-800 font-bold">
+                        ✅ Sin sancionados en esta fecha.
+                      </p>
+                    ) : (
+                      <table className="w-full text-left font-sans text-[8.5px] border-collapse border border-black font-mono">
+                        <thead>
+                          <tr className="bg-black text-white font-bold text-[8px]">
+                            <th className="p-0.5 border border-slate-700 w-6 text-center">#</th>
+                            <th className="p-0.5 border border-slate-700">Jugador</th>
+                            <th className="p-0.5 border border-slate-700">Equipo</th>
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  )}
+                        </thead>
+                        <tbody>
+                          {activeSuspensions.map((s) => (
+                            <tr key={s.playerId} className="bg-red-50 text-red-950 font-bold">
+                              <td className="p-0.5 border border-black font-black text-center">{s.dorsal}</td>
+                              <td className="p-0.5 border border-black font-extrabold truncate max-w-[140px]">{s.playerName}</td>
+                              <td className="p-0.5 border border-black truncate max-w-[80px]">{s.teamId}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    )}
+                  </div>
+
+                  {/* Suspendidos Próxima Fecha (Debajo del cuadro de la fecha actual) */}
+                  <div className="space-y-1">
+                    <h3 className="text-[10px] font-black text-red-950 font-mono uppercase flex items-center gap-1">
+                      <AlertTriangle className="w-3.5 h-3.5 text-red-600 shrink-0" />
+                      <span>SUSPENDIDOS PRÓX. FECHA #{nextFecha} ({nextFechaSuspensions.length})</span>
+                    </h3>
+
+                    {nextFechaSuspensions.length === 0 ? (
+                      <p className="text-[8.5px] font-mono p-1 bg-slate-100 border border-black rounded text-emerald-800 font-bold">
+                        ✅ Sin suspendidos para la Fecha #{nextFecha}.
+                      </p>
+                    ) : (
+                      <table className="w-full text-left font-sans text-[8.5px] border-collapse border border-black font-mono">
+                        <thead>
+                          <tr className="bg-red-950 text-white font-bold text-[8px]">
+                            <th className="p-0.5 border border-red-800 w-6 text-center">#</th>
+                            <th className="p-0.5 border border-red-800">Jugador</th>
+                            <th className="p-0.5 border border-red-800">Equipo</th>
+                            <th className="p-0.5 border border-red-800">Causa</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {nextFechaSuspensions.map((s) => {
+                            const cause = s.reason === '1_ROJA' ? '1 Roja Directa' : '3 Tarjetas';
+                            return (
+                              <tr key={s.playerId} className="bg-red-100/80 text-red-950 font-bold">
+                                <td className="p-0.5 border border-black font-black text-center">{s.dorsal}</td>
+                                <td className="p-0.5 border border-black font-extrabold truncate max-w-[140px]">{s.playerName}</td>
+                                <td className="p-0.5 border border-black truncate max-w-[80px]">{s.teamId}</td>
+                                <td className="p-0.5 border border-black text-red-800 font-black text-[7.5px]">{cause}</td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    )}
+                  </div>
                 </div>
 
-                {/* Cards Accumulation Table by Team (Fair Play) */}
+                {/* Column 2: Cards Accumulation Table by Team (Fair Play) */}
                 <div className="space-y-1 font-mono">
-                  <h3 className="text-[10.5px] font-black text-black font-mono uppercase">
-                    FAIR PLAY Y TARJETAS POR EQUIPO
+                  <h3 className="text-[10px] font-black text-black font-mono uppercase">
+                    FAIR PLAY Y TARJETAS
                   </h3>
 
-                  <table className="w-full text-left font-sans text-[9px] border-collapse border border-black font-mono">
+                  <table className="w-full text-left font-sans text-[8.5px] border-collapse border border-black font-mono">
                     <thead>
-                      <tr className="bg-slate-200 text-black font-bold text-[8.5px]">
-                        <th className="p-1 border border-black">Equipo</th>
-                        <th className="p-1 border border-black text-center">🟨</th>
-                        <th className="p-1 border border-black text-center">🟦</th>
-                        <th className="p-1 border border-black text-center">🟥</th>
-                        <th className="p-1 border border-black text-center">Fair Play</th>
+                      <tr className="bg-slate-200 text-black font-bold text-[8px]">
+                        <th className="p-0.5 border border-black">Equipo</th>
+                        <th className="p-0.5 border border-black text-center">🟨</th>
+                        <th className="p-0.5 border border-black text-center">🟦</th>
+                        <th className="p-0.5 border border-black text-center">🟥</th>
+                        <th className="p-0.5 border border-black text-center">Fair Play</th>
                       </tr>
                     </thead>
                     <tbody>
                       {standings.map((t) => (
                         <tr key={t.teamId} className="border-b border-black">
-                          <td className="p-1 border border-black font-extrabold uppercase text-[8.5px] truncate max-w-[90px]">{t.teamName}</td>
-                          <td className="p-1 border border-black text-center font-bold">{t.amarillas}</td>
-                          <td className="p-1 border border-black text-center font-bold">{t.azules}</td>
-                          <td className="p-1 border border-black text-center font-bold text-red-700">{t.rojas}</td>
-                          <td className="p-1 border border-black text-center font-black text-emerald-800 text-[9.5px]">
+                          <td className="p-0.5 border border-black font-extrabold uppercase text-[8px] truncate max-w-[80px]">{t.teamName}</td>
+                          <td className="p-0.5 border border-black text-center font-bold">{t.amarillas}</td>
+                          <td className="p-0.5 border border-black text-center font-bold">{t.azules}</td>
+                          <td className="p-0.5 border border-black text-center font-bold text-red-700">{t.rojas}</td>
+                          <td className="p-0.5 border border-black text-center font-black text-emerald-800 text-[8.5px]">
                             {t.fairPlayPts} pts
                           </td>
                         </tr>
@@ -1365,12 +1493,18 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
                             </thead>
                             <tbody className="divide-y divide-black text-[9px]">
                               {cardedList.map(({ player: p, stat, teamName, yellowRem }, idx) => {
-                                const isSuspended = stat?.isCurrentlySuspended;
+                                const isSuspendedCurrent = stat?.isCurrentlySuspended;
+                                const nextSusp = nextFechaSuspensions.find((s) => s.playerId === p.id);
+                                const isSuspendedNext = Boolean(nextSusp);
 
                                 let statusText = '✅ Habilitado';
                                 let statusBg = 'bg-emerald-100 text-emerald-900';
 
-                                if (isSuspended) {
+                                if (isSuspendedNext) {
+                                  const reason = nextSusp?.reason === '1_ROJA' ? 'Roja' : '3 Tarjetas';
+                                  statusText = `⛔ SUSP. FECHA #${nextFecha} (${reason})`;
+                                  statusBg = 'bg-red-600 text-white font-black';
+                                } else if (isSuspendedCurrent) {
                                   statusText = `⛔ SUSPENDIDO (${stat?.suspensionReason || 'Sanción'})`;
                                   statusBg = 'bg-red-600 text-white font-black';
                                 } else if (yellowRem === 2) {
@@ -1385,7 +1519,7 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
                                   <tr
                                     key={p.id}
                                     className={
-                                      isSuspended
+                                      isSuspendedNext || isSuspendedCurrent
                                         ? 'bg-red-50 font-bold'
                                         : (stat?.totalCards || 0) > 0
                                         ? 'bg-amber-50/40'
