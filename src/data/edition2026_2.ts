@@ -149,7 +149,7 @@ export const CARDS_2026_2: CardRecord[] = [
   { id: 'c6-6', playerId: 404, fecha: 6, type: 'AMARILLA', createdAt: new Date('2026-08-20').toISOString() }, // ALBERT MONTERROZA (AZUL) - Amarilla
   { id: 'c6-7', playerId: 406, fecha: 6, type: 'AZUL', createdAt: new Date('2026-08-20').toISOString() }, // LEONARDO CASTILLO (AZUL) - Azul
 
-  // Fecha 7 (25 de Agosto)
+  // Fecha 7 (25 y 26 de Agosto)
   { id: 'c7-2', playerId: 421, fecha: 7, type: 'AMARILLA', createdAt: new Date('2026-08-25').toISOString() }, // JHON CUARTAS (NEGRO) - Amarilla
   { id: 'c7-3', playerId: 436, fecha: 7, type: 'AMARILLA', createdAt: new Date('2026-08-25').toISOString() }, // WALTER GOEZ (RAYADO) - Amarilla
   { id: 'c7-4', playerId: 410, fecha: 7, type: 'AZUL', createdAt: new Date('2026-08-25').toISOString() }, // MARCOS FIGUEROA (VERDE) - Azul
@@ -157,7 +157,10 @@ export const CARDS_2026_2: CardRecord[] = [
   { id: 'c7-6', playerId: 411, fecha: 7, type: 'AMARILLA', createdAt: new Date('2026-08-25').toISOString() }, // LUIS PACHECO (VERDE) - Amarilla
   { id: 'c7-7', playerId: 449, fecha: 7, type: 'AMARILLA', createdAt: new Date('2026-08-25').toISOString() }, // ALEJANDRO ESCAMILLA (AMARILLO) - Amarilla
   { id: 'c7-8', playerId: 416, fecha: 7, type: 'AMARILLA', createdAt: new Date('2026-08-25').toISOString() }, // JACIT ARABIA (VERDE) - Amarilla
-  { id: 'c7-9', playerId: 442, fecha: 7, type: 'AMARILLA', createdAt: new Date('2026-08-25').toISOString() }, // MAURICIO DIAZ (ROJO) - Amarilla
+  { id: 'c7-9', playerId: 442, fecha: 7, type: 'AZUL', createdAt: new Date('2026-08-26').toISOString() }, // MAURICIO DIAZ (ROJO) - Azul
+  { id: 'c7-10', playerId: 459, fecha: 7, type: 'AMARILLA', createdAt: new Date('2026-08-26').toISOString() }, // JOSE FIGUEROA (BLANCO) - Amarilla
+  { id: 'c7-11', playerId: 428, fecha: 7, type: 'AMARILLA', createdAt: new Date('2026-08-26').toISOString() }, // CESAR MIZGER (NARANJA) - Amarilla
+  { id: 'c7-12', playerId: 432, fecha: 7, type: 'AMARILLA', createdAt: new Date('2026-08-26').toISOString() }, // JOSE ARROYO (NARANJA) - Amarilla
 ];
 
 export const GOALS_2026_2: GoalRecord[] = [
@@ -296,9 +299,15 @@ export const GOALS_2026_2: GoalRecord[] = [
   { id: 'g7-5', playerId: 412, fecha: 7, teamId: 'VERDE', createdAt: new Date('2026-08-25').toISOString() }, // JAVIER MELGAREJO (VERDE)
   { id: 'g7-6', playerId: 451, fecha: 7, teamId: 'AMARILLO', createdAt: new Date('2026-08-25').toISOString() }, // YAMIR PINEDA (AMARILLO)
 
-  // AZUL (1) vs ROJO (1)
-  { id: 'g7-7', playerId: 401, fecha: 7, teamId: 'AZUL', createdAt: new Date('2026-08-25').toISOString() }, // ALBERTO OSORIO (AZUL)
-  { id: 'g7-8', playerId: 446, fecha: 7, teamId: 'ROJO', createdAt: new Date('2026-08-25').toISOString() }, // GUSTAVO FERNANDEZ (ROJO)
+  // AZUL (3) vs ROJO (2)
+  { id: 'g7-7', playerId: 401, fecha: 7, teamId: 'AZUL', createdAt: new Date('2026-08-26').toISOString() }, // ALBERTO OSORIO (AZUL - Gol 1)
+  { id: 'g7-8', playerId: 401, fecha: 7, teamId: 'AZUL', createdAt: new Date('2026-08-26').toISOString() }, // ALBERTO OSORIO (AZUL - Gol 2)
+  { id: 'g7-9', playerId: 404, fecha: 7, teamId: 'AZUL', createdAt: new Date('2026-08-26').toISOString() }, // ALBERT MONTERROZA (AZUL)
+  { id: 'g7-10', playerId: 446, fecha: 7, teamId: 'ROJO', createdAt: new Date('2026-08-26').toISOString() }, // GUSTAVO FERNANDEZ (ROJO - Gol 1)
+  { id: 'g7-11', playerId: 446, fecha: 7, teamId: 'ROJO', createdAt: new Date('2026-08-26').toISOString() }, // GUSTAVO FERNANDEZ (ROJO - Gol 2)
+
+  // NARANJA (0) vs BLANCO (1)
+  { id: 'g7-12', playerId: 459, fecha: 7, teamId: 'BLANCO', createdAt: new Date('2026-08-26').toISOString() }, // JOSE FIGUEROA (BLANCO)
 ];
 
 // Official Fechas for II Semestre 2026 (Vuelta 1: Fechas 1 a 7, Vuelta 2: Fechas 8 a 14)
@@ -683,11 +692,11 @@ const INITIAL_FECHAS_2026_2: Match[] = [
     fecha: 7,
     homeTeamId: 'AZUL',
     awayTeamId: 'ROJO',
-    homeGoals: 1,
-    awayGoals: 1,
-    isPlayed: false,
-    status: 'SUSPENDIDO',
-    dateStr: '26 de Agosto (Reprogramado)',
+    homeGoals: 3,
+    awayGoals: 2,
+    isPlayed: true,
+    status: 'FINALIZADO',
+    dateStr: '26 de Agosto',
     attendance: {
       homePlayerIds: [401, 402, 403, 404, 406, 407, 408], // Sin asistencia: Albeiro Buelvas (405)
       awayPlayerIds: [441, 442, 443, 444, 445, 446, 447, 448],
@@ -699,10 +708,10 @@ const INITIAL_FECHAS_2026_2: Match[] = [
     homeTeamId: 'NARANJA',
     awayTeamId: 'BLANCO',
     homeGoals: 0,
-    awayGoals: 0,
-    isPlayed: false,
-    status: 'SUSPENDIDO',
-    dateStr: '26 de Agosto (Reprogramado)',
+    awayGoals: 1,
+    isPlayed: true,
+    status: 'FINALIZADO',
+    dateStr: '26 de Agosto',
   },
 
   // ==========================================
