@@ -721,7 +721,7 @@ const INITIAL_FECHAS_2026_2: Match[] = [
   // FECHA 8 (1. FECHA II Ronda: 1 Vs 3, 7 Vs 8, 4 Vs 6, 2 Vs 5)
   { id: 'P8-1', fecha: 8, homeTeamId: 'BLANCO', awayTeamId: 'NARANJA', homeGoals: 0, awayGoals: 2, isPlayed: true, status: 'FINALIZADO', dateStr: 'II Ronda - F1' },
   { id: 'P8-2', fecha: 8, homeTeamId: 'NEGRO', awayTeamId: 'RAYADO', homeGoals: 1, awayGoals: 0, isPlayed: true, status: 'FINALIZADO', dateStr: 'II Ronda - F1' },
-  { id: 'P8-3', fecha: 8, homeTeamId: 'AZUL', awayTeamId: 'AMARILLO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: 'II Ronda - F1' },
+  { id: 'P8-3', fecha: 8, homeTeamId: 'AZUL', awayTeamId: 'AMARILLO', homeGoals: 2, awayGoals: 3, isPlayed: true, status: 'FINALIZADO', dateStr: 'II Ronda - F1' },
   { id: 'P8-4', fecha: 8, homeTeamId: 'ROJO', awayTeamId: 'VERDE', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: 'II Ronda - F1' },
 
   // FECHA 9 (2. FECHA II Ronda: 6 Vs 7, 1 Vs 2, 5 Vs 8, 4 Vs 3)
