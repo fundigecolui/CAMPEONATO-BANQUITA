@@ -188,6 +188,10 @@ export const CARDS_2026_2: CardRecord[] = [
   { id: 'c9-7', playerId: 458, fecha: 9, type: 'AMARILLA', createdAt: new Date('2026-09-01').toISOString() }, // CAMILO PACHECO (BLANCO) - Amarilla
   { id: 'c9-8', playerId: 446, fecha: 9, type: 'AMARILLA', createdAt: new Date('2026-09-01').toISOString() }, // GUSTAVO FERNANDEZ (ROJO) - Amarilla
   { id: 'c9-9', playerId: 459, fecha: 9, type: 'AMARILLA', createdAt: new Date('2026-09-01').toISOString() }, // JOSE FIGUEROA (BLANCO) - Amarilla
+  { id: 'c9-10', playerId: 404, fecha: 9, type: 'AMARILLA', createdAt: new Date('2026-09-01').toISOString() }, // ALBERT MONTERROZA (AZUL) - Amarilla
+  { id: 'c9-11', playerId: 406, fecha: 9, type: 'AMARILLA', createdAt: new Date('2026-09-01').toISOString() }, // LEONARDO CASTILLO (AZUL) - Amarilla
+  { id: 'c9-12', playerId: 431, fecha: 9, type: 'AMARILLA', createdAt: new Date('2026-09-01').toISOString() }, // EDUAR MONTIEL (NARANJA) - Amarilla
+  { id: 'c9-13', playerId: 429, fecha: 9, type: 'AMARILLA', createdAt: new Date('2026-09-01').toISOString() }, // JORGE ORREGO (NARANJA) - Amarilla
 ];
 
 export const GOALS_2026_2: GoalRecord[] = [
@@ -372,6 +376,10 @@ export const GOALS_2026_2: GoalRecord[] = [
   { id: 'g9-10', playerId: 433, fecha: 9, teamId: 'RAYADO', createdAt: new Date('2026-09-01').toISOString() }, // DAMIAN MORENO (RAYADO)
   { id: 'g9-11', playerId: 409, fecha: 9, teamId: 'VERDE', createdAt: new Date('2026-09-01').toISOString() }, // ANDY ACEVEDO (VERDE - Gol 1)
   { id: 'g9-12', playerId: 409, fecha: 9, teamId: 'VERDE', createdAt: new Date('2026-09-01').toISOString() }, // ANDY ACEVEDO (VERDE - Gol 2)
+
+  // AZUL (1) vs NARANJA (1)
+  { id: 'g9-13', playerId: 403, fecha: 9, teamId: 'AZUL', createdAt: new Date('2026-09-01').toISOString() }, // OSCAR PACHECO (AZUL)
+  { id: 'g9-14', playerId: 427, fecha: 9, teamId: 'NARANJA', createdAt: new Date('2026-09-01').toISOString() }, // JORGE LOZANO (NARANJA)
 ];
 
 // Official Fechas for II Semestre 2026 (Vuelta 1: Fechas 1 a 7, Vuelta 2: Fechas 8 a 14)
@@ -806,7 +814,21 @@ const INITIAL_FECHAS_2026_2: Match[] = [
   { id: 'P9-1', fecha: 9, homeTeamId: 'AMARILLO', awayTeamId: 'NEGRO', homeGoals: 4, awayGoals: 2, isPlayed: true, status: 'FINALIZADO', dateStr: '1 de Septiembre' },
   { id: 'P9-2', fecha: 9, homeTeamId: 'BLANCO', awayTeamId: 'ROJO', homeGoals: 1, awayGoals: 1, isPlayed: true, status: 'FINALIZADO', dateStr: '1 de Septiembre' },
   { id: 'P9-3', fecha: 9, homeTeamId: 'VERDE', awayTeamId: 'RAYADO', homeGoals: 2, awayGoals: 2, isPlayed: true, status: 'FINALIZADO', dateStr: '1 de Septiembre' },
-  { id: 'P9-4', fecha: 9, homeTeamId: 'AZUL', awayTeamId: 'NARANJA', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: 'II Ronda - F2' },
+  {
+    id: 'P9-4',
+    fecha: 9,
+    homeTeamId: 'AZUL',
+    awayTeamId: 'NARANJA',
+    homeGoals: 1,
+    awayGoals: 1,
+    isPlayed: true,
+    status: 'FINALIZADO',
+    dateStr: '1 de Septiembre',
+    attendance: {
+      homePlayerIds: [401, 402, 403, 404, 405, 406, 408], // Excluye 407 (Moises Gomez - No asiste)
+      awayPlayerIds: [425, 426, 427, 428, 429, 430, 431], // Excluye 432 (Jose Arroyo - No asiste)
+    },
+  },
 
   // FECHA 10 (3. FECHA II Ronda: 3 Vs 5, 4 Vs 8, 1 Vs 6, 2 Vs 7)
   { id: 'P10-1', fecha: 10, homeTeamId: 'NARANJA', awayTeamId: 'VERDE', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: 'II Ronda - F3' },
