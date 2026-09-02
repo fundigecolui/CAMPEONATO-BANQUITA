@@ -813,7 +813,21 @@ const INITIAL_FECHAS_2026_2: Match[] = [
   // FECHA 9 (2. FECHA II Ronda: 6 Vs 7, 1 Vs 2, 5 Vs 8, 4 Vs 3)
   { id: 'P9-1', fecha: 9, homeTeamId: 'AMARILLO', awayTeamId: 'NEGRO', homeGoals: 4, awayGoals: 2, isPlayed: true, status: 'FINALIZADO', dateStr: '1 de Septiembre' },
   { id: 'P9-2', fecha: 9, homeTeamId: 'BLANCO', awayTeamId: 'ROJO', homeGoals: 1, awayGoals: 1, isPlayed: true, status: 'FINALIZADO', dateStr: '1 de Septiembre' },
-  { id: 'P9-3', fecha: 9, homeTeamId: 'VERDE', awayTeamId: 'RAYADO', homeGoals: 2, awayGoals: 2, isPlayed: true, status: 'FINALIZADO', dateStr: '1 de Septiembre' },
+  {
+    id: 'P9-3',
+    fecha: 9,
+    homeTeamId: 'VERDE',
+    awayTeamId: 'RAYADO',
+    homeGoals: 2,
+    awayGoals: 2,
+    isPlayed: true,
+    status: 'FINALIZADO',
+    dateStr: '1 de Septiembre',
+    attendance: {
+      homePlayerIds: [409, 410, 411, 412, 414, 416], // Excluye 413 (Javier Fadul) y 415 (Juan/Ivan Orrego)
+      awayPlayerIds: [433, 434, 435, 436, 437, 439, 440, 465], // Excluye 438 (Anuar Ojeda)
+    },
+  },
   {
     id: 'P9-4',
     fecha: 9,
