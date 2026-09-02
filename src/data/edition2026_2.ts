@@ -161,6 +161,33 @@ export const CARDS_2026_2: CardRecord[] = [
   { id: 'c7-10', playerId: 459, fecha: 7, type: 'AMARILLA', createdAt: new Date('2026-08-26').toISOString() }, // JOSE FIGUEROA (BLANCO) - Amarilla
   { id: 'c7-11', playerId: 428, fecha: 7, type: 'AMARILLA', createdAt: new Date('2026-08-26').toISOString() }, // CESAR MIZGER (NARANJA) - Amarilla
   { id: 'c7-12', playerId: 432, fecha: 7, type: 'AMARILLA', createdAt: new Date('2026-08-26').toISOString() }, // JOSE ARROYO (NARANJA) - Amarilla
+
+  // Fecha 8 (27 de Agosto)
+  { id: 'c8-1', playerId: 452, fecha: 8, type: 'AMARILLA', createdAt: new Date('2026-08-27').toISOString() }, // PEDRO DE LEON (AMARILLO) - Amarilla
+  { id: 'c8-2', playerId: 450, fecha: 8, type: 'AMARILLA', createdAt: new Date('2026-08-27').toISOString() }, // EDWIN TEJADA (AMARILLO) - Amarilla
+  { id: 'c8-3', playerId: 453, fecha: 8, type: 'AMARILLA', createdAt: new Date('2026-08-27').toISOString() }, // JOSE SIERRA (AMARILLO) - Amarilla
+  { id: 'c8-4', playerId: 417, fecha: 8, type: 'ROJA', createdAt: new Date('2026-08-27').toISOString() }, // RIGOBERTO LOZANO (NEGRO) - Roja
+  { id: 'c8-6', playerId: 451, fecha: 8, type: 'AMARILLA', createdAt: new Date('2026-08-27').toISOString() }, // YAMIR PINEDA (AMARILLO) - Amarilla
+  { id: 'c8-7', playerId: 442, fecha: 8, type: 'AMARILLA', createdAt: new Date('2026-08-27').toISOString() }, // MAURICIO DIAZ (ROJO) - Amarilla
+  { id: 'c8-8', playerId: 404, fecha: 8, type: 'AMARILLA', createdAt: new Date('2026-08-27').toISOString() }, // ALBERT MONTERROZA (AZUL) - Amarilla
+  { id: 'c8-9', playerId: 407, fecha: 8, type: 'AMARILLA', createdAt: new Date('2026-08-27').toISOString() }, // MOISES GOMEZ (AZUL) - Amarilla
+  { id: 'c8-10', playerId: 419, fecha: 8, type: 'AMARILLA', createdAt: new Date('2026-08-27').toISOString() }, // NEL MARTINEZ (NEGRO) - Amarilla
+  { id: 'c8-11', playerId: 421, fecha: 8, type: 'AMARILLA', createdAt: new Date('2026-08-27').toISOString() }, // JHON CUARTAS (NEGRO) - Amarilla
+  { id: 'c8-12', playerId: 422, fecha: 8, type: 'AZUL', createdAt: new Date('2026-08-27').toISOString() }, // MANUEL PEÑA (NEGRO) - Azul
+  { id: 'c8-13', playerId: 459, fecha: 8, type: 'AMARILLA', createdAt: new Date('2026-08-27').toISOString() }, // JOSE FIGUEROA (BLANCO) - Amarilla
+  { id: 'c8-14', playerId: 426, fecha: 8, type: 'AMARILLA', createdAt: new Date('2026-08-27').toISOString() }, // CARLOS FIGUEROA (NARANJA) - Amarilla
+  { id: 'c8-15', playerId: 427, fecha: 8, type: 'AMARILLA', createdAt: new Date('2026-08-27').toISOString() }, // JORGE LOZANO (NARANJA) - Amarilla
+
+  // Fecha 9 (1 de Septiembre)
+  { id: 'c9-1', playerId: 451, fecha: 9, type: 'AMARILLA', createdAt: new Date('2026-09-01').toISOString() }, // YAMIR PINEDA (AMARILLO) - Amarilla
+  { id: 'c9-2', playerId: 421, fecha: 9, type: 'AMARILLA', createdAt: new Date('2026-09-01').toISOString() }, // JHON CUARTAS (NEGRO) - Amarilla
+  { id: 'c9-3', playerId: 419, fecha: 9, type: 'AMARILLA', createdAt: new Date('2026-09-01').toISOString() }, // NEL MARTINEZ (NEGRO) - Amarilla
+  { id: 'c9-4', playerId: 445, fecha: 9, type: 'AMARILLA', createdAt: new Date('2026-09-01').toISOString() }, // ROBERTO PERTUZ (ROJO) - Amarilla
+  { id: 'c9-5', playerId: 443, fecha: 9, type: 'AMARILLA', createdAt: new Date('2026-09-01').toISOString() }, // URIEL ZAMBRANO (ROJO) - Amarilla
+  { id: 'c9-6', playerId: 461, fecha: 9, type: 'AMARILLA', createdAt: new Date('2026-09-01').toISOString() }, // EVER VILLALBA (BLANCO) - Amarilla
+  { id: 'c9-7', playerId: 458, fecha: 9, type: 'AMARILLA', createdAt: new Date('2026-09-01').toISOString() }, // CAMILO PACHECO (BLANCO) - Amarilla
+  { id: 'c9-8', playerId: 446, fecha: 9, type: 'AMARILLA', createdAt: new Date('2026-09-01').toISOString() }, // GUSTAVO FERNANDEZ (ROJO) - Amarilla
+  { id: 'c9-9', playerId: 459, fecha: 9, type: 'AMARILLA', createdAt: new Date('2026-09-01').toISOString() }, // JOSE FIGUEROA (BLANCO) - Amarilla
 ];
 
 export const GOALS_2026_2: GoalRecord[] = [
@@ -308,6 +335,41 @@ export const GOALS_2026_2: GoalRecord[] = [
 
   // NARANJA (0) vs BLANCO (1)
   { id: 'g7-12', playerId: 459, fecha: 7, teamId: 'BLANCO', createdAt: new Date('2026-08-26').toISOString() }, // JOSE FIGUEROA (BLANCO)
+
+  // Fecha 8 (27 de Agosto)
+  // BLANCO (0) vs NARANJA (2)
+  { id: 'g8-6', playerId: 425, fecha: 8, teamId: 'NARANJA', createdAt: new Date('2026-08-27').toISOString() }, // DIEGO LOPEZ (NARANJA)
+  { id: 'g8-7', playerId: 426, fecha: 8, teamId: 'NARANJA', createdAt: new Date('2026-08-27').toISOString() }, // CARLOS FIGUEROA (NARANJA)
+
+  // AZUL (2) vs AMARILLO (3)
+  { id: 'g8-1', playerId: 451, fecha: 8, teamId: 'AMARILLO', createdAt: new Date('2026-08-27').toISOString() }, // YAMIR PINEDA (AMARILLO - Gol 1)
+  { id: 'g8-2', playerId: 451, fecha: 8, teamId: 'AMARILLO', createdAt: new Date('2026-08-27').toISOString() }, // YAMIR PINEDA (AMARILLO - Gol 2)
+  { id: 'g8-3', playerId: 451, fecha: 8, teamId: 'AMARILLO', createdAt: new Date('2026-08-27').toISOString() }, // YAMIR PINEDA (AMARILLO - Gol 3)
+  { id: 'g8-4', playerId: 401, fecha: 8, teamId: 'AZUL', createdAt: new Date('2026-08-27').toISOString() }, // ALBERTO OSORIO (AZUL)
+  { id: 'g8-5', playerId: 404, fecha: 8, teamId: 'AZUL', createdAt: new Date('2026-08-27').toISOString() }, // ALBERT MONTERROZA (AZUL)
+
+  // NEGRO (1) vs RAYADO (0)
+  { id: 'g8-9', playerId: 421, fecha: 8, teamId: 'NEGRO', createdAt: new Date('2026-08-27').toISOString() }, // JHON CUARTAS (NEGRO)
+
+  // ROJO (0) vs VERDE (1)
+  { id: 'g8-8', playerId: 411, fecha: 8, teamId: 'VERDE', createdAt: new Date('2026-08-27').toISOString() }, // LUIS PACHECO (VERDE)
+
+  // Fecha 9 (1 de Septiembre)
+  // AMARILLO (4) vs NEGRO (2)
+  { id: 'g9-1', playerId: 449, fecha: 9, teamId: 'AMARILLO', createdAt: new Date('2026-09-01').toISOString() }, // ALEJANDRO ESCAMILLA (AMARILLO - Gol 1)
+  { id: 'g9-2', playerId: 449, fecha: 9, teamId: 'AMARILLO', createdAt: new Date('2026-09-01').toISOString() }, // ALEJANDRO ESCAMILLA (AMARILLO - Gol 2)
+  { id: 'g9-3', playerId: 452, fecha: 9, teamId: 'AMARILLO', createdAt: new Date('2026-09-01').toISOString() }, // PEDRO DE LEON (AMARILLO)
+  { id: 'g9-4', playerId: 451, fecha: 9, teamId: 'AMARILLO', createdAt: new Date('2026-09-01').toISOString() }, // YAMIR PINEDA (AMARILLO)
+  { id: 'g9-5', playerId: 419, fecha: 9, teamId: 'NEGRO', createdAt: new Date('2026-09-01').toISOString() }, // NEL MARTINEZ (NEGRO)
+  { id: 'g9-6', playerId: 420, fecha: 9, teamId: 'NEGRO', createdAt: new Date('2026-09-01').toISOString() }, // RUSBELL VILLALBA (NEGRO)
+
+  // BLANCO (1) vs ROJO (1)
+  { id: 'g9-7', playerId: 445, fecha: 9, teamId: 'ROJO', createdAt: new Date('2026-09-01').toISOString() }, // ROBERTO PERTUZ (ROJO)
+  { id: 'g9-8', playerId: 463, fecha: 9, teamId: 'BLANCO', createdAt: new Date('2026-09-01').toISOString() }, // IVAN DIAZ (BLANCO)
+
+  // VERDE (0) vs RAYADO (2)
+  { id: 'g9-9', playerId: 437, fecha: 9, teamId: 'RAYADO', createdAt: new Date('2026-09-01').toISOString() }, // MARIO VELASCO (RAYADO)
+  { id: 'g9-10', playerId: 433, fecha: 9, teamId: 'RAYADO', createdAt: new Date('2026-09-01').toISOString() }, // DAMIAN MORENO (RAYADO)
 ];
 
 // Official Fechas for II Semestre 2026 (Vuelta 1: Fechas 1 a 7, Vuelta 2: Fechas 8 a 14)
@@ -720,14 +782,28 @@ const INITIAL_FECHAS_2026_2: Match[] = [
 
   // FECHA 8 (1. FECHA II Ronda: 1 Vs 3, 7 Vs 8, 4 Vs 6, 2 Vs 5)
   { id: 'P8-1', fecha: 8, homeTeamId: 'BLANCO', awayTeamId: 'NARANJA', homeGoals: 0, awayGoals: 2, isPlayed: true, status: 'FINALIZADO', dateStr: 'II Ronda - F1' },
-  { id: 'P8-2', fecha: 8, homeTeamId: 'NEGRO', awayTeamId: 'RAYADO', homeGoals: 1, awayGoals: 0, isPlayed: true, status: 'FINALIZADO', dateStr: 'II Ronda - F1' },
+  {
+    id: 'P8-2',
+    fecha: 8,
+    homeTeamId: 'NEGRO',
+    awayTeamId: 'RAYADO',
+    homeGoals: 1,
+    awayGoals: 0,
+    isPlayed: true,
+    status: 'FINALIZADO',
+    dateStr: 'II Ronda - F1',
+    attendance: {
+      homePlayerIds: [417, 418, 419, 420, 421, 422, 423], // Excluye 424 (Alberto Bustos - No asiste)
+      awayPlayerIds: [433, 434, 435, 436, 437, 438, 439, 440, 465],
+    },
+  },
   { id: 'P8-3', fecha: 8, homeTeamId: 'AZUL', awayTeamId: 'AMARILLO', homeGoals: 2, awayGoals: 3, isPlayed: true, status: 'FINALIZADO', dateStr: 'II Ronda - F1' },
-  { id: 'P8-4', fecha: 8, homeTeamId: 'ROJO', awayTeamId: 'VERDE', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: 'II Ronda - F1' },
+  { id: 'P8-4', fecha: 8, homeTeamId: 'ROJO', awayTeamId: 'VERDE', homeGoals: 0, awayGoals: 1, isPlayed: true, status: 'FINALIZADO', dateStr: 'II Ronda - F1' },
 
   // FECHA 9 (2. FECHA II Ronda: 6 Vs 7, 1 Vs 2, 5 Vs 8, 4 Vs 3)
-  { id: 'P9-1', fecha: 9, homeTeamId: 'AMARILLO', awayTeamId: 'NEGRO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: 'II Ronda - F2' },
-  { id: 'P9-2', fecha: 9, homeTeamId: 'BLANCO', awayTeamId: 'ROJO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: 'II Ronda - F2' },
-  { id: 'P9-3', fecha: 9, homeTeamId: 'VERDE', awayTeamId: 'RAYADO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: 'II Ronda - F2' },
+  { id: 'P9-1', fecha: 9, homeTeamId: 'AMARILLO', awayTeamId: 'NEGRO', homeGoals: 4, awayGoals: 2, isPlayed: true, status: 'FINALIZADO', dateStr: '1 de Septiembre' },
+  { id: 'P9-2', fecha: 9, homeTeamId: 'BLANCO', awayTeamId: 'ROJO', homeGoals: 1, awayGoals: 1, isPlayed: true, status: 'FINALIZADO', dateStr: '1 de Septiembre' },
+  { id: 'P9-3', fecha: 9, homeTeamId: 'VERDE', awayTeamId: 'RAYADO', homeGoals: 0, awayGoals: 2, isPlayed: true, status: 'FINALIZADO', dateStr: '1 de Septiembre' },
   { id: 'P9-4', fecha: 9, homeTeamId: 'AZUL', awayTeamId: 'NARANJA', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: 'II Ronda - F2' },
 
   // FECHA 10 (3. FECHA II Ronda: 3 Vs 5, 4 Vs 8, 1 Vs 6, 2 Vs 7)
