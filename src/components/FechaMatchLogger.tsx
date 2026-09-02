@@ -805,7 +805,7 @@ export const FechaMatchLogger: React.FC<FechaMatchLoggerProps> = ({
                             key={s.playerId}
                             className="p-1 rounded bg-red-950/80 border border-red-800 text-red-300 font-bold text-[10px]"
                           >
-                            ⛔ SUSPENDIDO: #{s.dorsal} {s.playerName} ({s.reason})
+                            ⛔ SUSPENDIDO: #{s.dorsal} {s.playerName} ({s.reason === '1_ROJA' ? 'Tarjeta Roja Directa' : `${s.cardCount || 3} Tarjetas`})
                           </div>
                         ))}
 
@@ -928,7 +928,7 @@ export const FechaMatchLogger: React.FC<FechaMatchLoggerProps> = ({
                             key={s.playerId}
                             className="p-1 rounded bg-red-950/80 border border-red-800 text-red-300 font-bold text-[10px]"
                           >
-                            ⛔ SUSPENDIDO: #{s.dorsal} {s.playerName} ({s.reason})
+                            ⛔ SUSPENDIDO: #{s.dorsal} {s.playerName} ({s.reason === '1_ROJA' ? 'Tarjeta Roja Directa' : `${s.cardCount || 3} Tarjetas`})
                           </div>
                         ))}
 

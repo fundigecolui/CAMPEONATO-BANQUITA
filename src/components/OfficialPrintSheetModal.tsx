@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { computeStandings, computePlayerStats, checkMathematicalElimination, groupGoalsByPlayer } from '../utils/sanctionsEngine';
 import { getUnifiedPlayerEvents } from './FechaMatchLogger';
+import { getTeamEmoji } from './TeamColorDot';
 
 interface OfficialPrintSheetModalProps {
   isOpen: boolean;
@@ -67,6 +68,8 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
   const standings = computeStandings(teams, matches, cards, players);
   const { stats: playerStats, allSuspensions } = computePlayerStats(players, cards, goals, currentFecha);
   const nextFecha = currentFecha + 1;
+  const nextMatches = matches.filter((m) => (m.fecha ?? (m as any).fechaNumber) === nextFecha);
+  const nextFechaDate = FECHA_DATES[nextFecha] || 'Por Programar';
   const nextFechaSuspensions = allSuspensions.filter((s) => s.suspendedForFecha === nextFecha);
   const cardsInFecha = cards.filter((c) => (c.fecha ?? (c as any).fechaNumber) === currentFecha);
 
@@ -600,10 +603,11 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
                       <div className="space-y-1">
                         {nextFechaSuspensions.map((s, idx) => {
                           const team = teams.find((t) => t.id === s.teamId);
+                          const cardCount = s.cardCount || 3;
                           const reasonLabel =
                             s.reason === '1_ROJA'
                               ? 'Tarjeta Roja Directa'
-                              : 'Acumulación de 3 Tarjetas (Amarillas / Azules)';
+                              : `${cardCount} Tarjetas`;
                           return (
                             <div
                               key={idx}
@@ -627,6 +631,55 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
                     </p>
                   </div>
                 </div>
+              </div>
+
+              {/* Próxima Fecha (Programación de la siguiente Jornada) */}
+              <div className="border-2 border-black rounded-xl p-2.5 bg-slate-50 font-mono space-y-1.5">
+                <div className="flex items-center justify-between border-b border-slate-300 pb-1">
+                  <div className="flex items-center gap-1.5 font-black text-[11px] uppercase text-slate-950">
+                    <Calendar className="w-3.5 h-3.5 text-blue-700 shrink-0" />
+                    <span>PRÓXIMA FECHA (PROGRAMACIÓN JORNADA #{nextFecha})</span>
+                  </div>
+                  <span className="text-[9px] font-bold text-slate-800 bg-blue-100/80 px-2 py-0.5 rounded border border-blue-200">
+                    🗓️ {nextFechaDate}
+                  </span>
+                </div>
+
+                {nextMatches.length === 0 ? (
+                  <div className="bg-white p-2 rounded-lg border border-slate-200 text-center">
+                    <p className="text-[8.5px] text-slate-500 italic">Partidos de la Fecha #{nextFecha} pendientes por programar.</p>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-1.5 print:grid-cols-4">
+                    {nextMatches.map((m, idx) => {
+                      const homeTeam = teams.find((t) => t.id === m.homeTeamId);
+                      const awayTeam = teams.find((t) => t.id === m.awayTeamId);
+                      const homeEmoji = getTeamEmoji(m.homeTeamId);
+                      const awayEmoji = getTeamEmoji(m.awayTeamId);
+                      const scheduleTime = m.time || MATCH_SCHEDULE_TIMES[idx] || `Partido #${idx + 1}`;
+
+                      return (
+                        <div
+                          key={m.id}
+                          className="bg-white p-2 rounded-lg border border-slate-300 text-center space-y-1 shadow-xs flex flex-col justify-between"
+                        >
+                          <div className="flex items-center justify-between text-[8px] text-slate-500 font-bold border-b border-slate-200 pb-0.5">
+                            <span className="text-slate-700 font-black">P#{formatMatchId(m.id)}</span>
+                            <span className="text-slate-900 font-extrabold font-mono">⏰ {scheduleTime}</span>
+                          </div>
+                          <div className="flex items-center justify-center gap-1 font-black text-[9.5px] text-slate-950 uppercase pt-0.5">
+                            <span className="truncate">{homeEmoji} {homeTeam?.name || m.homeTeamId}</span>
+                            <span className="text-slate-400 font-normal text-[8px]">vs</span>
+                            <span className="truncate">{awayTeam?.name || m.awayTeamId} {awayEmoji}</span>
+                          </div>
+                          <div className="text-[7.5px] font-black uppercase text-blue-900 bg-blue-50 px-1.5 py-0.2 rounded border border-blue-200 inline-block self-center">
+                            {m.status || (m.isPlayed ? 'FINALIZADO' : 'PROGRAMADO')}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
 
               {/* Signatures */}
@@ -817,7 +870,7 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
                                   key={s.playerId}
                                   className="p-1.5 rounded bg-red-100 border border-red-300 text-red-950 font-black text-[10px]"
                                 >
-                                  ⛔ SUSPENDIDO: #{s.dorsal} {s.playerName} ({s.reason})
+                                  ⛔ SUSPENDIDO: #{s.dorsal} {s.playerName} ({s.reason === '1_ROJA' ? 'Tarjeta Roja Directa' : `${s.cardCount || 3} Tarjetas`})
                                 </div>
                               ))}
 
@@ -906,7 +959,7 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
                                   key={s.playerId}
                                   className="p-1.5 rounded bg-red-100 border border-red-300 text-red-950 font-black text-[10px]"
                                 >
-                                  ⛔ SUSPENDIDO: #{s.dorsal} {s.playerName} ({s.reason})
+                                  ⛔ SUSPENDIDO: #{s.dorsal} {s.playerName} ({s.reason === '1_ROJA' ? 'Tarjeta Roja Directa' : `${s.cardCount || 3} Tarjetas`})
                                 </div>
                               ))}
 
@@ -1387,7 +1440,7 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
                         </thead>
                         <tbody>
                           {nextFechaSuspensions.map((s) => {
-                            const cause = s.reason === '1_ROJA' ? '1 Roja Directa' : '3 Tarjetas';
+                            const cause = s.reason === '1_ROJA' ? '1 Roja Directa' : `${s.cardCount || 3} Tarjetas`;
                             return (
                               <tr key={s.playerId} className="bg-red-100/80 text-red-950 font-bold">
                                 <td className="p-0.5 border border-black font-black text-center">{s.dorsal}</td>
@@ -1501,7 +1554,7 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
                                 let statusBg = 'bg-emerald-100 text-emerald-900';
 
                                 if (isSuspendedNext) {
-                                  const reason = nextSusp?.reason === '1_ROJA' ? 'Roja' : '3 Tarjetas';
+                                  const reason = nextSusp?.reason === '1_ROJA' ? 'Roja' : `${nextSusp?.cardCount || 3} Tarjetas`;
                                   statusText = `⛔ SUSP. FECHA #${nextFecha} (${reason})`;
                                   statusBg = 'bg-red-600 text-white font-black';
                                 } else if (isSuspendedCurrent) {

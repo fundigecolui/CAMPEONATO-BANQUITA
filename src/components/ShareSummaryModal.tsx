@@ -222,7 +222,8 @@ export const ShareSummaryModal: React.FC<ShareSummaryModalProps> = ({
         nextFechaSuspensions.forEach((s) => {
           const teamEmoji = getTeamEmoji(s.teamId);
           const teamObj = teams.find((t) => t.id === s.teamId);
-          const reasonLabel = s.reason === '1_ROJA' ? 'Tarjeta Roja Directa' : 'Acumulación 3 Tarjetas (Amarillas / Azules)';
+          const cardCount = s.cardCount || 3;
+          const reasonLabel = s.reason === '1_ROJA' ? 'Tarjeta Roja Directa' : `${cardCount} Tarjetas`;
           txt += `• ⛔ #${s.dorsal} ${s.playerName} (${teamEmoji} ${teamObj?.name || s.teamId}) ➔ Suspendido [${reasonLabel}]\n`;
         });
         txt += `_Nota: La suspensión vence al finalizar la jornada o pagar la sanción respectiva._\n\n`;
@@ -815,7 +816,8 @@ export const ShareSummaryModal: React.FC<ShareSummaryModalProps> = ({
                             <div className="space-y-1">
                               {nextFechaSuspensions.map((s, idx) => {
                                 const teamObj = teams.find((t) => t.id === s.teamId);
-                                const reasonLabel = s.reason === '1_ROJA' ? 'Tarjeta Roja Directa' : 'Acumuló 3 Tarjetas';
+                                const cardCount = s.cardCount || 3;
+                                const reasonLabel = s.reason === '1_ROJA' ? 'Tarjeta Roja Directa' : `${cardCount} Tarjetas`;
                                 return (
                                   <div
                                     key={idx}

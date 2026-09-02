@@ -76,6 +76,7 @@ export function computePlayerStats(
             teamId: p.teamId,
             dorsal: p.dorsal,
             reason: '3_TARJETAS',
+            cardCount: accumulativeCards,
             suspendedForFecha: cFecha + 1,
             status: cFecha + 1 <= currentActiveFecha ? (cFecha + 1 === currentActiveFecha ? 'PENDIENTE' : 'CUMPLIDA') : 'PENDIENTE',
             details: `Acumuló ${accumulativeCards} tarjetas (Amarillas/Azules) en Fecha ${cFecha}. Suspendido para Fecha ${cFecha + 1}.`,
@@ -110,7 +111,7 @@ export function computePlayerStats(
       pStat.isCurrentlySuspended = true;
       pStat.suspensionReason = activeSuspension.reason === '1_ROJA'
         ? 'Tarjeta Roja'
-        : 'Acumulación 3 Tarjetas (Amarillas/Azules)';
+        : `${activeSuspension.cardCount || 3} Tarjetas`;
       pStat.suspendedForFecha = currentActiveFecha;
     }
   });

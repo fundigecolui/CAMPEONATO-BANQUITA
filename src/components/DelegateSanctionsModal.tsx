@@ -85,7 +85,8 @@ export const DelegateSanctionsModal: React.FC<DelegateSanctionsModalProps> = ({
     if (teamSuspensions.length > 0) {
       msg += `⛔ *JUGADORES SUSPENDIDOS (NO PUEDEN JUGAR FECHA ${currentFecha}):*\n`;
       teamSuspensions.forEach((s) => {
-        msg += `• *#${s.dorsal} ${s.playerName}* → Motivo: ${s.reason === '1_ROJA' ? 'Tarjeta Roja Directa' : 'Acumuló 3 Tarjetas (Amarillas / Azules)'}\n`;
+        const cardCount = s.cardCount || 3;
+        msg += `• *#${s.dorsal} ${s.playerName}* → Motivo: ${s.reason === '1_ROJA' ? 'Tarjeta Roja Directa' : `${cardCount} Tarjetas`}\n`;
       });
       msg += `\n`;
     } else {
@@ -207,7 +208,7 @@ export const DelegateSanctionsModal: React.FC<DelegateSanctionsModalProps> = ({
                           </span>
                         </div>
                         <p className="text-[11px] text-red-200 mt-1">
-                          Motivo: <strong className="text-amber-300">{s.reason === '1_ROJA' ? 'Tarjeta Roja Directa' : 'Acumuló 3 Tarjetas (Amarillas / Azules)'}</strong>
+                          Motivo: <strong className="text-amber-300">{s.reason === '1_ROJA' ? 'Tarjeta Roja Directa' : `${s.cardCount || 3} Tarjetas`}</strong>
                         </p>
                         <p className="text-[10px] text-slate-400 mt-0.5">
                           Delegado responsable: <strong>{teamObj?.delegate || 'Delegado de Equipo'}</strong>

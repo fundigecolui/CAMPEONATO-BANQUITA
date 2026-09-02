@@ -86,7 +86,7 @@ export const SanctionAlertsBanner: React.FC<SanctionAlertsBannerProps> = ({
                           {s.teamId}
                         </span>
                         <span className="text-[10px] text-red-400 font-medium truncate">
-                          {s.reason === '1_ROJA' ? 'Tarjeta Roja directa' : 'Acumulación de 3 Tarjetas (Amarillas / Azules)'}
+                          {s.reason === '1_ROJA' ? 'Tarjeta Roja directa' : `${s.cardCount || 3} Tarjetas`}
                         </span>
                       </div>
                     </div>

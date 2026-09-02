@@ -77,6 +77,7 @@ export interface SuspensionAlert {
   teamId: TeamId;
   dorsal: number;
   reason: '3_TARJETAS' | '3_AMARILLAS' | '1_ROJA' | 'MANUAL';
+  cardCount?: number; // accumulated cards when suspended (e.g. 3, 6, 9, 12...)
   suspendedForFecha: number; // The fecha where player MUST NOT play
   status: 'PENDIENTE' | 'CUMPLIDA' | 'EXPIRADA';
   details: string;
