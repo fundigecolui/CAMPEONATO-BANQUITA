@@ -367,10 +367,11 @@ export const GOALS_2026_2: GoalRecord[] = [
   { id: 'g9-7', playerId: 445, fecha: 9, teamId: 'ROJO', createdAt: new Date('2026-09-01').toISOString() }, // ROBERTO PERTUZ (ROJO)
   { id: 'g9-8', playerId: 463, fecha: 9, teamId: 'BLANCO', createdAt: new Date('2026-09-01').toISOString() }, // IVAN DIAZ (BLANCO)
 
-  // VERDE (1) vs RAYADO (2)
+  // VERDE (2) vs RAYADO (2)
   { id: 'g9-9', playerId: 437, fecha: 9, teamId: 'RAYADO', createdAt: new Date('2026-09-01').toISOString() }, // MARIO VELASCO (RAYADO)
   { id: 'g9-10', playerId: 433, fecha: 9, teamId: 'RAYADO', createdAt: new Date('2026-09-01').toISOString() }, // DAMIAN MORENO (RAYADO)
-  { id: 'g9-11', playerId: 409, fecha: 9, teamId: 'VERDE', createdAt: new Date('2026-09-01').toISOString() }, // ANDY ACEVEDO (VERDE)
+  { id: 'g9-11', playerId: 409, fecha: 9, teamId: 'VERDE', createdAt: new Date('2026-09-01').toISOString() }, // ANDY ACEVEDO (VERDE - Gol 1)
+  { id: 'g9-12', playerId: 409, fecha: 9, teamId: 'VERDE', createdAt: new Date('2026-09-01').toISOString() }, // ANDY ACEVEDO (VERDE - Gol 2)
 ];
 
 // Official Fechas for II Semestre 2026 (Vuelta 1: Fechas 1 a 7, Vuelta 2: Fechas 8 a 14)
@@ -804,7 +805,7 @@ const INITIAL_FECHAS_2026_2: Match[] = [
   // FECHA 9 (2. FECHA II Ronda: 6 Vs 7, 1 Vs 2, 5 Vs 8, 4 Vs 3)
   { id: 'P9-1', fecha: 9, homeTeamId: 'AMARILLO', awayTeamId: 'NEGRO', homeGoals: 4, awayGoals: 2, isPlayed: true, status: 'FINALIZADO', dateStr: '1 de Septiembre' },
   { id: 'P9-2', fecha: 9, homeTeamId: 'BLANCO', awayTeamId: 'ROJO', homeGoals: 1, awayGoals: 1, isPlayed: true, status: 'FINALIZADO', dateStr: '1 de Septiembre' },
-  { id: 'P9-3', fecha: 9, homeTeamId: 'VERDE', awayTeamId: 'RAYADO', homeGoals: 1, awayGoals: 2, isPlayed: true, status: 'FINALIZADO', dateStr: '1 de Septiembre' },
+  { id: 'P9-3', fecha: 9, homeTeamId: 'VERDE', awayTeamId: 'RAYADO', homeGoals: 2, awayGoals: 2, isPlayed: true, status: 'FINALIZADO', dateStr: '1 de Septiembre' },
   { id: 'P9-4', fecha: 9, homeTeamId: 'AZUL', awayTeamId: 'NARANJA', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: 'II Ronda - F2' },
 
   // FECHA 10 (3. FECHA II Ronda: 3 Vs 5, 4 Vs 8, 1 Vs 6, 2 Vs 7)
