@@ -390,6 +390,9 @@ export const GOALS_2026_2: GoalRecord[] = [
   { id: 'g10-5', playerId: 411, fecha: 10, teamId: 'VERDE', createdAt: new Date('2026-09-03').toISOString() }, // LUIS PACHECO (VERDE - Gol 2)
   { id: 'g10-6', playerId: 412, fecha: 10, teamId: 'VERDE', createdAt: new Date('2026-09-03').toISOString() }, // JAVIER MELGAREJO (VERDE - Gol 1)
   { id: 'g10-7', playerId: 412, fecha: 10, teamId: 'VERDE', createdAt: new Date('2026-09-03').toISOString() }, // JAVIER MELGAREJO (VERDE - Gol 2)
+
+  // BLANCO (1) vs AMARILLO (0)
+  { id: 'g10-8', playerId: 461, fecha: 10, teamId: 'BLANCO', createdAt: new Date('2026-09-03').toISOString() }, // EVER VILLALBA (BLANCO)
 ];
 
 // Official Fechas for II Semestre 2026 (Vuelta 1: Fechas 1 a 7, Vuelta 2: Fechas 8 a 14)
@@ -898,7 +901,7 @@ const INITIAL_FECHAS_2026_2: Match[] = [
       awayPlayerIds: [433, 434, 435, 436, 439, 440, 465], // Excluye 437 (Mario Velasco) y 438 (Anuar Ojeda - No asisten)
     },
   },
-  { id: 'P10-3', fecha: 10, homeTeamId: 'BLANCO', awayTeamId: 'AMARILLO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '3 de Septiembre' },
+  { id: 'P10-3', fecha: 10, homeTeamId: 'BLANCO', awayTeamId: 'AMARILLO', homeGoals: 1, awayGoals: 0, isPlayed: true, status: 'FINALIZADO', dateStr: '3 de Septiembre' },
   {
     id: 'P10-4',
     fecha: 10,
