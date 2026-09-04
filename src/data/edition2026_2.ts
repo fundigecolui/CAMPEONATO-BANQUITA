@@ -180,7 +180,7 @@ export const CARDS_2026_2: CardRecord[] = [
 
   // Fecha 9 (1 de Septiembre)
   { id: 'c9-1', playerId: 451, fecha: 9, type: 'AMARILLA', createdAt: new Date('2026-09-01').toISOString() }, // YAMIR PINEDA (AMARILLO) - Amarilla
-  // { id: 'c9-2', playerId: 421, fecha: 9, type: 'AMARILLA', createdAt: new Date('2026-09-01').toISOString() }, // JHON CUARTAS (NEGRO) - Inasistencia a Fecha 9
+  { id: 'c9-2', playerId: 421, fecha: 9, type: 'AMARILLA', createdAt: new Date('2026-09-01').toISOString() }, // JHON CUARTAS (NEGRO) - Amarilla
   { id: 'c9-3', playerId: 419, fecha: 9, type: 'AMARILLA', createdAt: new Date('2026-09-01').toISOString() }, // NEL MARTINEZ (NEGRO) - Amarilla
   { id: 'c9-4', playerId: 445, fecha: 9, type: 'AMARILLA', createdAt: new Date('2026-09-01').toISOString() }, // ROBERTO PERTUZ (ROJO) - Amarilla
   { id: 'c9-5', playerId: 443, fecha: 9, type: 'AMARILLA', createdAt: new Date('2026-09-01').toISOString() }, // URIEL ZAMBRANO (ROJO) - Amarilla
@@ -873,10 +873,36 @@ const INITIAL_FECHAS_2026_2: Match[] = [
   },
 
   // FECHA 10 (3. FECHA II Ronda: 3 Vs 5, 4 Vs 8, 1 Vs 6, 2 Vs 7)
-  { id: 'P10-1', fecha: 10, homeTeamId: 'NARANJA', awayTeamId: 'VERDE', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: 'II Ronda - F3' },
-  { id: 'P10-2', fecha: 10, homeTeamId: 'AZUL', awayTeamId: 'RAYADO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: 'II Ronda - F3' },
-  { id: 'P10-3', fecha: 10, homeTeamId: 'BLANCO', awayTeamId: 'AMARILLO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: 'II Ronda - F3' },
-  { id: 'P10-4', fecha: 10, homeTeamId: 'ROJO', awayTeamId: 'NEGRO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: 'II Ronda - F3' },
+  { id: 'P10-1', fecha: 10, homeTeamId: 'NARANJA', awayTeamId: 'VERDE', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '3 de Septiembre' },
+  {
+    id: 'P10-2',
+    fecha: 10,
+    homeTeamId: 'AZUL',
+    awayTeamId: 'RAYADO',
+    homeGoals: 0,
+    awayGoals: 0,
+    isPlayed: false,
+    dateStr: '3 de Septiembre',
+    attendance: {
+      homePlayerIds: [401, 402, 403, 404, 405, 406, 407, 408],
+      awayPlayerIds: [433, 434, 435, 436, 439, 440, 465], // Excluye 437 (Mario Velasco) y 438 (Anuar Ojeda - No asisten)
+    },
+  },
+  { id: 'P10-3', fecha: 10, homeTeamId: 'BLANCO', awayTeamId: 'AMARILLO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '3 de Septiembre' },
+  {
+    id: 'P10-4',
+    fecha: 10,
+    homeTeamId: 'ROJO',
+    awayTeamId: 'NEGRO',
+    homeGoals: 0,
+    awayGoals: 0,
+    isPlayed: false,
+    dateStr: '3 de Septiembre',
+    attendance: {
+      homePlayerIds: [441, 442, 443, 444, 445, 447], // Excluye 446 (Gustavo Fernandez - No asiste) y 448 (Robert Ortega - No asiste)
+      awayPlayerIds: [417, 418, 419, 420, 421, 422, 423, 424],
+    },
+  },
 
   // FECHA 11 (4. FECHA II Ronda: 1 Vs 4, 2 Vs 3, 7 Vs 5, 6 Vs 8)
   { id: 'P11-1', fecha: 11, homeTeamId: 'BLANCO', awayTeamId: 'AZUL', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: 'II Ronda - F4' },

@@ -595,7 +595,7 @@ export const FechaMatchLogger: React.FC<FechaMatchLoggerProps> = ({
               ) : null}
 
               {/* Attendance & Lineup Checklist Bar */}
-              {(isMatchPlayedOrLive || isEditMode) && (() => {
+              {(isMatchPlayedOrLive || isEditMode || Boolean(match.attendance)) && (() => {
                 const homeAttending = match.attendance?.homePlayerIds ?? homePlayers.map((p) => p.id);
                 const awayAttending = match.attendance?.awayPlayerIds ?? awayPlayers.map((p) => p.id);
                 const isAttendanceOpen = openAttendanceMatchId === match.id;
