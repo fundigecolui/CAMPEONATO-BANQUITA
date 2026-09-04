@@ -394,11 +394,13 @@ export const GOALS_2026_2: GoalRecord[] = [
   // BLANCO (1) vs AMARILLO (0)
   { id: 'g10-8', playerId: 461, fecha: 10, teamId: 'BLANCO', createdAt: new Date('2026-09-03').toISOString() }, // EVER VILLALBA (BLANCO)
 
-  // ROJO (4) vs NEGRO (0)
+  // ROJO (5) vs NEGRO (1)
   { id: 'g10-9', playerId: 445, fecha: 10, teamId: 'ROJO', createdAt: new Date('2026-09-03').toISOString() }, // ROBERTO PERTUZ (ROJO - Gol 1)
   { id: 'g10-10', playerId: 442, fecha: 10, teamId: 'ROJO', createdAt: new Date('2026-09-03').toISOString() }, // MAURICIO DIAZ (ROJO)
   { id: 'g10-11', playerId: 447, fecha: 10, teamId: 'ROJO', createdAt: new Date('2026-09-03').toISOString() }, // ANTONIO ORTEGA (ROJO)
   { id: 'g10-12', playerId: 445, fecha: 10, teamId: 'ROJO', createdAt: new Date('2026-09-03').toISOString() }, // ROBERTO PERTUZ (ROJO - Gol 2)
+  { id: 'g10-13', playerId: 443, fecha: 10, teamId: 'ROJO', createdAt: new Date('2026-09-03').toISOString() }, // URIEL ZAMBRANO (ROJO)
+  { id: 'g10-14', playerId: 417, fecha: 10, teamId: 'NEGRO', createdAt: new Date('2026-09-03').toISOString() }, // RIGOBERTO LOZANO (NEGRO)
 ];
 
 // Official Fechas for II Semestre 2026 (Vuelta 1: Fechas 1 a 7, Vuelta 2: Fechas 8 a 14)
@@ -913,8 +915,8 @@ const INITIAL_FECHAS_2026_2: Match[] = [
     fecha: 10,
     homeTeamId: 'ROJO',
     awayTeamId: 'NEGRO',
-    homeGoals: 4,
-    awayGoals: 0,
+    homeGoals: 5,
+    awayGoals: 1,
     isPlayed: true,
     status: 'FINALIZADO',
     dateStr: '3 de Septiembre',

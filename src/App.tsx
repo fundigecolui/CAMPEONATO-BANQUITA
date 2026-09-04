@@ -62,7 +62,7 @@ const getInitialDataForEdition = (editionId: string) => {
       matches: MATCHES_2026_2,
       currentFecha: 10,
       maxUnlockedFecha: 14,
-      v: 124,
+      v: 125,
     };
   }
   if (editionId === '2026-1') {
