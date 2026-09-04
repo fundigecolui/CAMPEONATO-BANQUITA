@@ -180,7 +180,7 @@ export const CARDS_2026_2: CardRecord[] = [
 
   // Fecha 9 (1 de Septiembre)
   { id: 'c9-1', playerId: 451, fecha: 9, type: 'AMARILLA', createdAt: new Date('2026-09-01').toISOString() }, // YAMIR PINEDA (AMARILLO) - Amarilla
-  { id: 'c9-2', playerId: 421, fecha: 9, type: 'AMARILLA', createdAt: new Date('2026-09-01').toISOString() }, // JHON CUARTAS (NEGRO) - Amarilla
+  // { id: 'c9-2', playerId: 421, fecha: 9, type: 'AMARILLA', createdAt: new Date('2026-09-01').toISOString() }, // JHON CUARTAS (NEGRO) - Inasistencia a Fecha 9
   { id: 'c9-3', playerId: 419, fecha: 9, type: 'AMARILLA', createdAt: new Date('2026-09-01').toISOString() }, // NEL MARTINEZ (NEGRO) - Amarilla
   { id: 'c9-4', playerId: 445, fecha: 9, type: 'AMARILLA', createdAt: new Date('2026-09-01').toISOString() }, // ROBERTO PERTUZ (ROJO) - Amarilla
   { id: 'c9-5', playerId: 443, fecha: 9, type: 'AMARILLA', createdAt: new Date('2026-09-01').toISOString() }, // URIEL ZAMBRANO (ROJO) - Amarilla
@@ -811,8 +811,36 @@ const INITIAL_FECHAS_2026_2: Match[] = [
   { id: 'P8-4', fecha: 8, homeTeamId: 'ROJO', awayTeamId: 'VERDE', homeGoals: 0, awayGoals: 1, isPlayed: true, status: 'FINALIZADO', dateStr: 'II Ronda - F1' },
 
   // FECHA 9 (2. FECHA II Ronda: 6 Vs 7, 1 Vs 2, 5 Vs 8, 4 Vs 3)
-  { id: 'P9-1', fecha: 9, homeTeamId: 'AMARILLO', awayTeamId: 'NEGRO', homeGoals: 4, awayGoals: 2, isPlayed: true, status: 'FINALIZADO', dateStr: '1 de Septiembre' },
-  { id: 'P9-2', fecha: 9, homeTeamId: 'BLANCO', awayTeamId: 'ROJO', homeGoals: 1, awayGoals: 1, isPlayed: true, status: 'FINALIZADO', dateStr: '1 de Septiembre' },
+  {
+    id: 'P9-1',
+    fecha: 9,
+    homeTeamId: 'AMARILLO',
+    awayTeamId: 'NEGRO',
+    homeGoals: 4,
+    awayGoals: 2,
+    isPlayed: true,
+    status: 'FINALIZADO',
+    dateStr: '1 de Septiembre',
+    attendance: {
+      homePlayerIds: [449, 450, 451, 452, 453, 454, 455, 456], // AMARILLO: 8/8
+      awayPlayerIds: [417, 418, 419, 420, 422, 423, 424], // Excluye 421 (Jhon Cuartas - No asiste)
+    },
+  },
+  {
+    id: 'P9-2',
+    fecha: 9,
+    homeTeamId: 'BLANCO',
+    awayTeamId: 'ROJO',
+    homeGoals: 1,
+    awayGoals: 1,
+    isPlayed: true,
+    status: 'FINALIZADO',
+    dateStr: '1 de Septiembre',
+    attendance: {
+      homePlayerIds: [457, 458, 459, 460, 461, 462, 463, 464],
+      awayPlayerIds: [441, 442, 443, 444, 445, 446, 447], // Excluye 448 (Robert Ortega - No asiste)
+    },
+  },
   {
     id: 'P9-3',
     fecha: 9,
@@ -825,7 +853,7 @@ const INITIAL_FECHAS_2026_2: Match[] = [
     dateStr: '1 de Septiembre',
     attendance: {
       homePlayerIds: [409, 410, 411, 412, 414, 416], // Excluye 413 (Javier Fadul) y 415 (Juan/Ivan Orrego)
-      awayPlayerIds: [433, 434, 435, 436, 437, 439, 440, 465], // Excluye 438 (Anuar Ojeda)
+      awayPlayerIds: [433, 434, 435, 436, 439, 440, 465], // Excluye 437 (Mario Velasco) y 438 (Anuar Ojeda)
     },
   },
   {
