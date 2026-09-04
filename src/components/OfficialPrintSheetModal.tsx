@@ -1245,6 +1245,7 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
                     <tr className="bg-black text-white font-mono text-[10px] font-extrabold">
                       <th className="p-1 text-center w-8 border border-slate-700">POS</th>
                       <th className="p-1 border border-slate-700">EQUIPO</th>
+                      <th className="p-1 text-center bg-amber-400 text-black border border-slate-700">PTS</th>
                       <th className="p-1 text-center border border-slate-700">PJ</th>
                       <th className="p-1 text-center border border-slate-700">PG</th>
                       <th className="p-1 text-center border border-slate-700">PE</th>
@@ -1254,7 +1255,6 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
                       <th className="p-1 text-center border border-slate-700">DG</th>
                       <th className="p-1 text-center border border-slate-700">RACHA</th>
                       <th className="p-1 text-center border border-slate-700">JUEGO LIMPIO</th>
-                      <th className="p-1 text-center bg-amber-400 text-black border border-slate-700">PTS</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-black font-mono text-[10.5px]">
@@ -1270,6 +1270,9 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
                           </td>
                           <td className="p-1 font-black border border-black text-xs uppercase">
                             {row.teamName}
+                          </td>
+                          <td className="p-1 text-center font-black border border-black bg-amber-100 text-black text-sm">
+                            {row.pts}
                           </td>
                           <td className="p-1 text-center font-bold border border-black">{row.pj}</td>
                           <td className="p-1 text-center font-bold border border-black">{row.pg}</td>
@@ -1294,9 +1297,6 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
                           </td>
                           <td className="p-1 text-center font-bold border border-black text-emerald-800">
                             {row.fairPlayPts} pts
-                          </td>
-                          <td className="p-1 text-center font-black border border-black bg-amber-100 text-black text-sm">
-                            {row.pts}
                           </td>
                         </tr>
                       );

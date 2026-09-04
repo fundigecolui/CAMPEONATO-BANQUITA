@@ -386,16 +386,19 @@ export const GOALS_2026_2: GoalRecord[] = [
   { id: 'g10-1', playerId: 409, fecha: 10, teamId: 'VERDE', createdAt: new Date('2026-09-03').toISOString() }, // ANDY ACEVEDO (VERDE - Gol 1)
   { id: 'g10-2', playerId: 409, fecha: 10, teamId: 'VERDE', createdAt: new Date('2026-09-03').toISOString() }, // ANDY ACEVEDO (VERDE - Gol 2)
   { id: 'g10-3', playerId: 409, fecha: 10, teamId: 'VERDE', createdAt: new Date('2026-09-03').toISOString() }, // ANDY ACEVEDO (VERDE - Gol 3)
-  { id: 'g10-4', playerId: 411, fecha: 10, teamId: 'VERDE', createdAt: new Date('2026-09-03').toISOString() }, // LUIS PACHECO (VERDE - Gol 1)
-  { id: 'g10-5', playerId: 411, fecha: 10, teamId: 'VERDE', createdAt: new Date('2026-09-03').toISOString() }, // LUIS PACHECO (VERDE - Gol 2)
-  { id: 'g10-6', playerId: 412, fecha: 10, teamId: 'VERDE', createdAt: new Date('2026-09-03').toISOString() }, // JAVIER MELGAREJO (VERDE - Gol 1)
-  { id: 'g10-7', playerId: 412, fecha: 10, teamId: 'VERDE', createdAt: new Date('2026-09-03').toISOString() }, // JAVIER MELGAREJO (VERDE - Gol 2)
+  { id: 'g10-4', playerId: 414, fecha: 10, teamId: 'VERDE', createdAt: new Date('2026-09-03').toISOString() }, // LUIS SOLANO (VERDE - Gol 1)
+  { id: 'g10-5', playerId: 414, fecha: 10, teamId: 'VERDE', createdAt: new Date('2026-09-03').toISOString() }, // LUIS SOLANO (VERDE - Gol 2)
+  { id: 'g10-6', playerId: 411, fecha: 10, teamId: 'VERDE', createdAt: new Date('2026-09-03').toISOString() }, // LUIS PACHECO (VERDE)
+  { id: 'g10-7', playerId: 410, fecha: 10, teamId: 'VERDE', createdAt: new Date('2026-09-03').toISOString() }, // MARCOS FIGUEROA (VERDE)
 
   // BLANCO (1) vs AMARILLO (0)
   { id: 'g10-8', playerId: 461, fecha: 10, teamId: 'BLANCO', createdAt: new Date('2026-09-03').toISOString() }, // EVER VILLALBA (BLANCO)
 
-  // ROJO (1) vs NEGRO (0)
-  { id: 'g10-9', playerId: 445, fecha: 10, teamId: 'ROJO', createdAt: new Date('2026-09-03').toISOString() }, // ROBERTO PERTUZ (ROJO)
+  // ROJO (4) vs NEGRO (0)
+  { id: 'g10-9', playerId: 445, fecha: 10, teamId: 'ROJO', createdAt: new Date('2026-09-03').toISOString() }, // ROBERTO PERTUZ (ROJO - Gol 1)
+  { id: 'g10-10', playerId: 442, fecha: 10, teamId: 'ROJO', createdAt: new Date('2026-09-03').toISOString() }, // MAURICIO DIAZ (ROJO)
+  { id: 'g10-11', playerId: 447, fecha: 10, teamId: 'ROJO', createdAt: new Date('2026-09-03').toISOString() }, // ANTONIO ORTEGA (ROJO)
+  { id: 'g10-12', playerId: 445, fecha: 10, teamId: 'ROJO', createdAt: new Date('2026-09-03').toISOString() }, // ROBERTO PERTUZ (ROJO - Gol 2)
 ];
 
 // Official Fechas for II Semestre 2026 (Vuelta 1: Fechas 1 a 7, Vuelta 2: Fechas 8 a 14)
@@ -910,7 +913,7 @@ const INITIAL_FECHAS_2026_2: Match[] = [
     fecha: 10,
     homeTeamId: 'ROJO',
     awayTeamId: 'NEGRO',
-    homeGoals: 1,
+    homeGoals: 4,
     awayGoals: 0,
     isPlayed: true,
     status: 'FINALIZADO',

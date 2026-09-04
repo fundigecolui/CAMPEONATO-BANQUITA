@@ -173,17 +173,17 @@ export const ShareSummaryModal: React.FC<ShareSummaryModalProps> = ({
 
     if (includeStandings) {
       txt += `─── 📊 TABLA DE POSICIONES ───\n\n`;
-      txt += `Pos  Equipo      PJ   PTS   DG\n`;
+      txt += `Pos  Equipo      PTS  PJ   DG\n`;
       txt += `-------------------------------\n`;
       standings.slice(0, 8).forEach((s, i) => {
         const posNum = String(i + 1).padStart(2, ' ');
         const teamEmoji = getTeamEmoji(s.teamId);
         const teamNamePad = s.teamName.padEnd(8, ' ');
+        const ptsPad = String(s.pts).padStart(3, ' ');
         const pjPad = String(s.pj).padStart(3, ' ');
-        const ptsPad = String(s.pts).padStart(4, ' ');
         const dgStr = s.dg >= 0 ? `+${s.dg}` : String(s.dg);
         const dgPad = dgStr.padStart(5, ' ');
-        txt += `${posNum}.  ${teamEmoji} ${teamNamePad} ${pjPad}  ${ptsPad}  ${dgPad}\n`;
+        txt += `${posNum}.  ${teamEmoji} ${teamNamePad} ${ptsPad}  ${pjPad}  ${dgPad}\n`;
       });
       txt += `\n`;
     }
@@ -672,9 +672,9 @@ export const ShareSummaryModal: React.FC<ShareSummaryModalProps> = ({
                       <div className="bg-white rounded-2xl border border-slate-200 p-2 text-xs overflow-hidden shadow-xs space-y-1">
                         <div className="grid grid-cols-12 font-black text-slate-500 border-b border-slate-200 pb-1.5 px-2 text-[9.5px] uppercase tracking-wider font-mono">
                           <span className="col-span-6">EQUIPO</span>
+                          <span className="col-span-2 text-center text-slate-800 bg-slate-100 rounded-md py-0.5">PTS</span>
                           <span className="col-span-2 text-center">PJ</span>
                           <span className="col-span-2 text-center">DG</span>
-                          <span className="col-span-2 text-center text-slate-800 bg-slate-100 rounded-md py-0.5">PTS</span>
                         </div>
                         {standings.slice(0, 8).map((s, i) => {
                           const isLeader = i === 0;
@@ -695,12 +695,6 @@ export const ShareSummaryModal: React.FC<ShareSummaryModalProps> = ({
                                 <TeamBadgeDot teamId={s.teamId} teamName={s.teamName} size="sm" />
                                 {isLeader && <span className="text-xs">🏅 🏆</span>}
                               </div>
-                              <span className="col-span-2 text-center text-slate-700 font-mono text-[11px] font-bold">
-                                {s.pj}
-                              </span>
-                              <span className="col-span-2 text-center text-slate-800 font-mono text-[11px] font-bold">
-                                {s.dg >= 0 ? `+${s.dg}` : s.dg}
-                              </span>
                               <div className="col-span-2 flex justify-center">
                                 <span
                                   className={`min-w-[28px] py-0.5 text-center font-black text-xs font-mono rounded-md shadow-2xs ${
@@ -712,6 +706,12 @@ export const ShareSummaryModal: React.FC<ShareSummaryModalProps> = ({
                                   {s.pts}
                                 </span>
                               </div>
+                              <span className="col-span-2 text-center text-slate-700 font-mono text-[11px] font-bold">
+                                {s.pj}
+                              </span>
+                              <span className="col-span-2 text-center text-slate-800 font-mono text-[11px] font-bold">
+                                {s.dg >= 0 ? `+${s.dg}` : s.dg}
+                              </span>
                             </div>
                           );
                         })}

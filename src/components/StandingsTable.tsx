@@ -120,6 +120,7 @@ export const StandingsTable: React.FC<StandingsTableProps> = ({ standings, teams
               <tr className="bg-slate-950/80 text-slate-300 uppercase tracking-wider font-mono text-xs sm:text-sm border-b border-slate-800">
                 <th className="p-3.5 text-center font-black w-14">POS</th>
                 <th className="p-3.5 font-black">EQUIPO</th>
+                <th className="p-3.5 text-center font-extrabold text-amber-400 bg-amber-500/10 text-base sm:text-lg border-x border-amber-500/20" title="Puntos Totales">PTS</th>
                 <th className="p-3.5 text-center font-bold" title="Partidos Jugados">PJ</th>
                 <th className="p-3.5 text-center font-bold text-emerald-400" title="Partidos Ganados">PG</th>
                 <th className="p-3.5 text-center font-bold text-amber-400" title="Partidos Empatados">PE</th>
@@ -129,7 +130,6 @@ export const StandingsTable: React.FC<StandingsTableProps> = ({ standings, teams
                 <th className="p-3.5 text-center font-black text-amber-300" title="Diferencia de Goles">DG</th>
                 <th className="p-3.5 text-center font-bold text-slate-300" title="Últimos partidos (G: Ganado, E: Empatado, P: Perdido)">RACHA</th>
                 <th className="p-3.5 text-center font-bold text-emerald-300" title="Puntos Juego Limpio (Fair Play)">JUEGO LIMPIO</th>
-                <th className="p-3.5 text-center font-extrabold text-amber-400 bg-amber-500/10 text-base sm:text-lg" title="Puntos Totales">PTS</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-800/80">
@@ -208,6 +208,11 @@ export const StandingsTable: React.FC<StandingsTableProps> = ({ standings, teams
                       </div>
                     </td>
 
+                    {/* Points (PTS) */}
+                    <td className="p-3.5 text-center font-mono font-black text-lg sm:text-xl text-amber-300 bg-amber-500/20 border-x border-amber-500/30">
+                      {row.pts}
+                    </td>
+
                     {/* Match Stats */}
                     <td className="p-3.5 text-center font-mono font-bold text-sm sm:text-base text-slate-200">{row.pj}</td>
                     <td className="p-3.5 text-center font-mono font-bold text-sm sm:text-base text-emerald-400">{row.pg}</td>
@@ -242,9 +247,6 @@ export const StandingsTable: React.FC<StandingsTableProps> = ({ standings, teams
 
                     <td className="p-3.5 text-center font-mono font-bold text-sm sm:text-base text-emerald-400 bg-emerald-950/20">
                       {row.fairPlayPts} pts
-                    </td>
-                    <td className="p-3.5 text-center font-mono font-black text-lg sm:text-xl text-amber-300 bg-amber-500/20 border-l border-amber-500/30">
-                      {row.pts}
                     </td>
                   </tr>
                 );
