@@ -380,6 +380,16 @@ export const GOALS_2026_2: GoalRecord[] = [
   // AZUL (1) vs NARANJA (1)
   { id: 'g9-13', playerId: 403, fecha: 9, teamId: 'AZUL', createdAt: new Date('2026-09-01').toISOString() }, // OSCAR PACHECO (AZUL)
   { id: 'g9-14', playerId: 427, fecha: 9, teamId: 'NARANJA', createdAt: new Date('2026-09-01').toISOString() }, // JORGE LOZANO (NARANJA)
+
+  // Fecha 10 (3 de Septiembre)
+  // NARANJA (0) vs VERDE (7)
+  { id: 'g10-1', playerId: 409, fecha: 10, teamId: 'VERDE', createdAt: new Date('2026-09-03').toISOString() }, // ANDY ACEVEDO (VERDE - Gol 1)
+  { id: 'g10-2', playerId: 409, fecha: 10, teamId: 'VERDE', createdAt: new Date('2026-09-03').toISOString() }, // ANDY ACEVEDO (VERDE - Gol 2)
+  { id: 'g10-3', playerId: 409, fecha: 10, teamId: 'VERDE', createdAt: new Date('2026-09-03').toISOString() }, // ANDY ACEVEDO (VERDE - Gol 3)
+  { id: 'g10-4', playerId: 411, fecha: 10, teamId: 'VERDE', createdAt: new Date('2026-09-03').toISOString() }, // LUIS PACHECO (VERDE - Gol 1)
+  { id: 'g10-5', playerId: 411, fecha: 10, teamId: 'VERDE', createdAt: new Date('2026-09-03').toISOString() }, // LUIS PACHECO (VERDE - Gol 2)
+  { id: 'g10-6', playerId: 412, fecha: 10, teamId: 'VERDE', createdAt: new Date('2026-09-03').toISOString() }, // JAVIER MELGAREJO (VERDE - Gol 1)
+  { id: 'g10-7', playerId: 412, fecha: 10, teamId: 'VERDE', createdAt: new Date('2026-09-03').toISOString() }, // JAVIER MELGAREJO (VERDE - Gol 2)
 ];
 
 // Official Fechas for II Semestre 2026 (Vuelta 1: Fechas 1 a 7, Vuelta 2: Fechas 8 a 14)
@@ -873,7 +883,7 @@ const INITIAL_FECHAS_2026_2: Match[] = [
   },
 
   // FECHA 10 (3. FECHA II Ronda: 3 Vs 5, 4 Vs 8, 1 Vs 6, 2 Vs 7)
-  { id: 'P10-1', fecha: 10, homeTeamId: 'NARANJA', awayTeamId: 'VERDE', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: '3 de Septiembre' },
+  { id: 'P10-1', fecha: 10, homeTeamId: 'NARANJA', awayTeamId: 'VERDE', homeGoals: 0, awayGoals: 7, isPlayed: true, status: 'FINALIZADO', dateStr: '3 de Septiembre' },
   {
     id: 'P10-2',
     fecha: 10,
