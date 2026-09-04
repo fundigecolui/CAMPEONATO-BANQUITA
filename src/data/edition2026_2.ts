@@ -393,6 +393,9 @@ export const GOALS_2026_2: GoalRecord[] = [
 
   // BLANCO (1) vs AMARILLO (0)
   { id: 'g10-8', playerId: 461, fecha: 10, teamId: 'BLANCO', createdAt: new Date('2026-09-03').toISOString() }, // EVER VILLALBA (BLANCO)
+
+  // ROJO (1) vs NEGRO (0)
+  { id: 'g10-9', playerId: 445, fecha: 10, teamId: 'ROJO', createdAt: new Date('2026-09-03').toISOString() }, // ROBERTO PERTUZ (ROJO)
 ];
 
 // Official Fechas for II Semestre 2026 (Vuelta 1: Fechas 1 a 7, Vuelta 2: Fechas 8 a 14)
@@ -907,9 +910,10 @@ const INITIAL_FECHAS_2026_2: Match[] = [
     fecha: 10,
     homeTeamId: 'ROJO',
     awayTeamId: 'NEGRO',
-    homeGoals: 0,
+    homeGoals: 1,
     awayGoals: 0,
-    isPlayed: false,
+    isPlayed: true,
+    status: 'FINALIZADO',
     dateStr: '3 de Septiembre',
     attendance: {
       homePlayerIds: [441, 442, 443, 444, 445, 447], // Excluye 446 (Gustavo Fernandez - No asiste) y 448 (Robert Ortega - No asiste)
