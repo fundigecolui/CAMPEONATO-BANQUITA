@@ -353,6 +353,11 @@ export const ShareSummaryModal: React.FC<ShareSummaryModalProps> = ({
         pixelRatio: 3,
         quality: 1.0,
         backgroundColor: '#ffffff',
+        width: 540,
+        style: {
+          width: '540px',
+          minWidth: '540px',
+        },
       });
       const link = document.createElement('a');
       link.download = `Resumen_Oficial_Fecha_${currentFecha}_San_Simon.png`;
@@ -579,8 +584,8 @@ export const ShareSummaryModal: React.FC<ShareSummaryModalProps> = ({
               <div className="overflow-x-auto p-2 bg-slate-950/80 rounded-2xl border border-slate-800 flex justify-center">
                 <div
                   ref={cardRef}
-                  className="w-full max-w-[520px] bg-[#fcfcfd] text-slate-950 p-4 sm:p-5 rounded-3xl border border-slate-200/90 shadow-2xl space-y-4 font-sans antialiased"
-                  style={{ backgroundColor: '#fcfcfd' }}
+                  className="w-[540px] min-w-[540px] bg-[#fcfcfd] text-slate-950 p-4 sm:p-5 rounded-3xl border border-slate-200/90 shadow-2xl space-y-4 font-sans antialiased shrink-0"
+                  style={{ backgroundColor: '#fcfcfd', width: '540px', minWidth: '540px' }}
                 >
                   {/* Header / Brand with 3D Silver Official Badge */}
                   <div className="flex items-center justify-between pb-3 border-b-2 border-slate-200">
@@ -619,7 +624,7 @@ export const ShareSummaryModal: React.FC<ShareSummaryModalProps> = ({
                           RESULTADOS DE LA JORNADA
                         </span>
                       </div>
-                      <div className="grid grid-cols-2 gap-2 text-xs">
+                      <div className="grid grid-cols-2 gap-2.5 text-xs">
                         {currentMatches.map((m, idx) => {
                           const home = teams.find((t) => t.id === m.homeTeamId);
                           const away = teams.find((t) => t.id === m.awayTeamId);
@@ -629,27 +634,48 @@ export const ShareSummaryModal: React.FC<ShareSummaryModalProps> = ({
                           return (
                             <div
                               key={m.id}
-                              className="p-2.5 rounded-2xl border border-slate-200 bg-gradient-to-b from-slate-50/90 to-blue-50/20 text-slate-950 flex flex-col justify-between space-y-1.5 shadow-xs"
+                              className="p-2.5 rounded-2xl border border-slate-200/90 bg-gradient-to-b from-slate-50 to-blue-50/20 text-slate-950 flex flex-col justify-between space-y-2 shadow-2xs"
                             >
-                              <span className="text-[9.5px] text-slate-400 font-mono font-bold block">
-                                Partido #{idx + 1}
-                              </span>
+                              <div className="flex items-center justify-between text-[9.5px] font-mono">
+                                <span className="text-slate-400 font-bold">
+                                  Partido #{idx + 1}
+                                </span>
+                                {isPlayed ? (
+                                  <span className="text-[8px] font-black uppercase px-1.5 py-0.5 bg-emerald-100 text-emerald-800 rounded font-mono">
+                                    Finalizado
+                                  </span>
+                                ) : (
+                                  <span className="text-[8px] font-bold uppercase px-1.5 py-0.5 bg-slate-200 text-slate-600 rounded font-mono">
+                                    Pendiente
+                                  </span>
+                                )}
+                              </div>
+
                               <div className="flex items-center justify-between gap-1.5">
-                                <div className="flex items-center gap-1.5 min-w-0 flex-1">
+                                <div className="flex items-center gap-1 min-w-0 flex-1 overflow-hidden">
                                   <TeamBadgeDot teamId={home?.id} teamName={home?.name} size="sm" />
                                 </div>
 
-                                <span
-                                  className={`px-2.5 py-0.5 rounded-md font-black text-xs shrink-0 font-mono shadow-xs ${
+                                <div
+                                  className={`px-2.5 py-1 rounded-lg font-black text-xs shrink-0 font-mono shadow-xs whitespace-nowrap inline-flex items-center justify-center gap-1 min-w-[56px] select-none ${
                                     isPlayed
-                                      ? 'bg-black text-white border border-amber-500/80'
+                                      ? 'bg-slate-950 text-white border border-amber-500/80 shadow-inner'
                                       : 'bg-slate-200 text-slate-800'
                                   }`}
+                                  style={{ whiteSpace: 'nowrap' }}
                                 >
-                                  {m.homeGoals ?? 0} - {m.awayGoals ?? 0}
-                                </span>
+                                  <span className="font-mono font-black text-xs tabular-nums text-white">
+                                    {m.homeGoals ?? 0}
+                                  </span>
+                                  <span className={`font-black text-xs leading-none px-0.5 ${isPlayed ? 'text-amber-400' : 'text-slate-500'}`}>
+                                    -
+                                  </span>
+                                  <span className="font-mono font-black text-xs tabular-nums text-white">
+                                    {m.awayGoals ?? 0}
+                                  </span>
+                                </div>
 
-                                <div className="flex items-center gap-1.5 min-w-0 flex-1 justify-end">
+                                <div className="flex items-center gap-1 min-w-0 flex-1 justify-end overflow-hidden">
                                   <TeamBadgeDot teamId={away?.id} teamName={away?.name} size="sm" />
                                 </div>
                               </div>
@@ -997,9 +1023,13 @@ export const ShareSummaryModal: React.FC<ShareSummaryModalProps> = ({
                                     {m.time && <span className="text-slate-950 font-black font-mono">⏰ {m.time}</span>}
                                   </div>
                                   <div className="flex items-center justify-between gap-1 text-[11px]">
-                                    <TeamBadgeDot teamId={home?.id} teamName={home?.name} size="sm" />
-                                    <span className="text-slate-400 font-black text-[10px] font-mono">vs</span>
-                                    <TeamBadgeDot teamId={away?.id} teamName={away?.name} size="sm" />
+                                    <div className="min-w-0 flex-1 truncate">
+                                      <TeamBadgeDot teamId={home?.id} teamName={home?.name} size="sm" />
+                                    </div>
+                                    <span className="text-slate-400 font-black text-[10px] font-mono px-1 shrink-0">vs</span>
+                                    <div className="min-w-0 flex-1 truncate flex justify-end">
+                                      <TeamBadgeDot teamId={away?.id} teamName={away?.name} size="sm" />
+                                    </div>
                                   </div>
                                 </div>
                               );

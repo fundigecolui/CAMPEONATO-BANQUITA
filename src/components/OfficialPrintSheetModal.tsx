@@ -450,7 +450,7 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
                         <div className="flex-1 font-black text-[11px] text-slate-950 uppercase truncate">
                           {homeTeam?.name || m.homeTeamId}
                         </div>
-                        <div className="px-3 py-1 bg-slate-900 text-white font-black text-xs sm:text-sm rounded shadow-sm tracking-wider">
+                        <div className="px-3 py-1 bg-slate-900 text-white font-black text-xs sm:text-sm rounded shadow-sm tracking-wider whitespace-nowrap">
                           {m.homeGoals ?? 0} - {m.awayGoals ?? 0}
                         </div>
                         <div className="flex-1 font-black text-[11px] text-slate-950 uppercase truncate">
