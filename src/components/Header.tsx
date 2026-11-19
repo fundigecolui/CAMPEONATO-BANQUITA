@@ -1,5 +1,5 @@
 import React from 'react';
-import { Shield, AlertTriangle, Trophy, Users, Calendar, RotateCcw, Download, Upload, UserPlus, Lock, Edit3, Key, Plus, Archive, FileText, Share2, Bell, BarChart2 } from 'lucide-react';
+import { Shield, AlertTriangle, Trophy, Users, Calendar, RotateCcw, Download, Upload, UserPlus, Lock, Edit3, Key, Plus, Archive, FileText, Share2, Bell, BarChart2, Printer, FileSpreadsheet } from 'lucide-react';
 import { getFechaFullTitle } from '../utils/fechas';
 import tournamentLogo from '../assets/images/san_simon_logo_dark_1785590924842.jpg';
 import { TournamentEdition } from '../types';
@@ -26,6 +26,8 @@ interface HeaderProps {
   onAddNewEdition: () => void;
   onOpenShareSummary?: () => void;
   onOpenDelegateAlerts?: () => void;
+  onOpenExportPdf?: () => void;
+  onOpenGoogleSheets?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -49,6 +51,8 @@ export const Header: React.FC<HeaderProps> = ({
   onAddNewEdition,
   onOpenShareSummary,
   onOpenDelegateAlerts,
+  onOpenExportPdf,
+  onOpenGoogleSheets,
 }) => {
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
@@ -186,6 +190,28 @@ export const Header: React.FC<HeaderProps> = ({
                 >
                   <Share2 className="w-3.5 h-3.5" />
                   <span className="hidden sm:inline font-bold text-[11px]">Compartir Resumen</span>
+                </button>
+              )}
+
+              {onOpenExportPdf && (
+                <button
+                  onClick={onOpenExportPdf}
+                  className="p-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs transition cursor-pointer flex items-center gap-1.5 px-3 shadow-md border border-amber-300"
+                  title="Exportar resultados y estadísticas actuales a PDF para imprimir (oculta controles de edición)"
+                >
+                  <Printer className="w-3.5 h-3.5 text-slate-950" />
+                  <span className="hidden sm:inline font-black text-[11px]">Exportar PDF</span>
+                </button>
+              )}
+
+              {onOpenGoogleSheets && (
+                <button
+                  onClick={onOpenGoogleSheets}
+                  className="p-1.5 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-black text-xs transition cursor-pointer flex items-center gap-1.5 px-3 shadow-md border border-teal-400/50"
+                  title="Generar Google Sheet y sincronizar resultados actualizados"
+                >
+                  <FileSpreadsheet className="w-3.5 h-3.5 text-white" />
+                  <span className="hidden sm:inline font-black text-[11px]">Google Sheets</span>
                 </button>
               )}
 

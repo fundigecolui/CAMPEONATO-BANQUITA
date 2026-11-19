@@ -192,6 +192,17 @@ export const CARDS_2026_2: CardRecord[] = [
   { id: 'c9-11', playerId: 406, fecha: 9, type: 'AMARILLA', createdAt: new Date('2026-09-01').toISOString() }, // LEONARDO CASTILLO (AZUL) - Amarilla
   { id: 'c9-12', playerId: 431, fecha: 9, type: 'AMARILLA', createdAt: new Date('2026-09-01').toISOString() }, // EDUAR MONTIEL (NARANJA) - Amarilla
   { id: 'c9-13', playerId: 429, fecha: 9, type: 'AMARILLA', createdAt: new Date('2026-09-01').toISOString() }, // JORGE ORREGO (NARANJA) - Amarilla
+
+  // Fecha 10 (3 de Septiembre)
+  { id: 'c10-1', playerId: 415, fecha: 10, type: 'AMARILLA', createdAt: new Date('2026-09-03').toISOString() }, // IVAN ORREGO (VERDE) - Amarilla
+  { id: 'c10-2', playerId: 426, fecha: 10, type: 'AMARILLA', createdAt: new Date('2026-09-03').toISOString() }, // CARLOS FIGUEROA (NARANJA) - Amarilla (3ra -> Susp. F11)
+  { id: 'c10-3', playerId: 429, fecha: 10, type: 'AMARILLA', createdAt: new Date('2026-09-03').toISOString() }, // JORGE ORREGO (NARANJA) - Amarilla (3ra -> Susp. F11)
+  { id: 'c10-4', playerId: 436, fecha: 10, type: 'AMARILLA', createdAt: new Date('2026-09-03').toISOString() }, // WALTER GOEZ (RAYADO) - Amarilla (3ra -> Susp. F11)
+  { id: 'c10-5', playerId: 449, fecha: 10, type: 'AMARILLA', createdAt: new Date('2026-09-03').toISOString() }, // ALEJANDRO ESCAMILLA (AMARILLO) - Amarilla
+  { id: 'c10-6', playerId: 445, fecha: 10, type: 'AMARILLA', createdAt: new Date('2026-09-03').toISOString() }, // ROBERTO PERTUZ (ROJO) - Amarilla
+  { id: 'c10-7', playerId: 417, fecha: 10, type: 'AMARILLA', createdAt: new Date('2026-09-03').toISOString() }, // RIGOBERTO LOZANO (NEGRO) - Amarilla (3ra total -> Susp. F11)
+  { id: 'c10-8', playerId: 418, fecha: 10, type: 'AMARILLA', createdAt: new Date('2026-09-03').toISOString() }, // JORGE ACEVEDO (NEGRO) - Amarilla
+  { id: 'c10-9', playerId: 443, fecha: 10, type: 'AZUL', createdAt: new Date('2026-09-03').toISOString() }, // URIEL ZAMBRANO (ROJO) - Azul (3ra -> Susp. F11)
 ];
 
 export const GOALS_2026_2: GoalRecord[] = [
@@ -400,7 +411,7 @@ export const GOALS_2026_2: GoalRecord[] = [
   { id: 'g10-11', playerId: 447, fecha: 10, teamId: 'ROJO', createdAt: new Date('2026-09-03').toISOString() }, // ANTONIO ORTEGA (ROJO)
   { id: 'g10-12', playerId: 445, fecha: 10, teamId: 'ROJO', createdAt: new Date('2026-09-03').toISOString() }, // ROBERTO PERTUZ (ROJO - Gol 2)
   { id: 'g10-13', playerId: 443, fecha: 10, teamId: 'ROJO', createdAt: new Date('2026-09-03').toISOString() }, // URIEL ZAMBRANO (ROJO)
-  { id: 'g10-14', playerId: 417, fecha: 10, teamId: 'NEGRO', createdAt: new Date('2026-09-03').toISOString() }, // RIGOBERTO LOZANO (NEGRO)
+  { id: 'g10-14', playerId: 418, fecha: 10, teamId: 'NEGRO', createdAt: new Date('2026-09-03').toISOString() }, // JORGE ACEVEDO (NEGRO)
 ];
 
 // Official Fechas for II Semestre 2026 (Vuelta 1: Fechas 1 a 7, Vuelta 2: Fechas 8 a 14)
@@ -926,11 +937,59 @@ const INITIAL_FECHAS_2026_2: Match[] = [
     },
   },
 
-  // FECHA 11 (4. FECHA II Ronda: 1 Vs 4, 2 Vs 3, 7 Vs 5, 6 Vs 8)
-  { id: 'P11-1', fecha: 11, homeTeamId: 'BLANCO', awayTeamId: 'AZUL', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: 'II Ronda - F4' },
-  { id: 'P11-2', fecha: 11, homeTeamId: 'ROJO', awayTeamId: 'NARANJA', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: 'II Ronda - F4' },
-  { id: 'P11-3', fecha: 11, homeTeamId: 'NEGRO', awayTeamId: 'VERDE', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: 'II Ronda - F4' },
-  { id: 'P11-4', fecha: 11, homeTeamId: 'AMARILLO', awayTeamId: 'RAYADO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: 'II Ronda - F4' },
+  // FECHA 11 (8 de Septiembre - 4. FECHA II Ronda: 1 Vs 4, 2 Vs 3, 7 Vs 5, 6 Vs 8)
+  {
+    id: 'P11-1',
+    fecha: 11,
+    homeTeamId: 'BLANCO',
+    awayTeamId: 'AZUL',
+    homeGoals: 1,
+    awayGoals: 6,
+    isPlayed: true,
+    status: 'FINALIZADO',
+    dateStr: '8 de Septiembre',
+    attendance: {
+      homePlayerIds: [458, 459, 460, 461, 462, 463, 464], // Excluye 457 (Donaldo Morales - No asiste)
+      awayPlayerIds: [401, 402, 403, 404, 405, 406, 408], // Excluye 407 (Moises Gomez - No asiste)
+    },
+  },
+  {
+    id: 'P11-2',
+    fecha: 11,
+    homeTeamId: 'ROJO',
+    awayTeamId: 'NARANJA',
+    homeGoals: 1,
+    awayGoals: 0,
+    isPlayed: true,
+    status: 'FINALIZADO',
+    dateStr: '8 de Septiembre',
+  },
+  {
+    id: 'P11-3',
+    fecha: 11,
+    homeTeamId: 'NEGRO',
+    awayTeamId: 'VERDE',
+    homeGoals: 2,
+    awayGoals: 6,
+    isPlayed: true,
+    status: 'FINALIZADO',
+    dateStr: '8 de Septiembre',
+    attendance: {
+      homePlayerIds: [417, 418, 419, 421, 422, 423, 424], // Excluye 420 (Rusbell Villalba - No asiste)
+      awayPlayerIds: [409, 410, 411, 412, 413, 414, 415, 416],
+    },
+  },
+  {
+    id: 'P11-4',
+    fecha: 11,
+    homeTeamId: 'AMARILLO',
+    awayTeamId: 'RAYADO',
+    homeGoals: 1,
+    awayGoals: 2,
+    isPlayed: true,
+    status: 'FINALIZADO',
+    dateStr: '8 de Septiembre',
+  },
 
   // FECHA 12 (5. FECHA II Ronda: 3 Vs 7, 1 Vs 8, 2 Vs 6, 4 Vs 5)
   { id: 'P12-1', fecha: 12, homeTeamId: 'NARANJA', awayTeamId: 'NEGRO', homeGoals: 0, awayGoals: 0, isPlayed: false, dateStr: 'II Ronda - F5' },

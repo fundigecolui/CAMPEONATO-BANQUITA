@@ -31,6 +31,7 @@ interface OfficialPrintSheetModalProps {
   cards: CardRecord[];
   goals: GoalRecord[];
   activeSuspensions: SuspensionAlert[];
+  defaultIncludeStats?: boolean;
 }
 
 export const MATCH_SCHEDULE_TIMES = [
@@ -50,16 +51,27 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
   cards,
   goals,
   activeSuspensions,
+  defaultIncludeStats = false,
 }) => {
-  if (!isOpen) return null;
-
-  // Print section toggles
+  // Print section toggles (declared before early return to obey Rules of Hooks)
   const [printFechaSummary, setPrintFechaSummary] = useState(true);
   const [printMatches, setPrintMatches] = useState(false);
-  const [printStandings, setPrintStandings] = useState(false);
-  const [printCards, setPrintCards] = useState(false);
+  const [printStandings, setPrintStandings] = useState(defaultIncludeStats);
+  const [printCards, setPrintCards] = useState(defaultIncludeStats);
   const [printAttendance, setPrintAttendance] = useState(false);
   const [printOnlyAttending, setPrintOnlyAttending] = useState(true);
+
+  React.useEffect(() => {
+    if (isOpen) {
+      setPrintFechaSummary(true);
+      setPrintMatches(false);
+      setPrintStandings(defaultIncludeStats);
+      setPrintCards(defaultIncludeStats);
+      setPrintAttendance(false);
+    }
+  }, [isOpen, defaultIncludeStats]);
+
+  if (!isOpen) return null;
 
   const currentMatches = matches.filter((m) => (m.fecha ?? m.fechaNumber) === currentFecha);
   const fechaDate = FECHA_DATES[currentFecha] || 'Fecha Programada';
@@ -215,6 +227,22 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
         <div className="p-3 bg-slate-900 border-b border-slate-800 flex flex-col md:flex-row items-start md:items-center justify-between text-xs font-mono gap-3 print:hidden shrink-0">
           <div className="flex items-center gap-1.5 flex-wrap">
             <span className="text-amber-400 font-bold shrink-0 text-[11px]">IMPRIMIR:</span>
+            <button
+              onClick={() => {
+                setPrintFechaSummary(true);
+                setPrintMatches(false);
+                setPrintStandings(true);
+                setPrintCards(true);
+                setPrintAttendance(false);
+              }}
+              className={`px-2 py-1 rounded-lg border text-[11px] font-bold transition cursor-pointer ${
+                printFechaSummary && !printMatches && printStandings && printCards && !printAttendance
+                  ? 'bg-amber-500 text-slate-950 border-amber-400 font-black'
+                  : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700'
+              }`}
+            >
+              📄 Resultados + Estadísticas
+            </button>
             <button
               onClick={() => {
                 setPrintFechaSummary(true);
@@ -1334,6 +1362,28 @@ export const OfficialPrintSheetModal: React.FC<OfficialPrintSheetModalProps> = (
                   </span>
                 </div>
               </div>
+
+              {/* Top Scorers Compact Table */}
+              {topScorers.length > 0 && (
+                <div className="border border-black rounded-lg overflow-hidden">
+                  <div className="bg-black text-white px-2.5 py-1 text-[10px] font-mono font-black uppercase flex items-center justify-between">
+                    <span>⚽ TABLA DE GOLEADORES (TOP {Math.min(topScorers.length, 8)})</span>
+                    <span>HASTA FECHA #{currentFecha}</span>
+                  </div>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 divide-x divide-y divide-slate-300 text-[9.5px] font-mono bg-white">
+                    {topScorers.slice(0, 8).map((sc, idx) => (
+                      <div key={sc.playerId} className="px-2 py-1 flex items-center justify-between gap-1">
+                        <span className="truncate font-bold text-black">
+                          {idx + 1}. {sc.name} <span className="text-slate-600 font-normal">({sc.teamId})</span>
+                        </span>
+                        <span className="font-black bg-amber-200 text-black px-1.5 rounded shrink-0">
+                          {sc.goles}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {/* Signature Line */}
               <div className="pt-2 border-t border-black grid grid-cols-2 gap-8 text-center font-mono text-[9.5px]">

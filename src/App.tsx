@@ -15,6 +15,8 @@ import { SeasonPerformanceReport } from './components/SeasonPerformanceReport';
 import { ShareSummaryModal } from './components/ShareSummaryModal';
 import { DelegateSanctionsModal } from './components/DelegateSanctionsModal';
 import { CreateEditionModal } from './components/CreateEditionModal';
+import { OfficialPrintSheetModal } from './components/OfficialPrintSheetModal';
+import { GoogleSheetsSyncModal } from './components/GoogleSheetsSyncModal';
 import { validateMatchData, validateBackupJSONData } from './utils/zodSchemas';
 
 import {
@@ -60,9 +62,9 @@ const getInitialDataForEdition = (editionId: string) => {
       cards: CARDS_2026_2,
       goals: GOALS_2026_2,
       matches: MATCHES_2026_2,
-      currentFecha: 10,
+      currentFecha: 11,
       maxUnlockedFecha: 14,
-      v: 126,
+      v: 127,
     };
   }
   if (editionId === '2026-1') {
@@ -141,6 +143,8 @@ export default function App() {
   const [isShareSummaryOpen, setIsShareSummaryOpen] = useState<boolean>(false);
   const [isDelegateAlertsOpen, setIsDelegateAlertsOpen] = useState<boolean>(false);
   const [isCreateEditionOpen, setIsCreateEditionOpen] = useState<boolean>(false);
+  const [isExportPdfOpen, setIsExportPdfOpen] = useState<boolean>(false);
+  const [isGoogleSheetsOpen, setIsGoogleSheetsOpen] = useState<boolean>(false);
 
   const currentEdition = editions.find((e) => e.id === selectedEditionId) || editions[0];
 
@@ -564,6 +568,8 @@ export default function App() {
         onAddNewEdition={handleAddNewEdition}
         onOpenShareSummary={() => setIsShareSummaryOpen(true)}
         onOpenDelegateAlerts={() => setIsDelegateAlertsOpen(true)}
+        onOpenExportPdf={() => setIsExportPdfOpen(true)}
+        onOpenGoogleSheets={() => setIsGoogleSheetsOpen(true)}
       />
 
       {/* Main Content Viewport with Left Vertical Sidebar Navigation */}
@@ -586,7 +592,7 @@ export default function App() {
           <div className="flex-1 min-w-0 w-full space-y-6">
             {/* Historical Edition Banner Indicator */}
             {currentEdition?.status === 'FINALIZADO' && (
-              <div className="bg-gradient-to-r from-amber-950/90 via-slate-900 to-amber-950/90 border border-amber-500/50 p-3.5 rounded-2xl text-center shadow-lg flex flex-col sm:flex-row items-center justify-between gap-3 font-mono">
+              <div className="bg-gradient-to-r from-amber-950/90 via-slate-900 to-amber-950/90 border border-amber-500/50 p-3.5 rounded-2xl text-center shadow-lg flex flex-col sm:flex-row items-center justify-between gap-3 font-mono print:hidden">
                 <div className="flex items-center gap-2 text-amber-300 font-extrabold text-xs sm:text-sm">
                   <span className="text-lg">🏆</span>
                   <span>EDICIÓN HISTÓRICA FINALIZADA: {currentEdition.name}</span>
@@ -761,6 +767,39 @@ export default function App() {
         isOpen={isCreateEditionOpen}
         onClose={() => setIsCreateEditionOpen(false)}
         onCreate={handleConfirmCreateEdition}
+      />
+
+      {/* Global Official PDF Print & Export Modal */}
+      <OfficialPrintSheetModal
+        isOpen={isExportPdfOpen}
+        onClose={() => setIsExportPdfOpen(false)}
+        currentFecha={currentFecha}
+        matches={matches}
+        players={players}
+        teams={teams}
+        cards={cards}
+        goals={goals}
+        activeSuspensions={activeSuspensions}
+        defaultIncludeStats={true}
+      />
+
+      {/* Google Sheets Sync Modal */}
+      <GoogleSheetsSyncModal
+        isOpen={isGoogleSheetsOpen}
+        onClose={() => setIsGoogleSheetsOpen(false)}
+        editionId={selectedEditionId}
+        editionName={currentEdition?.name || selectedEditionId}
+        teams={teams}
+        players={players}
+        matches={matches}
+        cards={cards}
+        goals={goals}
+        currentFecha={currentFecha}
+        onApplySheetData={(data) => {
+          setMatches(data.matches);
+          setGoals(data.goals);
+          setCards(data.cards);
+        }}
       />
     </div>
   );

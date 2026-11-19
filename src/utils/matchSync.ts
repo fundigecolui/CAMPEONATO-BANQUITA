@@ -155,20 +155,22 @@ export function syncMatchStatuses(
     }
 
     const { startDate, endDate } = getMatchStartAndEndDates(match, matchIdxInFecha, defaultYear);
+    const hasRecordedScore = (match.homeGoals ?? 0) > 0 || (match.awayGoals ?? 0) > 0;
+    const alreadyPlayed = Boolean(match.isPlayed || match.played || hasRecordedScore);
 
     let targetStatus: 'PROGRAMADO' | 'EN_VIVO' | 'FINALIZADO';
-    let targetPlayed = match.isPlayed;
+    let targetPlayed = Boolean(match.isPlayed);
 
-    if (now >= startDate && now <= endDate) {
-      targetStatus = 'EN_VIVO';
-    } else if (now > endDate) {
+    if (alreadyPlayed) {
       targetStatus = 'FINALIZADO';
       targetPlayed = true;
+    } else if (now >= startDate && now <= endDate) {
+      targetStatus = 'EN_VIVO';
     } else {
       targetStatus = 'PROGRAMADO';
     }
 
-    if (match.status !== targetStatus || match.isPlayed !== targetPlayed) {
+    if (match.status !== targetStatus || Boolean(match.isPlayed) !== targetPlayed) {
       hasChanges = true;
       return {
         ...match,

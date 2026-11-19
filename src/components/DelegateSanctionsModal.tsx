@@ -39,20 +39,22 @@ export const DelegateSanctionsModal: React.FC<DelegateSanctionsModalProps> = ({
 
   if (!isOpen) return null;
 
-  // Identify players "Apercibidos / En Capilla" (2 Cards accumulated - 1 away from 3-card suspension: Amarillas / Azules)
+  // Identify players "Apercibidos / En Capilla" (1 away from 3/6/9/12-card suspension: Amarillas + Azules + Rojas)
   const playersEnCapilla = players.map((p) => {
-    const accumCards = cards.filter((c) => c.playerId === p.id && (c.type === 'AMARILLA' || c.type === 'AZUL'));
+    const accumCards = cards.filter((c) => c.playerId === p.id);
     const totalAccum = accumCards.length;
-    // Condition: totalAccum % 3 === 2 means 2, 5, 8... accumulated cards (1 card away from suspension)!
+    // Condition: totalAccum % 3 === 2 means 2, 5, 8, 11... accumulated cards (1 card away from suspension)!
     const isEnCapilla = totalAccum % 3 === 2;
     const amarillasCount = accumCards.filter((c) => c.type === 'AMARILLA').length;
     const azulesCount = accumCards.filter((c) => c.type === 'AZUL').length;
+    const rojasCount = accumCards.filter((c) => c.type === 'ROJA').length;
     return {
       player: p,
       team: teams.find((t) => t.id === p.teamId),
       totalAccum,
       amarillasCount,
       azulesCount,
+      rojasCount,
       isEnCapilla,
     };
   }).filter((item) => item.isEnCapilla);
@@ -96,8 +98,13 @@ export const DelegateSanctionsModal: React.FC<DelegateSanctionsModalProps> = ({
     if (teamCapilla.length > 0) {
       msg += `⚠️ *JUGADORES APERCIBIDOS (A 1 TARJETA DE SUSPENSIÓN):*\n`;
       teamCapilla.forEach((c) => {
-        const detail = `${c.amarillasCount > 0 ? `${c.amarillasCount} 🟨` : ''}${c.amarillasCount > 0 && c.azulesCount > 0 ? ' + ' : ''}${c.azulesCount > 0 ? `${c.azulesCount} 🟦` : ''}`;
-        msg += `• *#${c.player.dorsal} ${c.player.name}* (Tiene ${c.totalAccum} tarjetas acumuladas: ${detail}). Si recibe 1 tarjeta más (amarilla o azul), será suspendido la fecha siguiente.\n`;
+        const parts = [
+          c.amarillasCount > 0 ? `${c.amarillasCount} 🟨` : '',
+          c.azulesCount > 0 ? `${c.azulesCount} 🟦` : '',
+          c.rojasCount > 0 ? `${c.rojasCount} 🟥` : '',
+        ].filter(Boolean);
+        const detail = parts.join(' + ');
+        msg += `• *#${c.player.dorsal} ${c.player.name}* (Tiene ${c.totalAccum} tarjetas acumuladas: ${detail}). Si recibe 1 tarjeta más, será suspendido la fecha siguiente.\n`;
       });
       msg += `\n`;
     }
@@ -120,7 +127,7 @@ export const DelegateSanctionsModal: React.FC<DelegateSanctionsModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 overflow-y-auto font-sans">
+    <div className="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 overflow-y-auto font-sans print:hidden">
       <div className="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-3xl text-slate-100 shadow-2xl overflow-hidden my-auto flex flex-col max-h-[92vh]">
         {/* Header */}
         <div className="p-4 bg-slate-950 border-b border-slate-800 flex items-center justify-between gap-3">

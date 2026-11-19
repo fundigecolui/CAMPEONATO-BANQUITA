@@ -5,6 +5,7 @@ import tournamentLogo from '../assets/images/san_simon_logo_dark_1785590924842.j
 import { checkMathematicalElimination } from '../utils/sanctionsEngine';
 import { HeadToHeadModal } from './HeadToHeadModal';
 import { TeamBadgeDot } from './TeamColorDot';
+import { InfoTooltip } from './InfoTooltip';
 
 interface StandingsTableProps {
   standings: TeamStandings[];
@@ -120,16 +121,41 @@ export const StandingsTable: React.FC<StandingsTableProps> = ({ standings, teams
               <tr className="bg-slate-950/80 text-slate-300 uppercase tracking-wider font-mono text-xs sm:text-sm border-b border-slate-800">
                 <th className="p-3.5 text-center font-black w-14">POS</th>
                 <th className="p-3.5 font-black">EQUIPO</th>
-                <th className="p-3.5 text-center font-extrabold text-amber-400 bg-amber-500/10 text-base sm:text-lg border-x border-amber-500/20" title="Puntos Totales">PTS</th>
+                <th className="p-3.5 text-center font-extrabold text-amber-400 bg-amber-500/10 text-base sm:text-lg border-x border-amber-500/20" title="Puntos Totales">
+                  <span className="inline-flex items-center justify-center gap-1">
+                    PTS
+                    <InfoTooltip
+                      title="Cálculo de Puntos"
+                      description="Victoria = 3 puntos · Empate = 1 punto · Derrota = 0 puntos. Criterio de desempate: Puntos > DG > GF > Juego Limpio."
+                    />
+                  </span>
+                </th>
                 <th className="p-3.5 text-center font-bold" title="Partidos Jugados">PJ</th>
                 <th className="p-3.5 text-center font-bold text-emerald-400" title="Partidos Ganados">PG</th>
                 <th className="p-3.5 text-center font-bold text-amber-400" title="Partidos Empatados">PE</th>
                 <th className="p-3.5 text-center font-bold text-red-400" title="Partidos Perdidos">PP</th>
                 <th className="p-3.5 text-center font-bold" title="Goles a Favor">GF</th>
                 <th className="p-3.5 text-center font-bold" title="Goles en Contra (Valla)">GC</th>
-                <th className="p-3.5 text-center font-black text-amber-300" title="Diferencia de Goles">DG</th>
+                <th className="p-3.5 text-center font-black text-amber-300" title="Diferencia de Goles">
+                  <span className="inline-flex items-center justify-center gap-1">
+                    DG
+                    <InfoTooltip
+                      title="Diferencia de Gol (DG)"
+                      description="Se calcula restando los Goles en Contra (GC) de los Goles a Favor (GF): DG = GF - GC."
+                    />
+                  </span>
+                </th>
                 <th className="p-3.5 text-center font-bold text-slate-300" title="Últimos partidos (G: Ganado, E: Empatado, P: Perdido)">RACHA</th>
-                <th className="p-3.5 text-center font-bold text-emerald-300" title="Puntos Juego Limpio (Fair Play)">JUEGO LIMPIO</th>
+                <th className="p-3.5 text-center font-bold text-emerald-300" title="Puntos Juego Limpio (Fair Play)">
+                  <span className="inline-flex items-center justify-center gap-1">
+                    JUEGO LIMPIO
+                    <InfoTooltip
+                      title="Puntaje Juego Limpio"
+                      description="Cada equipo inicia con 100 pts. Se descuenta por tarjeta: Amarilla (-1 pt), Azul (-2 pts) y Roja (-3 pts)."
+                      align="right"
+                    />
+                  </span>
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-800/80">

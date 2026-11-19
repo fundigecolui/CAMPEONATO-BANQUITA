@@ -10,10 +10,10 @@ interface HeadToHeadModalProps {
 }
 
 export const HeadToHeadModal: React.FC<HeadToHeadModalProps> = ({ isOpen, onClose, teams, matches }) => {
-  if (!isOpen) return null;
-
   const [teamAId, setTeamAId] = useState<string>(teams[0]?.id || 'AZUL');
   const [teamBId, setTeamBId] = useState<string>(teams[1]?.id || 'VERDE');
+
+  if (!isOpen) return null;
 
   const teamA = teams.find((t) => t.id === teamAId);
   const teamB = teams.find((t) => t.id === teamBId);

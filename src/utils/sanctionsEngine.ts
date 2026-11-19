@@ -49,7 +49,7 @@ export function computePlayerStats(
       .sort((a, b) => (a.fecha ?? (a as any).fechaNumber) - (b.fecha ?? (b as any).fechaNumber));
     const pStat = statsMap[p.id];
 
-    let accumulativeCards = 0; // Sum of AMARILLAS + AZULES
+    let accumulativeCards = 0; // Sum of AMARILLAS + AZULES + ROJAS
 
     playerCards.forEach((c) => {
       const cFecha = c.fecha ?? (c as any).fechaNumber;
@@ -58,34 +58,21 @@ export function computePlayerStats(
         pStat.cardsPerFecha[cFecha] = { amarillas: 0, azules: 0, rojas: 0 };
       }
 
-      if (c.type === 'AMARILLA' || c.type === 'AZUL') {
-        if (c.type === 'AMARILLA') {
-          pStat.amarillas += 1;
-          pStat.cardsPerFecha[cFecha].amarillas += 1;
-        } else {
-          pStat.azules += 1;
-          pStat.cardsPerFecha[cFecha].azules += 1;
-        }
-        accumulativeCards += 1;
-
-        // Rule: 3 accumulated cards (Amarillas y/o Azules, ej: 2 amarillas + 1 azul) -> 1 Match Suspension for next fecha (cFecha + 1)
-        if (accumulativeCards % 3 === 0) {
-          allSuspensions.push({
-            playerId: p.id,
-            playerName: p.name,
-            teamId: p.teamId,
-            dorsal: p.dorsal,
-            reason: '3_TARJETAS',
-            cardCount: accumulativeCards,
-            suspendedForFecha: cFecha + 1,
-            status: cFecha + 1 <= currentActiveFecha ? (cFecha + 1 === currentActiveFecha ? 'PENDIENTE' : 'CUMPLIDA') : 'PENDIENTE',
-            details: `Acumuló ${accumulativeCards} tarjetas (Amarillas/Azules) en Fecha ${cFecha}. Suspendido para Fecha ${cFecha + 1}.`,
-          });
-        }
+      if (c.type === 'AMARILLA') {
+        pStat.amarillas += 1;
+        pStat.cardsPerFecha[cFecha].amarillas += 1;
+      } else if (c.type === 'AZUL') {
+        pStat.azules += 1;
+        pStat.cardsPerFecha[cFecha].azules += 1;
       } else if (c.type === 'ROJA') {
         pStat.rojas += 1;
         pStat.cardsPerFecha[cFecha].rojas += 1;
+      }
 
+      accumulativeCards += 1;
+      pStat.totalCards = pStat.amarillas + pStat.azules + pStat.rojas;
+
+      if (c.type === 'ROJA') {
         // Rule: 1 Red Card -> Automatic 1 Match Suspension for next fecha (cFecha + 1)
         allSuspensions.push({
           playerId: p.id,
@@ -93,13 +80,28 @@ export function computePlayerStats(
           teamId: p.teamId,
           dorsal: p.dorsal,
           reason: '1_ROJA',
+          cardCount: accumulativeCards,
           suspendedForFecha: cFecha + 1,
-          status: cFecha + 1 <= currentActiveFecha ? (cFecha + 1 === currentActiveFecha ? 'PENDIENTE' : 'CUMPLIDA') : 'PENDIENTE',
-          details: `Tarjeta roja directa en Fecha ${cFecha}. Suspendido para Fecha ${cFecha + 1}.`,
+          status: cFecha + 1 < currentActiveFecha ? 'CUMPLIDA' : 'PENDIENTE',
+          details:
+            accumulativeCards % 3 === 0
+              ? `Tarjeta roja directa y alcanzó ${accumulativeCards} tarjetas totales en Fecha ${cFecha}. Suspendido para Fecha ${cFecha + 1}.`
+              : `Tarjeta roja directa en Fecha ${cFecha}. Suspendido para Fecha ${cFecha + 1}.`,
+        });
+      } else if (accumulativeCards % 3 === 0) {
+        // Rule: 3, 6, 9, 12 accumulated total cards (Amarillas + Azules + Rojas) -> 1 Match Suspension for next fecha (cFecha + 1)
+        allSuspensions.push({
+          playerId: p.id,
+          playerName: p.name,
+          teamId: p.teamId,
+          dorsal: p.dorsal,
+          reason: '3_TARJETAS',
+          cardCount: accumulativeCards,
+          suspendedForFecha: cFecha + 1,
+          status: cFecha + 1 < currentActiveFecha ? 'CUMPLIDA' : 'PENDIENTE',
+          details: `Acumuló ${accumulativeCards} tarjetas totales (Amarillas + Azules + Rojas) en Fecha ${cFecha}. Suspendido para Fecha ${cFecha + 1}.`,
         });
       }
-
-      pStat.totalCards = pStat.amarillas + pStat.azules + pStat.rojas;
     });
 
     // Determine if player is suspended specifically for the CURRENT SELECTED FECHA

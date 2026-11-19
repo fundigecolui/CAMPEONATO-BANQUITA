@@ -141,7 +141,7 @@ export const SeasonPerformanceReport: React.FC<SeasonPerformanceReportProps> = (
       : playerStats.filter((p) => p.teamId === selectedTeamFilter);
 
   return (
-    <div className="space-y-6 font-sans">
+    <div className="space-y-6 font-sans print:hidden">
       {/* Header Banner */}
       <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div className="flex items-center gap-3">

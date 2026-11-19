@@ -3,6 +3,7 @@ import { Search, Filter, Plus, Trash2, Edit3, X, Check, Eye, Lock } from 'lucide
 import { Player, Team, CardRecord, CardType, PlayerStats, TeamId } from '../types';
 import { getFechaLabel } from '../utils/fechas';
 import { GoalBallBadge } from './TeamColorDot';
+import { InfoTooltip } from './InfoTooltip';
 
 interface MatrixCardTableProps {
   players: Player[];
@@ -221,11 +222,25 @@ export const MatrixCardTable: React.FC<MatrixCardTableProps> = ({
               <th className="p-2 font-black border-r border-b border-slate-800 bg-red-950/60 text-red-300 text-center min-w-[42px]" title="Rojas">
                 🟥 R
               </th>
-              <th className="p-2 font-black border-r border-b border-slate-800 bg-slate-950 text-amber-400 text-center min-w-[50px]" title="Suspenso">
-                SUS
+              <th className="p-2 font-black border-r border-b border-slate-800 bg-slate-950 text-amber-400 text-center min-w-[60px]" title="Suspensiones">
+                <span className="inline-flex items-center justify-center gap-1">
+                  SUS
+                  <InfoTooltip
+                    title="Regla de Suspensiones"
+                    description="Un jugador queda suspendido 1 fecha si recibe 1 Tarjeta Roja directa o al alcanzar un múltiplo de 3, 6, 9 o 12 tarjetas en la sumatoria total (Amarillas + Azules + Rojas)."
+                    align="right"
+                  />
+                </span>
               </th>
-              <th className="p-2 font-black border-b border-slate-800 bg-slate-950 text-white text-center min-w-[48px]" title="Total Tarjetas">
-                T
+              <th className="p-2 font-black border-b border-slate-800 bg-slate-950 text-white text-center min-w-[56px]" title="Total Tarjetas">
+                <span className="inline-flex items-center justify-center gap-1">
+                  T
+                  <InfoTooltip
+                    title="Total de Tarjetas y Multas"
+                    description="Sumatoria total = Amarillas + Azules + Rojas. Multas reglamentarias: Amarilla $2.000 · Azul $5.000 · Roja $10.000."
+                    align="right"
+                  />
+                </span>
               </th>
             </tr>
           </thead>

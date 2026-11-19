@@ -28,15 +28,15 @@ export const PlayerProfileModal: React.FC<PlayerProfileModalProps> = ({
   onRemoveCard,
   onRemoveGoal,
 }) => {
+  const [quickFecha, setQuickFecha] = useState<number>(1);
+  const [quickType, setQuickType] = useState<CardType>('AMARILLA');
+
   if (!player) return null;
 
   const team = teams.find((t) => t.id === player.teamId);
   const playerCards = cards.filter((c) => c.playerId === player.id).sort((a, b) => a.fecha - b.fecha);
   const playerGoals = goals.filter((g) => g.playerId === player.id).sort((a, b) => a.fecha - b.fecha);
   const playerSuspensions = allSuspensions.filter((s) => s.playerId === player.id);
-
-  const [quickFecha, setQuickFecha] = useState<number>(1);
-  const [quickType, setQuickType] = useState<CardType>('AMARILLA');
 
   return (
     <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto print:hidden">
